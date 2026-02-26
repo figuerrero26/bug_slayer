@@ -7,8 +7,9 @@ body {
 /* HEADER */
 .header {
     width: 100%;
-    background: #f5f5f5;
+    background: #ffffff;
     box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  
 }
 
 /* NAV */
@@ -18,13 +19,29 @@ body {
     padding: 0 10px;
     height: 100px;
 }
-
-/* LOGO */
-.logo img{
-    height: 60px;
-    width: auto;
+/* --- INICIO CORRECCIÓN LOGO --- */
+.logo {
+    display: flex;       /* Pone el video y la imagen en fila */
+    align-items: center; /* Los centra verticalmente */
+    gap: 15px;           /* Espacio entre el video y la imagen */
+    height: 100%;        /* Se ajusta a la altura del menú */
+    overflow: hidden;    /* Corta cualquier desborde */
 }
 
+/* Fuerza el tamaño del video del escudo */
+.logo video {
+    height: 70px !important; 
+    width: auto;
+    object-fit: contain;
+}
+
+/* Fuerza el tamaño de la imagen de Italia (Para que no sea gigante) */
+.logo img {
+    height: 70px !important;
+    width: auto;
+    object-fit: contain;
+}
+/* --- FIN CORRECCIÓN LOGO --- */
 /* MENU */
 .menu{
     position: relative;
@@ -36,7 +53,7 @@ body {
     padding: 0;
     height: 100%;
 
-    transform: translateX(-70px); /* 👈 mueve a la izquierda */
+    transform: translateX(-80px); /* 👈 mueve a la izquierda */
 }
 
 /* ITEMS */
