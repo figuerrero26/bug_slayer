@@ -1,38 +1,59 @@
-import React from 'react'
+import React from "react";
+import { motion } from "framer-motion";
 import "./css/Login.css";
-import Barra from "./Barra";
-export const Login = () => {
-  return (
-    <>
-        <Barra />
-        <form className="login">
-        <h2>Iniciar Sesión</h2>
+import ImagenFondo from "./assets/C_C_08.jpg";
+import logoUCatolica from "./assets/LOGO-LOGIN.svg";
 
-        <input 
+const Login = () => {
+  return (
+    <motion.div
+      className="login-container"
+      initial={{ opacity: 0, x: 80 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -80 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}    
+    >
+      {/* LADO IZQUIERDO */}
+      <div className="login-left">
+      {/* IMAGEN DE FONDO */}
+        <img src={ImagenFondo} alt="Evento CONIITI" className="login-image" />
+      {/* LOGO UNIVERSIDAD */}
+        <img src={logoUCatolica} alt="Logo Universidad" className="logo-login" />
+        <div className="overlay"></div>
+
+        <div className="login-text">
+          <h1>XII Congreso Internacional de Innovación y Tendencias en Ingeniería (CONIITI 2026).</h1>
+          <p>Tejiendo redes para el futuro profesional</p>
+        </div>
+      </div>
+
+      {/* LADO DERECHO */}
+      <div className="login-right">
+        <form className="login-form">
+          <h2>Iniciar Sesión</h2>
+
+          <input
             type="text"
-            name="username"
             placeholder="Usuario"
             required
-            minLength={4}
-            maxLength={12}
-            pattern="[A-Za-z0-9_]+"
-            title="Solo letras, números y guion bajo. Entre 4 y 12 caracteres"
-        />
+          />
 
-        <input 
+          <input
             type="password"
-            name="password"
             placeholder="Contraseña"
             required
-            pattern="(?=.*[A-Z])(?=.*[0-9])(?=.*[\W_]).{8,}"
-            title="Debe tener mínimo 8 caracteres, una mayúscula, un número y un símbolo"
-        />
+          />
 
-        <button className="ENVIAR" type="submit">Entrar</button>
+          <button type="submit">Entrar</button>
+
+          <p className="extra">
+            ¿No tienes cuenta? <span>Regístrate</span>
+          </p>
         </form>
+      </div>
 
-    
-    </>
-  )
-}
-export default Login
+    </motion.div>
+  );
+};
+
+export default Login;
