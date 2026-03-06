@@ -3,7 +3,8 @@ import VideoConiiti from "./assets/CONIITI .mp4";
 import VideoConiiti2 from "./assets/videoconiiti.mp4";
 import imgItalia from "./assets/Italiabandera.png";
 import Barra from "./Barra";
-import imgCulture from "./assets/italiaimagenculture.png";
+import imgCulture from "./assets/selloycalidad.png";
+import Footer from "./Footer";
 import "./css/Home.css";
 
 function Home() {
@@ -142,6 +143,7 @@ function Home() {
 
         </div>
       </section>
+      <Footer />
     </>
   );
 }
