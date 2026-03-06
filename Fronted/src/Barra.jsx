@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaSearch } from "react-icons/fa";
+import { IoLanguage } from "react-icons/io5";
+
 import VideoConiiti from "./assets/CONIITI .mp4";
-import imgCulture from "./assets/italiaimagenculture.png";
+import imgCulture from "./assets/selloycalidad.png";
+
 import "./css/Home.css";
 
 const Barra = () => {
@@ -13,17 +17,21 @@ const Barra = () => {
 
     function moveSlider(element) {
       if (element && slider) {
+
         const rect = element.getBoundingClientRect();
         const parentRect = element.parentElement.getBoundingClientRect();
 
         slider.style.width = `${rect.width}px`;
         slider.style.left = `${rect.left - parentRect.left}px`;
+
       }
     }
 
     function handleResize() {
+
       const activeItem = document.querySelector(".menu li.active");
       moveSlider(activeItem);
+
     }
 
     items.forEach(item => {
@@ -31,10 +39,13 @@ const Barra = () => {
       item.addEventListener("mouseenter", () => moveSlider(item));
 
       item.addEventListener("click", () => {
+
         document
           .querySelector(".menu li.active")
           ?.classList.remove("active");
+
         item.classList.add("active");
+
       });
 
     });
@@ -44,18 +55,84 @@ const Barra = () => {
     handleResize();
 
     return () => {
+
       window.removeEventListener("resize", handleResize);
+
     };
 
   }, []);
 
   return (
+
     <header className="header">
+
+      {/* ========================
+            BARRA SUPERIOR
+      ======================== */}
+
+      <div className="topbar">
+
+        {/* ICONOS IZQUIERDA */}
+
+        <div className="topbar-icons">
+
+          <a href="tel:+576014433700">
+            <FaPhone />
+          </a>
+
+          <a href="mailto:coniiti@ucatolica.edu.co">
+            <FaEnvelope />
+          </a>
+
+          <a
+            href="https://www.ucatolica.edu.co"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <FaMapMarkerAlt />
+          </a>
+
+        </div>
+
+        {/* BUSCADOR + IDIOMA */}
+
+        <div className="topbar-right">
+
+          <div className="search-box">
+            <FaSearch />
+            <input
+              type="text"
+              placeholder="Buscar..."
+            />
+          </div>
+
+          <div className="language">
+            <IoLanguage />
+
+            <select>
+
+              <option>ES</option>
+              <option>EN</option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      {/* ========================
+            NAVBAR PRINCIPAL
+      ======================== */}
+
       <nav className="nav">
 
+        {/* LOGO + VIDEO */}
+
         <div className="logo">
+
           <video
-            width="200"
             autoPlay
             muted
             loop
@@ -64,10 +141,17 @@ const Barra = () => {
             <source src={VideoConiiti} type="video/mp4" />
           </video>
 
-          <img src={imgCulture} alt="Italia Imagen Cultural" />
+          <img
+            src={imgCulture}
+            alt="Italia Imagen Cultural"
+          />
+
         </div>
 
+        {/* MENU */}
+
         <ul className="menu">
+
           <li className="active">
             <Link to="/">Home</Link>
           </li>
@@ -76,20 +160,36 @@ const Barra = () => {
             <Link to="/nosotros">Nosotros</Link>
           </li>
 
-          <li>Nuestras ferias</li>
-          <li>Proceso de inscripciones</li>
-          <li>Noticias</li>
-
           <li>
-            <Link to="/login">Login</Link>
+            Nuestras ferias
           </li>
 
+          <li>
+            Proceso de inscripciones
+          </li>
+
+          <li>
+            Noticias
+          </li>
+
+          <li>
+            <Link to="/login">
+              Login
+            </Link>
+          </li>
+
+          {/* LINEA ANIMADA */}
+
           <div className="slider"></div>
+
         </ul>
 
       </nav>
+
     </header>
+
   );
+
 };
 
 export default Barra;
