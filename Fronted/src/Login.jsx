@@ -6,7 +6,7 @@ export const Login = () => {
     <>
         <Barra />
         <form className="login">
-        <h2>Iniciar Sesión</h2>
+        <h2>Iniciar Sesión frank</h2>
 
         <input 
             type="text"
