@@ -16,21 +16,21 @@ function Home() {
     ========================================= */
 
     const items = document.querySelectorAll(".menu li");
-    const slider = document.querySelector(".slider");
+    const slider = document.querySelector(".slider") as HTMLElement | null;
     const menu = document.querySelector(".menu");
 
-    function moveSlider(element) {
-      if (element && slider) {
+    function moveSlider(element: HTMLElement | null) {
+      if (element && slider && element.parentElement) {
         const rect = element.getBoundingClientRect();
         const parentRect = element.parentElement.getBoundingClientRect();
 
-        slider.style.width = `${rect.width}px`;
-        slider.style.left = `${rect.left - parentRect.left}px`;
+        (slider as HTMLElement).style.width = `${rect.width}px`;
+        (slider as HTMLElement).style.left = `${rect.left - parentRect.left}px`;
       }
     }
 
     items.forEach(item => {
-      item.addEventListener("mouseenter", () => moveSlider(item));
+      item.addEventListener("mouseenter", () => moveSlider(item as HTMLElement));
 
       item.addEventListener("click", () => {
         document.querySelector(".menu li.active")?.classList.remove("active");
@@ -39,7 +39,7 @@ function Home() {
     });
 
     function handleResize() {
-      const activeItem = document.querySelector(".menu li.active");
+      const activeItem = document.querySelector(".menu li.active") as HTMLElement | null;
       moveSlider(activeItem);
     }
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaSearch } from "react-icons/fa";
 import { IoLanguage } from "react-icons/io5";
@@ -13,30 +13,30 @@ const Barra = () => {
   useEffect(() => {
 
     const items = document.querySelectorAll(".menu li");
-    const slider = document.querySelector(".slider");
+    const slider = document.querySelector(".slider") as HTMLElement | null;
 
-    function moveSlider(element) {
-      if (element && slider) {
+    function moveSlider(element: HTMLElement | null) {
+      if (element && slider && element.parentElement) {
 
         const rect = element.getBoundingClientRect();
         const parentRect = element.parentElement.getBoundingClientRect();
 
-        slider.style.width = `${rect.width}px`;
-        slider.style.left = `${rect.left - parentRect.left}px`;
+        (slider as HTMLElement).style.width = `${rect.width}px`;
+        (slider as HTMLElement).style.left = `${rect.left - parentRect.left}px`;
 
       }
     }
 
     function handleResize() {
 
-      const activeItem = document.querySelector(".menu li.active");
+      const activeItem = document.querySelector(".menu li.active") as HTMLElement | null;
       moveSlider(activeItem);
 
     }
 
     items.forEach(item => {
 
-      item.addEventListener("mouseenter", () => moveSlider(item));
+      item.addEventListener("mouseenter", () => moveSlider(item as HTMLElement));
 
       item.addEventListener("click", () => {
 
