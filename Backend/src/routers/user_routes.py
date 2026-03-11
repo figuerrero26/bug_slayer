@@ -32,6 +32,28 @@ def login(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Contraseña incorrecta")
 
     return {
-        "message": "Login correcto",
-        "username": db_user.username
+    "access_token": db_user.username,
+    "token_type": "bearer"
+    }
+
+@router.post("/")
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
+
+    existing_user = db.query(User).filter(User.username == user.username).first()
+
+    if existing_user:
+        raise HTTPException(status_code=400, detail="El usuario ya existe")
+
+    new_user = User(
+        username=user.username,
+        password=user.password
+    )
+
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+
+    return {
+        "message": "Usuario creado correctamente",
+        "username": new_user.username
     }
