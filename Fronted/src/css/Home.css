@@ -1,7 +1,21 @@
-body {
+html, body {
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
+    padding: 0;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden; /* Elimina el scroll horizontal y el espacio blanco */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: #f5f5f5;
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
 }
 
 /* HEADER */
@@ -17,27 +31,28 @@ body {
     display: flex;
     align-items: center;
     padding: 0 10px;
-    height: 100px;
+    height: 110px;
 }
 /* --- INICIO CORRECCIÓN LOGO --- */
 .logo {
     display: flex;       /* Pone el video y la imagen en fila */
     align-items: center; /* Los centra verticalmente */
-    gap: 15px;           /* Espacio entre el video y la imagen */
+    gap: 17px;           /* Espacio entre el video y la imagen */
     height: 100%;        /* Se ajusta a la altura del menú */
     overflow: hidden;    /* Corta cualquier desborde */
 }
 
 /* Fuerza el tamaño del video del escudo */
 .logo video {
-    height: 70px !important; 
+    height: 85px !important; 
     width: auto;
     object-fit: contain;
+    
 }
 
 /* Fuerza el tamaño de la imagen de Italia (Para que no sea gigante) */
 .logo img {
-    height: 70px !important;
+    height: 90px !important;
     width: auto;
     object-fit: contain;
 }
@@ -47,13 +62,13 @@ body {
     position: relative;
     list-style: none;
     display: flex;
-    gap: 35px;
+    gap: 45px;
     align-items: center;
     margin: 0 auto;
     padding: 0;
     height: 100%;
 
-    transform: translateX(-80px); /* 👈 mueve a la izquierda */
+    transform: translateX(-100px); /* 👈 mueve a la izquierda */
 }
 
 /* ITEMS */
@@ -335,3 +350,130 @@ a{
 .reveal.delay-2 { transition-delay: 0.4s; }
 .reveal.delay-3 { transition-delay: 0.6s; }
 .reveal.delay-4 { transition-delay: 0.8s; }
+
+
+/*Pie de pagina*/
+
+/* ================= FOOTER ================= */
+
+.footer {
+  background: linear-gradient(135deg, #0b0f2b, #141c4f);
+  color: white;
+  padding: 50px 20px;
+  margin-top: 80px;
+}
+
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.footer-logos {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 20px;
+}
+
+.footer-logos img {
+  height: 80px;
+}
+
+.footer-info h3 {
+  margin-bottom: 10px;
+  color: #facc15;
+}
+
+.footer-info p {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* BARRA SUPERIOR */
+/* ===== BARRA SUPERIOR ===== */
+
+.topbar{
+    width:100%;
+    height:42px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 50px;
+
+    background:linear-gradient(90deg,#0b1f3a,#163b6c);
+
+    color:white;
+
+    font-size:14px;
+
+    border-bottom:1px solid rgba(166, 22, 22, 0.08);
+}
+/* ICONOS IZQUIERDA */
+
+.topbar-icons{
+    display:flex;
+    gap:20px;
+}
+
+.topbar-icons a{
+    color:white;
+    font-size:15px;
+    transition:0.3s;
+    opacity:0.9;
+}
+
+.topbar-icons a:hover{
+    color:#c8a45c;
+    transform:scale(1.1);
+}
+
+.topbar-icons a:hover{
+    color:#c8a45c;
+}
+
+/* DERECHA */
+
+.topbar-right{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+/* BUSCADOR */
+
+.search-box{
+    display:flex;
+    align-items:center;
+    background: rgba(255,255,255,0.12);/* Blanco translúcido */ 
+    padding:5px 10px;
+    border-radius:20px;
+}
+/*aqui se corrige el input del buscador para que no tenga borde ni fondo, y el placeholder se vea más claro*/
+.search-box input{
+    border:none;
+    outline:none;
+    margin-left:5px;
+    background: transparent;
+    color:white;
+}
+
+.search-box input::placeholder{
+    color:#ccc;
+}
+/* IDIOMA */
+
+.language{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    color:white;
+}
+
+.language select{
+    border:none;
+    background:transparent;
+    color:white;
+}

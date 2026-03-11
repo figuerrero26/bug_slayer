@@ -1,4 +1,24 @@
+# Python
 venv/
-node_modules/
 **/venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Node
+node_modules/
 **/node_modules/
+
+# Build
+dist/
+build/
+
+# Variables de entorno
+.env
+
+# Logs
+*.log
+
+# VS Code
+.vscode/
