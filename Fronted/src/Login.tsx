@@ -30,7 +30,7 @@ const Login = () => {
       {/* LADO DERECHO */}
       <div className="login-right">
         <form className="login-form">
-          <h2>Iniciar Sesión</h2>
+          <h2>Iniciar Sesión F</h2>
 
           <input
             type="text"
