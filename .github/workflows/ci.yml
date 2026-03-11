@@ -1,0 +1,69 @@
+# Nombre del flujo de trabajo que aparecerá en la pestaña "Actions"
+name: Node.js CI
+
+# ---------------------------------------------------------
+# EVENTOS QUE ACTIVAN EL WORKFLOW
+# Este flujo se ejecuta cuando hay cambios en la rama main
+# ---------------------------------------------------------
+on:
+  # Se ejecuta cuando alguien hace push al repositorio
+  push:
+    branches:
+      - main   # rama principal del repositorio
+
+  # También se ejecuta cuando alguien crea o actualiza un Pull Request
+  pull_request:
+    branches:
+      - main   # rama donde se revisan los cambios
+
+# ---------------------------------------------------------
+# DEFINICIÓN DE LOS TRABAJOS (JOBS)
+# ---------------------------------------------------------
+jobs:
+
+  # Nombre del trabajo
+  build:
+
+    # Sistema operativo donde se ejecutará el proceso
+    runs-on: windows-latest
+
+    # -----------------------------------------------------
+    # PASOS QUE SE EJECUTAN EN EL JOB
+    # -----------------------------------------------------
+    steps:
+
+      # -------------------------------------------------
+      # PASO 1: Descargar el código del repositorio
+      # -------------------------------------------------
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # -------------------------------------------------
+      # PASO 2: Instalar y configurar Node.js
+      # -------------------------------------------------
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'   # versión de Node que usará el servidor
+
+          # -------------------------------------------------
+      # PASO 3: Instalar dependencias
+      # -------------------------------------------------
+      - name: Install dependencies
+        run: npm install
+        working-directory: produccion/react_coniiti
+      
+      # -------------------------------------------------
+      # PASO 4: Ejecutar pruebas automáticas
+      # (solo funciona si el proyecto tiene tests)
+      # -------------------------------------------------
+      - name: Run tests
+        run: npm test
+        working-directory: produccion/react_coniiti
+      
+      # -------------------------------------------------
+      # PASO 5: Compilar el proyecto
+      # -------------------------------------------------
+      - name: Build project
+        run: npm run build
+        working-directory: produccion/react_coniiti
