@@ -5,6 +5,7 @@ import "./css/Login.css";
 import ImagenFondo from "./assets/C_C_08.jpg";
 import logoUCatolica from "./assets/LOGO-LOGIN.svg";
 import API_URL from "./config"
+
 const Login = () => {
 
   const navigate = useNavigate()
@@ -17,8 +18,8 @@ const Login = () => {
   e.preventDefault()
 
   try {
-
-    const response = await fetch(`${API_URL}/users/login`, {
+    const ruta = `${API_URL}/users/login`
+    const response = await fetch(ruta, {
 
       method: "POST",
 
@@ -36,6 +37,7 @@ const Login = () => {
     const data = await response.json()
 
     console.log("Respuesta backend:", data)
+    console.log(ruta)
 
     if (response.status === 200) {
 
