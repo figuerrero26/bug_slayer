@@ -3,13 +3,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 
 from src.models.persistence import engine, Base
-"""from src.routers.user_routes import router as user_router"""
+from src.routers.user_routes import router as user_router
 
 
 app = FastAPI(
-    title="API de Audiometrías",
+    title="API de coniiti",
     version="1.0.0",
-    description="Documentación de la API de usuarios y audiometrías."
+    description="Documentación de la API de usuarios y coniiti."
 )
 
 # CORS
@@ -26,7 +26,7 @@ Base.metadata.create_all(bind=engine)
 print("Las tablas han sido creadas correctamente en la base de datos.")
 
 # Incluir routers
-"""app.include_router(user_router)"""
+app.include_router(user_router)
 
 
 # Ruta raíz
@@ -44,6 +44,8 @@ def custom_openapi():
         description=app.description,
         routes=app.routes,
     )
+    if "components" not in openapi_schema:
+        openapi_schema["components"] = {}
     openapi_schema["components"]["securitySchemes"] = {
         "BearerAuth": {
             "type": "http",
