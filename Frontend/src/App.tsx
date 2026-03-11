@@ -8,7 +8,7 @@ import Ferias from "./Ferias";
 import Noticias from "./Noticias";
 import Login from "./Login";
 import Register from "./Register"; // ← IMPORTANTE
-
+import Coniiti2015 from "./Coniiti2015"; // ← IMPORTANTE
 function Layout() {
 
   const location = useLocation();
@@ -25,7 +25,7 @@ function Layout() {
         <Route path="/ferias" element={<Ferias />} />
         <Route path="/inscripciones" element={<Inscripciones />} />
         <Route path="/noticias" element={<Noticias />} />
-
+        <Route path="/coniiti2015" element={<Coniiti2015 />} />
         {/* Auth */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
