@@ -1,0 +1,152 @@
+/* =====================================================
+   AGREGA ESTO AL FINAL DE Home.css
+   (reemplaza el bloque anterior si ya lo tenías)
+   ===================================================== */
+
+/* ── SESSION BADGE (topbar) ─────────────────────────── */
+.session-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(250,204,21,0.3);
+  border-radius: 30px;
+  padding: 4px 10px 4px 8px;
+  color: white;
+  font-size: 13px;
+}
+
+.session-badge__icon {
+  font-size: 17px;
+  color: #facc15;
+  flex-shrink: 0;
+}
+
+.session-badge__name {
+  color: #facc15;
+  font-weight: 700;
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Botón Salir — sin ícono raro, solo texto limpio */
+.session-badge__logout {
+  background: rgba(239,68,68,0.2);
+  border: 1px solid rgba(239,68,68,0.4);
+  color: #fca5a5;
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+  line-height: 1.6;
+}
+.session-badge__logout:hover {
+  background: rgba(239,68,68,0.45);
+  color: #fff;
+}
+
+/* Link login cuando no hay sesión */
+.session-login-link {
+  color: #facc15;
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: none;
+  border: 1px solid rgba(250,204,21,0.4);
+  border-radius: 20px;
+  padding: 4px 14px;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+.session-login-link:hover { background: rgba(250,204,21,0.12); }
+
+/* Nombre usuario en el menú nav */
+.menu-user {
+  display: flex;
+  align-items: center;
+  color: #facc15 !important;
+  font-weight: 700 !important;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ── WELCOME BADGE (dentro del hero, esquina inf. derecha) ── */
+.welcome-badge {
+  position: absolute;       /* relativo al .hero */
+  bottom: 28px;
+  right: 28px;
+  z-index: 10;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  background: rgba(11, 31, 58, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(250,204,21,0.35);
+  border-radius: 16px;
+  padding: 12px 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+
+  animation: wbSlideIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes wbSlideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Avatar inicial */
+.welcome-badge__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #facc15;
+  color: #0b1f3a;
+  font-size: 17px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.welcome-badge__info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.35;
+}
+
+.welcome-badge__greeting {
+  font-size: 11px;
+  color: rgba(255,255,255,0.55);
+}
+
+.welcome-badge__name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #facc15;
+}
+
+/* Botón cerrar sesión dentro del badge */
+.welcome-badge__logout {
+  background: rgba(239,68,68,0.18);
+  border: 1px solid rgba(239,68,68,0.4);
+  color: #fca5a5;
+  border-radius: 10px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+.welcome-badge__logout:hover {
+  background: rgba(239,68,68,0.45);
+  color: #fff;
+}

@@ -1,0 +1,122 @@
+css
+
+/* ── NOSOTROS SECTION ── */
+
+.nos-section {
+  padding: 70px 20px;
+  background: #f8f9fc;
+}
+
+.nos-container {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+/* Bloques de texto */
+.nos-block h2 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f2c5e;
+  margin: 0 0 10px;
+  padding-bottom: 8px;
+  border-bottom: 3px solid #c8102e;
+  display: inline-block;
+}
+
+.nos-block p {
+  font-size: 0.97rem;
+  line-height: 1.8;
+  color: #555;
+  margin: 12px 0 0;
+}
+
+/* Grid de tarjetas */
+.nos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.nos-card {
+  background: white;
+  border: 1px solid #e4e8f0;
+  border-radius: 12px;
+  padding: 24px 20px;
+  text-align: center;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.nos-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(15, 44, 94, 0.1);
+}
+
+.nos-icono {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.nos-card h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f2c5e;
+  margin: 0 0 6px;
+}
+
+.nos-card p {
+  font-size: 0.85rem;
+  color: #777;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .nos-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.nos-link {
+  display: inline-block;
+  margin-top: 12px;
+  color: #0f2c5e;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.nos-link:hover {
+  color: #c8102e;
+}
+
+.nos-redes {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.nos-redes a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #f0f2f8;
+  color: #0f2c5e;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background 0.3s, color 0.3s, transform 0.2s;
+}
+
+.nos-redes a:hover {
+  background: #0f2c5e;
+  color: white;
+  transform: translateY(-3px);
+}

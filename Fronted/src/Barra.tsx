@@ -21,8 +21,8 @@ const Barra = () => {
         const rect = element.getBoundingClientRect();
         const parentRect = element.parentElement.getBoundingClientRect();
 
-        (slider as HTMLElement).style.width = `${rect.width}px`;
-        (slider as HTMLElement).style.left = `${rect.left - parentRect.left}px`;
+        slider.style.width = `${rect.width}px`;
+        slider.style.left = `${rect.left - parentRect.left}px`;
 
       }
     }
@@ -85,7 +85,7 @@ const Barra = () => {
           </a>
 
           <a
-            href="https://www.ucatolica.edu.co"
+            href="https://www.google.com/maps/place/Universidad+Cat%C3%B3lica+de+Colombia+Sede+4/@4.6342232,-74.0685259,17z/data=!3m1!4b1!4m6!3m5!1s0x8e3f9a2f84cd3649:0xabd321c3ea5f9e1c!8m2!3d4.6342232!4d-74.065951!16s%2Fg%2F1pw3y1zh2?entry=ttu&g_ep=EgoyMDI2MDMwOC4wIKXMDSoASAFQAw%3D%3D"
             target="_blank"
             rel="noreferrer"
           >
@@ -161,15 +161,15 @@ const Barra = () => {
           </li>
 
           <li>
-            Nuestras ferias
+            <Link to="/ferias">Nuestras ferias</Link>
           </li>
 
           <li>
-            Proceso de inscripciones
+            <Link to="/inscripciones">Proceso de inscripciones</Link>
           </li>
 
           <li>
-            Noticias
+            <Link to="/noticias">Noticias</Link>
           </li>
 
           <li>
