@@ -14,7 +14,7 @@ const PAISES = [
   "Benin","Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria",
   "Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Chile","China","Colombia",
   "Congo","Costa Rica","Croatia","Cuba","Cyprus","Czech Republic","Denmark",
-  "Dominican Republic","Ecuador","Egypt","El Salvador","Estonia","Ethiopia","Finland",
+  "Dominican Republic","Ecuadaor","Egypt","El Salvador","Estonia","Ethiopia","Finland",
   "France","Georgia","Germany","Ghana","Greece","Guatemala","Haiti","Honduras","Hungary",
   "India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Jamaica","Japan","Jordan",
   "Kazakhstan","Kenya","Kuwait","Kyrgyzstan","Latvia","Lebanon","Libya","Lithuania",

@@ -7,6 +7,8 @@ import "./css/Login.css";
 import ImagenFondo from "./assets/C_C_08.jpg";
 import logoUCatolica from "./assets/LOGO-LOGIN.svg";
 
+import API_URL from "./config";
+
 export default function Login() {
 
   const navigate = useNavigate();
@@ -21,15 +23,15 @@ export default function Login() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
-    setForm((p) => ({
-      ...p,
+    setForm((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value
     }));
 
     setError("");
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
     e.preventDefault();
 
@@ -42,21 +44,55 @@ export default function Login() {
 
     setLoading(true);
 
-    // simulación de login
-    setTimeout(() => {
+    try {
+
+      const ruta = `${API_URL}/users/login`;
+
+      const response = await fetch(ruta, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username: form.username,
+          password: form.password
+        })
+      });
+
+      const data = await response.json();
+
+      console.log("Respuesta backend:", data);
+
+      if (response.status === 200) {
+
+        sessionStorage.setItem(
+          "user",
+          JSON.stringify({
+            username: form.username
+          })
+        );
+
+        alert("Inicio de sesión exitoso ✅");
+
+        navigate("/");   // redirección al Home
+
+      } else {
+
+        setError(data.detail || "Usuario o contraseña incorrectos");
+
+      }
+
+    } catch (err) {
+
+      console.error(err);
+      setError("Error conectando con el servidor");
+
+    } finally {
 
       setLoading(false);
 
-      sessionStorage.setItem(
-        "user",
-        JSON.stringify({
-          username: form.username
-        })
-      );
+    }
 
-      navigate("/");
-
-    }, 1200);
   };
 
   return (
@@ -148,7 +184,7 @@ export default function Login() {
 
           <p className="extra">
             ¿No tienes cuenta?{" "}
-            <Link to="/register">
+            <Link to="/crear-cuenta">
               <span>Regístrate</span>
             </Link>
           </p>
