@@ -5,6 +5,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true,
-    allowedHosts: true
+    allowedHosts: true,
+    hmr: {
+      protocol: 'wss',
+      host: 'coniiti.cogra.com.co',
+      clientPort: 443
+    }
   }
 })
