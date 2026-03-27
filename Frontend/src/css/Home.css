@@ -497,7 +497,7 @@ a{
 .countdown-units{
   display:flex;
   justify-content:center;
-  gap: 80px;px;
+  gap: 80px;
 }
 
 .countdown-unit{

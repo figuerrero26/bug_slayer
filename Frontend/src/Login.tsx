@@ -74,7 +74,7 @@ export default function Login() {
 
         alert("Inicio de sesión exitoso ✅");
 
-        navigate("/");   // redirección al Home
+        navigate("/dashboard");   // redirección al dashboard
 
       } else {
 
