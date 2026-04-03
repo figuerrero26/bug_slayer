@@ -59,7 +59,7 @@ jobs:
       # -------------------------------------------------
       - name: Run tests
         run: npm test
-        working-directory: produccion/react_coniiti
+        working-directory: Frontend
       
       # -------------------------------------------------
       # PASO 5: Compilar el proyecto
