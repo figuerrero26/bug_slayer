@@ -51,7 +51,7 @@ jobs:
       # -------------------------------------------------
       - name: Install dependencies
         run: npm install
-        working-directory: produccion/react_coniiti
+        working-directory:  Frontend
       
       # -------------------------------------------------
       # PASO 4: Ejecutar pruebas automáticas
@@ -66,4 +66,4 @@ jobs:
       # -------------------------------------------------
       - name: Build project
         run: npm run build
-        working-directory: produccion/react_coniiti
+        working-directory:  Frontend
