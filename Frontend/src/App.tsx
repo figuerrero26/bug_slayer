@@ -8,6 +8,7 @@ import Ferias from "./Ferias";
 import Inscripciones from "./Inscripciones";
 import Noticias from "./Noticias";
 import Coniiti2015 from "./Coniiti2015";
+import Dashboard from "./Dashboard";
 
 import Login from "./Login";
 import Register from "./Register";
@@ -18,7 +19,8 @@ function Layout() {
 
   const hideBar =
     location.pathname === "/login" ||
-    location.pathname === "/crear-cuenta";
+    location.pathname === "/crear-cuenta" ||
+    location.pathname === "/dashboard";
 
   return (
     <>
@@ -36,6 +38,9 @@ function Layout() {
         {/* Auth */}
         <Route path="/login" element={<Login />} />
         <Route path="/crear-cuenta" element={<Register />} />
+
+        {/* Dashboard */}
+        <Route path="/dashboard" element={<Dashboard />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
 
