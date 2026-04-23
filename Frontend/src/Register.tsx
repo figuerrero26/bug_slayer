@@ -2,6 +2,8 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 
+import API_URL from "./config";
+
 // ── Imágenes ──────────────────────────────────────────
 import ImagenFondo from "./assets/C_C_08.jpg";
 import logoUCatolica from "./assets/LOGO-LOGIN.svg";
@@ -108,22 +110,45 @@ export default function Register() {
     setStep((s) => s - 1);
   };
 
-  // ── Registro solo visual ─────────────────────────────
-  const handleSubmit = () => {
+  // ── Registro real: POST /users/ con username y password ──
+  const handleSubmit = async () => {
 
     setError("");
     setLoading(true);
 
-    setTimeout(() => {
+    try {
+
+      const response = await fetch(`${API_URL}/users/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        // Solo se envían los campos que la BD almacena actualmente
+        body: JSON.stringify({
+          username: form.username,
+          password: form.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Registro exitoso: mostrar pantalla de confirmación y redirigir
+        setDone(true);
+        setTimeout(() => navigate("/login"), 3000);
+      } else {
+        // El backend devuelve el motivo en data.detail (ej: "El usuario ya existe")
+        setError(data.detail || "Error al registrar. Intenta de nuevo.");
+      }
+
+    } catch (err) {
+
+      console.error("Error de red al registrar:", err);
+      setError("No se pudo conectar con el servidor. Verifica tu conexión.");
+
+    } finally {
 
       setLoading(false);
-      setDone(true);
 
-      setTimeout(() => {
-        navigate("/login");
-      }, 3000);
-
-    }, 1200);
+    }
   };
 
   // ── Pantalla de éxito ───────────────────────────────
