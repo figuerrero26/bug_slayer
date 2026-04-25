@@ -7,14 +7,14 @@ import "./css/Login.css";
 import ImagenFondo from "./assets/C_C_08.jpg";
 import logoUCatolica from "./assets/LOGO-LOGIN.svg";
 
-import API_URL from "./config";
+import { AUTH_URL } from "./config";
 
 export default function Login() {
 
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
-    username: "",
+    email: "",
     password: ""
   });
 
@@ -37,7 +37,7 @@ export default function Login() {
 
     setError("");
 
-    if (!form.username.trim() || !form.password) {
+    if (!form.email.trim() || !form.password) {
       setError("Completa todos los campos.");
       return;
     }
@@ -46,39 +46,33 @@ export default function Login() {
 
     try {
 
-      const ruta = `${API_URL}/users/login`;
-
-      const response = await fetch(ruta, {
+      const response = await fetch(`${AUTH_URL}/auth/login`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          username: form.username,
-          password: form.password
-        })
+          email:    form.email,
+          password: form.password,
+        }),
       });
 
       const data = await response.json();
 
-      console.log("Respuesta backend:", data);
-
-      if (response.status === 200) {
+      if (response.ok) {
 
         sessionStorage.setItem(
-          "user",
+          "session",
           JSON.stringify({
-            username: form.username
+            token:   data.access_token,
+            user_id: data.user_id,
+            email:   data.email,
           })
         );
 
-        alert("Inicio de sesión exitoso ✅");
-
-        navigate("/dashboard");   // redirección al dashboard
+        navigate("/dashboard");
 
       } else {
 
-        setError(data.detail || "Usuario o contraseña incorrectos");
+        setError(data.detail || "Correo o contraseña incorrectos");
 
       }
 
@@ -158,12 +152,12 @@ export default function Login() {
           )}
 
           <input
-            type="text"
-            name="username"
-            placeholder="Usuario"
-            value={form.username}
+            type="email"
+            name="email"
+            placeholder="Correo electrónico"
+            value={form.email}
             onChange={handleChange}
-            autoComplete="username"
+            autoComplete="email"
           />
 
           <input
