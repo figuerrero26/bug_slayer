@@ -1,8 +1,9 @@
 import logo_U from "./assets/logo_ucatolica.png";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 
+import { DASHBOARD_URL } from "./config";
 import "./css/Dashboard.css";
 
 // ─── TYPES ────────────────────────────────────────────────────────────────────
@@ -17,41 +18,52 @@ interface User {
   registeredAt?: string;
 }
 
-// ─── API CONFIG ───────────────────────────────────────────────────────────────
-const API_BASE = "http://localhost:8000/api";
+interface Conference {
+  id: number;
+  title: string;
+  speaker_name: string | null;
+  speaker_image_url: string | null;
+  category: string | null;
+  schedule: string | null;
+  location_text: string | null;
+  registration_id: number;
+  registration_status: string;
+}
 
-const api = {
-  getUser: async (): Promise<User> => {
-    const token = localStorage.getItem("token");
-    const res = await fetch(`${API_BASE}/users/me`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (!res.ok) throw new Error("No autorizado");
-    return res.json();
-  },
-};
+interface DashboardData {
+  user_id: number;
+  full_name: string;
+  birth_date: string | null;
+  country_city: string;
+  phone: string;
+  photo_url: string | null;
+  registered_at: string | null; 
+  completed_events: number;
+  pending_events: number;
+  unread_messages: number;
+  conferences: Conference[];
+}
 
-// ─── MOCK DATA ────────────────────────────────────────────────────────────────
-const MOCK_USER: User = {
-  id: 1,
-  name: "Julian David Villegas Fernandez",
-  email: "jdvillegas10@ucatolica.edu.co",
-  phone: "+57 320 383 5488",
-  city: "Bogotá",
-  country: "Colombia",
-  birthdate: "03/07/2004",
-  registeredAt: "10 enero 2024",
-};
+// ─── SESSION HELPER ───────────────────────────────────────────────────────────
+// Usa la misma clave "session" que Login.tsx e Inscripciones.tsx
+function getSession(): { token: string; user_id: number; email: string } | null {
+  try {
+    const raw = sessionStorage.getItem("session");
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
 
 // ─── SIDEBAR NAV ──────────────────────────────────────────────────────────────
 const NAV_ITEMS = [
-  { id: "profile",     label: "Perfil"           },
-  { id: "conferences", label: "Mis conferencias", badge: 3 },
-  { id: "completed",   label: "Completadas",      badge: 0 },
-  { id: "events",      label: "Eventos",          badge: 2 },
-  { id: "favorites",   label: "Favoritos"         },
-  { id: "schedule",    label: "Agenda"            },
-  { id: "messages",    label: "Mensajes",         badge: 1 },
+  { id: "profile",     label: "Perfil"                         },
+  { id: "conferences", label: "Mis conferencias", badge: true  },
+  { id: "completed",   label: "Completadas",      badge: false },
+  { id: "events",      label: "Eventos",          badge: false },
+  { id: "favorites",   label: "Favoritos"                      },
+  { id: "schedule",    label: "Agenda"                         },
+  { id: "messages",    label: "Mensajes",         badge: false },
 ];
 
 // ─── EDIT PROFILE MODAL ───────────────────────────────────────────────────────
@@ -105,33 +117,80 @@ function EditProfileModal({ user, onClose }: { user: User; onClose: () => void }
 
 // ─── MAIN DASHBOARD ───────────────────────────────────────────────────────────
 export default function Dashboard() {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser]               = useState<User | null>(null);
+  const [conferences, setConferences] = useState<Conference[]>([]);
+  const [loading, setLoading]         = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [activeNav, setActiveNav] = useState("profile");
+  const [activeNav, setActiveNav]     = useState("profile");
 
-  const navigate = useNavigate();
+  const navigate     = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  const USE_MOCK = true; // cambia a false cuando el backend esté listo
+  // Resolución del user_id: sessionStorage tiene prioridad sobre el param de URL.
+  // El param ?user_id=1 sirve para pruebas mientras auth_service no esté integrado.
+  const session = getSession();
+  const userId  = session?.user_id ?? Number(searchParams.get("user_id")) ?? null;
 
+  // ── Cerrar sesión: limpia almacenamiento y redirige a login ────────────────
+  const handleLogout = () => {
+    sessionStorage.removeItem("session");
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
+  // ── Ir a Home: la sesión permanece en sessionStorage, Inscripciones.tsx
+  //    la detecta automáticamente para validar el acceso a inscripciones. ────
+  const handleGoHome = () => {
+    navigate("/");
+  };
+
+  // ── Carga de datos desde dashboard_service ────────────────────────────────
   useEffect(() => {
-    const loadUser = async () => {
+    if (!userId) {
+      navigate("/login");
+      return;
+    }
+
+    const loadDashboard = async () => {
       try {
-        if (USE_MOCK) {
-          await new Promise((r) => setTimeout(r, 500));
-          setUser(MOCK_USER);
-        } else {
-          const u = await api.getUser();
-          setUser(u);
-        }
+        // Un solo fetch al dashboard_service que consolida perfil + stats + conferencias
+        const res = await fetch(`${DASHBOARD_URL}/dashboard/${userId}`);
+        if (!res.ok) throw new Error("No se pudo cargar el dashboard");
+
+        const data: DashboardData = await res.json();
+
+        setUser({
+          id:           data.user_id,
+          name:         data.full_name,
+          email:        session?.email ?? "",
+          phone:        data.phone,
+          city:         data.country_city,
+          country:      data.country_city,
+          birthdate:    data.birth_date
+            ? new Date(data.birth_date).toLocaleDateString("es-CO")
+            : "—",
+            
+          registeredAt: data.registered_at
+            ? new Date(data.registered_at).toLocaleString("es-CO", {
+                day: "2-digit", 
+                month: "short", 
+                year: "numeric",
+                hour: "2-digit", 
+                minute: "2-digit"
+              })
+            : "—",
+        });
+
+        setConferences(data.conferences);
       } catch (err) {
-        console.error(err);
+        console.error("[Dashboard] Error al cargar datos:", err);
       } finally {
         setLoading(false);
       }
     };
-    loadUser();
-  }, []);
+
+    loadDashboard();
+  }, [userId]);
 
   if (loading) {
     return (
@@ -149,29 +208,37 @@ export default function Dashboard() {
         {/* ── SIDEBAR ───────────────────────────────────────────── */}
         <aside className="sidebar">
           <div className="sidebar-brand">
-            <img src = {logo_U} alt = "Logo Universidad" className="Logo-U"/>
+            <img src={logo_U} alt="Logo Universidad" className="Logo-U" />
           </div>
 
           <nav className="sidebar-nav">
-            {NAV_ITEMS.map((item) => (
-              <button
-                key={item.id}
-                className={`nav-item ${activeNav === item.id ? "nav-active" : ""}`}
-                onClick={() => setActiveNav(item.id)}
-              >
-                <span className="nav-icon"></span>
-                <span className="nav-label">{item.label}</span>
-                {item.badge !== undefined && (
-                  <span className={`nav-badge ${item.badge === 0 ? "badge-zero" : ""}`}>
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            ))}
+            {NAV_ITEMS.map((item) => {
+              // El badge de conferencias refleja el total real de inscripciones
+              const badgeCount =
+                item.id === "conferences" ? conferences.length : 0;
+              const showBadge = item.badge !== undefined;
+
+              return (
+                <button
+                  key={item.id}
+                  className={`nav-item ${activeNav === item.id ? "nav-active" : ""}`}
+                  onClick={() => setActiveNav(item.id)}
+                >
+                  <span className="nav-icon"></span>
+                  <span className="nav-label">{item.label}</span>
+                  {showBadge && (
+                    <span className={`nav-badge ${badgeCount === 0 ? "badge-zero" : ""}`}>
+                      {badgeCount}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </nav>
 
           <div className="sidebar-footer">
-            <button className="btn-logout">
+            {/* Cierra sesión: limpia sessionStorage y redirige a /login */}
+            <button className="btn-logout" onClick={handleLogout}>
               <span>🚪</span>
               <span>Cerrar sesión</span>
             </button>
@@ -189,7 +256,8 @@ export default function Dashboard() {
                 <span className="search-icon-1">🔍</span>
                 <input className="search-input-1" placeholder="Buscar…" />
               </div>
-              <button className="btn-exit" title="Cerrar sesión">↪</button>
+              {/* Vuelve al home conservando la sesión activa */}
+              <button className="btn-exit" title="Ir a inicio" onClick={handleGoHome}>↪</button>
             </div>
           </header>
 
@@ -217,7 +285,7 @@ export default function Dashboard() {
                   </div>
                   <div className="detail-row">
                     <span className="detail-label">País, ciudad:</span>
-                    <span className="detail-value">{user?.country}, {user?.city}</span>
+                    <span className="detail-value">{user?.country}</span>
                   </div>
                   <div className="detail-row">
                     <span className="detail-label">Fecha de nacimiento:</span>
@@ -243,56 +311,49 @@ export default function Dashboard() {
                 <h3 className="section-title">Mis conferencias</h3>
                 <div className="conf-list">
 
-                  <div className="conf-item">
-                    <div className="conf-timeline">
-                      <div className="timeline-dot dot-done" />
-                      <div className="timeline-line" />
-                    </div>
-                    <div className="conf-body">
-                      <div className="conf-top">
-                        <div>
-                          <p className="conf-name">TypeScript Avanzado — Patrones y Performance</p>
-                          <p className="conf-sub">Composición, tipos avanzados, rendimiento</p>
-                          <p className="conf-meta">15 sesiones</p>
-                        </div>
-                        <span className="badge-status badge-done">Completada</span>
-                      </div>
-                    </div>
-                  </div>
+                  {conferences.length === 0 ? (
+                    <p style={{ color: "var(--muted, #888)", fontSize: "0.9rem", padding: "0.5rem 0" }}>
+                      Aún no tienes conferencias inscritas.
+                    </p>
+                  ) : (
+                    conferences.map((conf, i) => {
+                      const isPast = conf.schedule
+                        ? new Date(conf.schedule) < new Date()
+                        : false;
+                      const isLast = i === conferences.length - 1;
 
-                  <div className="conf-item">
-                    <div className="conf-timeline">
-                      <div className="timeline-dot dot-done" />
-                      <div className="timeline-line " />
-                    </div>
-                    <div className="conf-body">
-                      <div className="conf-top">
-                        <div>
-                          <p className="conf-name">FastAPI + Async — Backend Moderno</p>
-                          <p className="conf-sub">Diseño de APIs, async/await, autenticación…</p>
-                          <p className="conf-meta">12 sesiones</p>
+                      return (
+                        <div key={conf.id} className="conf-item">
+                          <div className="conf-timeline">
+                            <div className={`timeline-dot ${isPast ? "dot-done" : "dot-pending"}`} />
+                            {!isLast && <div className="timeline-line" />}
+                          </div>
+                          <div className="conf-body">
+                            <div className="conf-top">
+                              <div>
+                                <p className="conf-name">{conf.title}</p>
+                                {conf.speaker_name && (
+                                  <p className="conf-sub">{conf.speaker_name}</p>
+                                )}
+                                {conf.location_text && (
+                                  <p className="conf-meta">{conf.location_text}</p>
+                                )}
+                              </div>
+                              <span className={`badge-status ${isPast ? "badge-done" : "badge-upcoming"}`}>
+                                {isPast
+                                  ? "Completada"
+                                  : conf.schedule
+                                    ? new Date(conf.schedule).toLocaleDateString("es-CO", {
+                                        day: "2-digit", month: "short", year: "numeric",
+                                      })
+                                    : "Por definir"}
+                              </span>
+                            </div>
+                          </div>
                         </div>
-                        <span className="badge-status badge-done">Completada</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="conf-item">
-                    <div className="conf-timeline">
-                      <div className="timeline-dot dot-pending" />
-                      
-                    </div>
-                    <div className="conf-body">
-                      <div className="conf-top">
-                        <div>
-                          <p className="conf-name">Microservicios con Docker & Kubernetes</p>
-                          <p className="conf-sub">Arquitectura cloud-native de principio a fin…</p>
-                          <p className="conf-meta">12 sesiones</p>
-                        </div>
-                        <span className="badge-status badge-upcoming">Inicio: 05.04.2026</span>
-                      </div>
-                    </div>
-                  </div>
+                      );
+                    })
+                  )}
 
                 </div>
               </div>
@@ -307,7 +368,7 @@ export default function Dashboard() {
                     Aún no has comprado tickets para la conferencia.
                   </div>
                 </div>
-              
+
               </div>
             </div>
           </div>

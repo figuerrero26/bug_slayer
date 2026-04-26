@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, Date
+from sqlalchemy import Column, Integer, String, Date, TIMESTAMP
 from database import Base
+from sqlalchemy.sql import func
 
 
 class Profile(Base):
@@ -12,6 +13,8 @@ class Profile(Base):
     country_city = Column(String(200))
     phone = Column(String(50))
     photo_url = Column(String(500), nullable=True)
+    # Mapeo exacto para TIMESTAMP de MySQL
+    registered_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
 
 
 class UserStats(Base):
