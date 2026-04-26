@@ -1,0 +1,59 @@
+/* PlaceholderView — prefijo ph- */
+
+.ph-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 58vh;
+  padding: 2rem;
+  animation: ph-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes ph-pop {
+  from { opacity: 0; transform: scale(0.88); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.ph-card {
+  background: var(--surface, #ffffff);
+  border: 1px solid var(--border, #d0dcea);
+  border-radius: var(--radius, 16px);
+  padding: 3rem 2.5rem;
+  text-align: center;
+  max-width: 360px;
+  width: 100%;
+  box-shadow: 0 4px 24px rgba(26, 37, 69, 0.08);
+}
+
+.ph-icon {
+  font-size: 3.2rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.ph-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--navy, #1a2545);
+  margin: 0 0 0.6rem;
+}
+
+.ph-message {
+  font-size: 0.88rem;
+  color: var(--muted, #6b7fa3);
+  line-height: 1.6;
+  margin: 0 0 1.5rem;
+}
+
+.ph-badge {
+  display: inline-block;
+  background: var(--gold-dim, #e8941a20);
+  color: var(--gold, #e8941a);
+  border: 1px solid rgba(232, 148, 26, 0.35);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 0.3rem 1rem;
+  border-radius: 999px;
+}

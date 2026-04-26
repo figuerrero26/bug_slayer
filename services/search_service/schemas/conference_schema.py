@@ -104,7 +104,7 @@ class UserConferenceOut(BaseModel):
     id:                  int
     title:               str
     speaker_name:        Optional[str]
-    speaker_image_url:   Optional[str]
+    speaker_image_url: str | None = None
     category:            Optional[str]
     schedule:            Optional[datetime]
     location_text:       Optional[str]
