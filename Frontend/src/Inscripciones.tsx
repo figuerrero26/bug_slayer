@@ -58,7 +58,7 @@ function spotsLeft(conf: Conference): number {
   return conf.capacity - conf.registered_count;
 }
 
-const CATEGORIES = ["Todas", "IA", "Software", "Redes", "Datos", "Robótica", "Gestión", "Innovación"];
+const CATEGORIES = ["Todas", "IAA", "Software", "Redes", "Datos", "Robótica", "Gestión", "Innovación"];
 
 // ── Componente principal ──────────────────────────────────────────────────────
 
