@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaSearch } from "react-icons/fa";
 import { IoLanguage } from "react-icons/io5";
@@ -9,6 +9,8 @@ import imgCulture from "./assets/selloycalidad.png";
 import "./css/Home.css";
 
 const Barra = () => {
+
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
 
@@ -148,38 +150,48 @@ const Barra = () => {
 
         </div>
 
+        {/* BOTON HAMBURGUESA — solo visible en móvil */}
+        <button
+          className={`hamburger ${menuOpen ? "hamburger-open" : ""}`}
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Abrir menú"
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+
         {/* MENU */}
 
-        <ul className="menu">
+        <ul className={`menu ${menuOpen ? "menu-open" : ""}`}>
 
           <li className="active">
-            <Link to="/">Home</Link>
+            <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
           </li>
 
           <li>
-            <Link to="/nosotros">Nosotros</Link>
+            <Link to="/nosotros" onClick={() => setMenuOpen(false)}>Nosotros</Link>
           </li>
 
           <li>
-            <Link to="/ferias">Nuestras ferias</Link>
+            <Link to="/ferias" onClick={() => setMenuOpen(false)}>Nuestras ferias</Link>
           </li>
 
           <li>
-            <Link to="/inscripciones">Proceso de inscripciones</Link>
+            <Link to="/inscripciones" onClick={() => setMenuOpen(false)}>Proceso de inscripciones</Link>
           </li>
 
           <li>
-            <Link to="/noticias">Noticias</Link>
+            <Link to="/noticias" onClick={() => setMenuOpen(false)}>Noticias</Link>
           </li>
 
           <li>
-            <Link to="/login">
+            <Link to="/login" onClick={() => setMenuOpen(false)}>
               Login
             </Link>
           </li>
 
-          {/* LINEA ANIMADA */}
-
+          {/* LINEA ANIMADA — solo en desktop */}
           <div className="slider"></div>
 
         </ul>
