@@ -1,9 +1,9 @@
 // URLs de los microservicios
 // En local (npm run dev) usa localhost por defecto.
-// En Docker, VITE_SEARCH_URL se inyecta en build-time desde el Dockerfile.
+// En Docker, las variables VITE_*_URL se inyectan en build-time desde el Dockerfile.
 export const AUTH_URL          = "http://localhost:8001";
-export const DASHBOARD_URL     = "http://localhost:8002";
-export const SEARCH_URL        = import.meta.env.VITE_SEARCH_URL ?? "http://localhost:8003";
+export const DASHBOARD_URL     = import.meta.env.VITE_DASHBOARD_URL ?? "http://localhost:8002";
+export const SEARCH_URL        = import.meta.env.VITE_SEARCH_URL    ?? "http://localhost:8003";
 export const NOTIFICATIONS_URL = "http://localhost:8004";
 
 // Retrocompatibilidad con componentes que aún usen API_URL

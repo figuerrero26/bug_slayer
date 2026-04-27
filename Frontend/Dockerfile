@@ -6,9 +6,11 @@ RUN npm install
 
 COPY . .
 
-# Variable inyectada en build-time desde docker-compose.yml
+# Variables inyectadas en build-time desde docker-compose.yml
 ARG VITE_SEARCH_URL=/api/search
+ARG VITE_DASHBOARD_URL=/api/dashboard
 ENV VITE_SEARCH_URL=$VITE_SEARCH_URL
+ENV VITE_DASHBOARD_URL=$VITE_DASHBOARD_URL
 
 RUN npm run build
 
