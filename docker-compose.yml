@@ -1,77 +1,30 @@
-
 version: "3.9"
-
-
-
 
 services:
 
-
-
-
   search_service:
-
-
     build: ./services/search_service
-
-
     container_name: search_service
-
-
     ports:
-
-
       - "8003:8003"
-
-
     environment:
-
-
       DATABASE_URL: mysql+pymysql://coniiti:coniiti@181.79.5.78:3306/db_search
-
-
       NOTIFICATIONS_SERVICE_URL: http://notifications_service:8004
-
-
     volumes:
-
-
       - speaker_images:/app/uploads/speakers
-
-
     restart: unless-stopped
-
-
-
 
   frontend:
-
-
-    build: ./Frontend
-
-
+    build:
+      context: ./Frontend
+      args:
+        VITE_SEARCH_URL: /api/search
     container_name: frontend
-
-
     ports:
-
-
       - "80:80"
-
-
     depends_on:
-
-
       - search_service
-
-
     restart: unless-stopped
 
-
-
-
 volumes:
-
-
   speaker_images:
-
