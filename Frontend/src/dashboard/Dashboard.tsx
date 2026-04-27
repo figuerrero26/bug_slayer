@@ -1,9 +1,9 @@
-import logo_U from "./assets/logo_ucatolica.png";
+import logo_U from "../assets/logo_ucatolica.png";
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { DASHBOARD_URL } from "./config";
-import "./css/Dashboard.css";
+import { DASHBOARD_URL } from "../config";
+import "../css/Dashboard.css";
 
 // ── Vistas internas ────────────────────────────────────────────────────────────
 import ProfileView     from "./views/ProfileView";

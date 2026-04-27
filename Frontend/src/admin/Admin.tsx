@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { SEARCH_URL } from "./config";
-import "./css/Admin.css";
+import { SEARCH_URL } from "../config";
+import "../css/Admin.css";
 
 // ── Tipos ─────────────────────────────────────────────────────────────────────
 

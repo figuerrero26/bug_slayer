@@ -3,7 +3,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import { FaFacebookF, FaInstagram, FaYoutube, FaLinkedinIn } from "react-icons/fa";
-import "./css/Nosotros.css";
+import "../../css/Nosotros.css";
 
 
 const objetivos = [

@@ -2,12 +2,12 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 
-import "./css/Login.css";
+import "../css/Login.css";
 
-import ImagenFondo from "./assets/C_C_08.jpg";
-import logoUCatolica from "./assets/LOGO-LOGIN.svg";
+import ImagenFondo from "../assets/C_C_08.jpg";
+import logoUCatolica from "../assets/LOGO-LOGIN.svg";
 
-import { AUTH_URL } from "./config";
+import { AUTH_URL } from "../config";
 
 export default function Login() {
 

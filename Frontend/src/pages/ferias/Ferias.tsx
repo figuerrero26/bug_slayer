@@ -1,4 +1,4 @@
-import "./css/Ferias.css";
+import "../../css/Ferias.css";
 import { Link } from "react-router-dom";
 
 function Ferias() {

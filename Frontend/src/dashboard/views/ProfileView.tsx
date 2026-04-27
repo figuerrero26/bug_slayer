@@ -1,4 +1,4 @@
-import "../css/ProfileView.css";
+import "../../css/ProfileView.css";
 
 interface User {
   id: number;

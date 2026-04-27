@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaSearch } from "react-icons/fa";
 import { IoLanguage } from "react-icons/io5";
 
-import VideoConiiti from "./assets/CONIITI .mp4";
-import imgCulture from "./assets/selloycalidad.png";
+import VideoConiiti from "../assets/CONIITI .mp4";
+import imgCulture from "../assets/selloycalidad.png";
 
-import "./css/Home.css";
+import "../css/Home.css";
 
 const Barra = () => {
 

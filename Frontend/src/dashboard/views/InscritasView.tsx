@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { SEARCH_URL } from "../config";
-import "../css/InscritasView.css";
+import { SEARCH_URL } from "../../config";
+import "../../css/InscritasView.css";
 
 interface Conference {
   id: number;

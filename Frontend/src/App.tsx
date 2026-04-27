@@ -1,18 +1,18 @@
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 
-import Barra from "./Barra";
+import Barra from "./layout/Barra";
 
-import Home from "./Home";
-import Nosotros from "./Nosotros";
-import Ferias from "./Ferias";
-import Inscripciones from "./Inscripciones";
-import Noticias from "./Noticias";
-import Coniiti2015 from "./Coniiti2015";
-import Dashboard from "./Dashboard";
-import Admin from "./Admin";
+import Home from "./pages/home/Home";
+import Nosotros from "./pages/nosotros/Nosotros";
+import Ferias from "./pages/ferias/Ferias";
+import Inscripciones from "./pages/inscripciones/Inscripciones";
+import Noticias from "./pages/noticias/Noticias";
+import Coniiti2015 from "./pages/ferias/Coniiti2015";
+import Dashboard from "./dashboard/Dashboard";
+import Admin from "./admin/Admin";
 
-import Login from "./Login";
-import Register from "./Register";
+import Login from "./auth/Login";
+import Register from "./auth/Register";
 
 function Layout() {
 

@@ -2,13 +2,13 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 
-import { AUTH_URL } from "./config";
+import { AUTH_URL } from "../config";
 
 // ── Imágenes ──────────────────────────────────────────
-import ImagenFondo from "./assets/C_C_08.jpg";
-import logoUCatolica from "./assets/LOGO-LOGIN.svg";
+import ImagenFondo from "../assets/C_C_08.jpg";
+import logoUCatolica from "../assets/LOGO-LOGIN.svg";
 
-import "./css/Auth.css";
+import "../css/Auth.css";
 
 const PAISES = [
   "Afghanistan","Albania","Algeria","Andorra","Angola","Argentina","Armenia","Australia",

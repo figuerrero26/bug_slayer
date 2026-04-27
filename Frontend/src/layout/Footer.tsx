@@ -1,8 +1,8 @@
 import React from "react";
-import "./css/Home.css"; // usamos el mismo css o puedes crear Footer.css
+import "../css/Home.css";
 
-import logoIcontec from "./assets/Logo_Icontec_universidad.png";
-import logoAltaCalidad from "./assets/logo-alta-calidad-ho.svg";
+import logoIcontec from "../assets/Logo_Icontec_universidad.png";
+import logoAltaCalidad from "../assets/logo-alta-calidad-ho.svg";
 
 function Footer() {
   return (
