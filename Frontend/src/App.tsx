@@ -1,6 +1,10 @@
+import { useState } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 
 import Barra from "./Barra";
+import Footer from "./Footer";
+import SplashScreen from "./SplashScreen";
 
 import Home from "./Home";
 import Nosotros from "./Nosotros";
@@ -45,10 +49,21 @@ function Layout() {
         <Route path="*" element={<Navigate to="/" replace />} />
 
       </Routes>
+
+      {!hideBar && <Footer />}
     </>
   );
 }
 
 export default function App() {
-  return <Layout />;
+  const [splashDone, setSplashDone] = useState(false);
+
+  return (
+    <>
+      <AnimatePresence>
+        {!splashDone && <SplashScreen onDone={() => setSplashDone(true)} />}
+      </AnimatePresence>
+      {splashDone && <Layout />}
+    </>
+  );
 }

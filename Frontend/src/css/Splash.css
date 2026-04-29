@@ -1,0 +1,51 @@
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #0f172a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.splash-logo {
+  width: 260px;
+  height: auto;
+  opacity: 0.95;
+}
+
+.splash-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: 6px;
+  margin: 0;
+  background: linear-gradient(90deg, #ffffff 0%, #facc15 60%, #f97316 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.splash-subtitle {
+  color: #94a3b8;
+  font-size: 13px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.splash-bar-wrapper {
+  width: 240px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.splash-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #a855f7, #facc15);
+  border-radius: 999px;
+}

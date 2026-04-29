@@ -2,7 +2,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
-import { FaFacebookF, FaInstagram, FaYoutube, FaLinkedinIn } from "react-icons/fa";
 import "./css/Nosotros.css";
 
 
@@ -64,21 +63,6 @@ export default function Nosotros(): React.JSX.Element {
             Visitar sitio oficial →
           </a>
 
-          {/* REDES SOCIALES */}
-          <div className="nos-redes">
-            <a href="https://www.facebook.com/ucatolicaco/" target="_blank" rel="noreferrer" aria-label="Facebook">
-              <FaFacebookF />
-            </a>
-            <a href="https://www.instagram.com/ucatolicaco" target="_blank" rel="noreferrer" aria-label="Instagram">
-              <FaInstagram />
-            </a>
-            <a href="https://www.youtube.com/user/ucatolicaco" target="_blank" rel="noreferrer" aria-label="YouTube">
-              <FaYoutube />
-            </a>
-            <a href="https://co.linkedin.com/school/universidadcatólicadecolombia/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
-              <FaLinkedinIn />
-            </a>
-          </div>
         </div>
 
         {/* OBJETIVOS */}

@@ -390,6 +390,30 @@ a{
   opacity: 0.8;
 }
 
+.footer-redes {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.footer-redes a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 20px;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.footer-redes a:hover {
+  background: #0077ff;
+  transform: translateY(-4px);
+}
+
 /* BARRA SUPERIOR */
 /* ===== BARRA SUPERIOR ===== */
 

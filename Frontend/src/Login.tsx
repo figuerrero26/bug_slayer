@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
 
 import "./css/Login.css";
 
@@ -136,6 +137,10 @@ export default function Login() {
 
       {/* PANEL DERECHO */}
       <div className="login-right">
+
+        <Link to="/" className="login-back">
+          <FaArrowLeft /> Volver al inicio
+        </Link>
 
         <form
           className="login-form"

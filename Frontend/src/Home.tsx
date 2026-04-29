@@ -4,7 +4,6 @@ import VideoConiiti2 from "./assets/videoconiiti.mp4";
 import imgItalia from "./assets/Italiabandera.png";
 import Barra from "./Barra";
 import imgCulture from "./assets/selloycalidad.png";
-import Footer from "./Footer";
 import "./css/Home.css";
 import "./css/Statsbar.css"
 
@@ -371,7 +370,6 @@ const timer = setInterval(() => {
 
 </section>
 
-      <Footer />
     </>
   );
 }
