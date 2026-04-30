@@ -2,20 +2,21 @@ import { useState } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 
-import Barra from "./Barra";
-import Footer from "./Footer";
-import SplashScreen from "./SplashScreen";
+import Barra from "./layout/Barra.tsx";
 
-import Home from "./Home";
-import Nosotros from "./Nosotros";
-import Ferias from "./Ferias";
-import Inscripciones from "./Inscripciones";
-import Noticias from "./Noticias";
-import Coniiti2015 from "./Coniiti2015";
-import Dashboard from "./Dashboard";
+import Home from "./pages/home/Home.tsx";
+import Nosotros from "./pages/nosotros/Nosotros.tsx";
+import Ferias from "./pages/ferias/Ferias.tsx";
+import Inscripciones from "./pages/inscripciones/Inscripciones.tsx";
+import Noticias from "./pages/noticias/Noticias.tsx";
+import Coniiti2015 from "./pages/ferias/Coniiti2015.tsx";
+import Dashboard from "./dashboard/Dashboard.tsx";
+import Admin from "./admin/Admin.tsx";
+import Footer from "./layout/Footer.tsx";
+import SplashScreen from "./SplashScreen.tsx";
 
-import Login from "./Login";
-import Register from "./Register";
+import Login from "./auth/Login.tsx";
+import Register from "./auth/Register.tsx";
 
 function Layout() {
 
@@ -24,7 +25,8 @@ function Layout() {
   const hideBar =
     location.pathname === "/login" ||
     location.pathname === "/crear-cuenta" ||
-    location.pathname === "/dashboard";
+    location.pathname === "/dashboard" ||
+    location.pathname.startsWith("/admin");
 
   return (
     <>
@@ -45,6 +47,9 @@ function Layout() {
 
         {/* Dashboard */}
         <Route path="/dashboard" element={<Dashboard />} />
+
+        {/* Admin — ruta oculta, sin enlace en navegación, sin autenticación */}
+        <Route path="/admin/conferences" element={<Admin />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
 

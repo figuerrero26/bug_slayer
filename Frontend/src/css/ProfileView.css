@@ -1,0 +1,14 @@
+/* ProfileView — solo animación de entrada; los estilos de card vienen de Dashboard.css */
+
+.profv-wrapper {
+  animation: profv-fade 0.3s ease;
+}
+
+@keyframes profv-fade {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.profv-bottom {
+  margin-top: 0;
+}

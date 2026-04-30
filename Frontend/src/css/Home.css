@@ -623,5 +623,146 @@ a{
   margin-top:15px;
   font-size:14px;
   color:#9fb3c8;
-     
+
+}
+
+/* =============================================
+   HAMBURGUESA + RESPONSIVE NAVBAR
+   ============================================= */
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  margin-left: auto;
+  z-index: 200;
+}
+
+.hamburger span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background: #0b4da2;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+/* Animación X al abrir */
+.hamburger-open span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+.hamburger-open span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger-open span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* ── Tablets (≤ 900px) ── */
+@media (max-width: 900px) {
+
+  .topbar {
+    padding: 0 20px;
+  }
+
+  .topbar-right {
+    gap: 10px;
+  }
+
+  .search-box input {
+    width: 80px;
+  }
+
+  .nav {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 10px 20px;
+    position: relative;
+  }
+
+  .logo {
+    flex: 1;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .menu {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    gap: 0;
+    transform: none;
+    background: #fff;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    border-top: 2px solid #e2e8f0;
+    padding: 8px 0;
+  }
+
+  .menu.menu-open {
+    display: flex;
+  }
+
+  .menu li {
+    height: auto;
+    padding: 14px 24px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 15px;
+  }
+
+  .menu li:last-of-type {
+    border-bottom: none;
+  }
+
+  .slider {
+    display: none;
+  }
+}
+
+/* ── Móvil (≤ 480px) ── */
+@media (max-width: 480px) {
+
+  .topbar {
+    padding: 0 14px;
+    height: auto;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+
+  .search-box {
+    display: none;
+  }
+
+  .logo video {
+    height: 60px !important;
+  }
+
+  .logo img {
+    height: 65px !important;
+  }
+
+  .hero-content h1 {
+    font-size: 32px;
+  }
+
+  .hero-content p {
+    font-size: 15px;
+  }
+
+  .countdown-units {
+    gap: 30px;
+  }
+
+  .speakers-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px 20px;
+  }
 }
