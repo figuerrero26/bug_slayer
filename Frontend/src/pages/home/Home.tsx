@@ -4,7 +4,6 @@ import VideoConiiti2 from "../../assets/videoconiiti.mp4";
 import imgItalia from "../../assets/Italiabandera.png";
 import Barra from "../../layout/Barra.tsx";
 import imgCulture from "../../assets/selloycalidad.png";
-import Footer from "../../layout/Footer.tsx";
 import "../../css/Home.css";
 import "../../css/Statsbar.css"
 

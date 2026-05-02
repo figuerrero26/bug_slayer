@@ -1,4 +1,5 @@
 import React from "react";
+import { FaFacebookF, FaInstagram, FaYoutube, FaLinkedinIn } from "react-icons/fa";
 import "../css/Home.css";
 
 import logoIcontec from "../assets/Logo_Icontec_universidad.png";

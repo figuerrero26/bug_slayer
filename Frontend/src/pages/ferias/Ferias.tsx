@@ -13,16 +13,6 @@ function Ferias() {
           <p>Ver información del evento.</p>
         </Link>
 
-        <Link to="/coniiti2016" className="feria-card">
-          <h2>CONIITI 2016</h2>
-          <p>Ver información del evento.</p>
-        </Link>
-
-        <Link to="/coniiti2017" className="feria-card">
-          <h2>CONIITI 2017</h2>
-          <p>Ver información del evento.</p>
-        </Link>
-
       </div>
     </div>
   );
