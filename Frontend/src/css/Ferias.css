@@ -1,0 +1,26 @@
+.ferias-container{
+  padding:40px;
+  text-align:center;
+}
+
+.ferias-grid{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  margin-top:30px;
+}
+
+.feria-card{
+  width:180px;
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+  text-decoration:none;
+  color:black;
+  transition:0.3s;
+}
+
+.feria-card:hover{
+  transform:scale(1.05);
+}

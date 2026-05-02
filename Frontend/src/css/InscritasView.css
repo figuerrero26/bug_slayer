@@ -1,0 +1,196 @@
+/* InscritasView — prefijo inscr- para evitar colisiones con Dashboard.css */
+
+/* ── Estados vacío / carga / error ──────────────────────────────────────── */
+
+.inscr-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 5rem 2rem;
+  text-align: center;
+  color: var(--muted, #6b7fa3);
+  animation: inscr-fade 0.3s ease;
+}
+
+.inscr-icon { font-size: 2.8rem; }
+
+.inscr-error { color: #dc2626; }
+
+.inscr-empty-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--navy, #1a2545);
+  margin: 0;
+}
+
+.inscr-empty-sub {
+  font-size: 0.88rem;
+  color: var(--muted, #6b7fa3);
+  max-width: 300px;
+  line-height: 1.5;
+}
+
+.inscr-spinner {
+  width: 38px;
+  height: 38px;
+  border: 3px solid var(--border, #d0dcea);
+  border-top-color: var(--blue, #1e6fbd);
+  border-radius: 50%;
+  animation: inscr-spin 0.8s linear infinite;
+}
+
+@keyframes inscr-spin { to { transform: rotate(360deg); } }
+
+/* ── Contenedor principal ─────────────────────────────────────────────────── */
+
+.inscr-container {
+  animation: inscr-fade 0.3s ease;
+}
+
+@keyframes inscr-fade {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.inscr-section-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--navy, #1a2545);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.inscr-count {
+  background: var(--blue, #1e6fbd);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+}
+
+/* ── Grid de tarjetas ─────────────────────────────────────────────────────── */
+
+.inscr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 1rem;
+}
+
+.inscr-card {
+  position: relative;
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #d0dcea);
+  border-radius: var(--radius, 16px);
+  padding: 1.25rem;
+  box-shadow: 0 2px 10px rgba(26, 37, 69, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.inscr-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(26, 37, 69, 0.12);
+}
+
+.inscr-card--done {
+  border-left: 3px solid var(--green, #27ae60);
+}
+
+/* ── Badges ───────────────────────────────────────────────────────────────── */
+
+.inscr-badge-cat {
+  display: inline-block;
+  background: var(--gold-dim, #e8941a20);
+  color: var(--gold, #e8941a);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(232, 148, 26, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.4rem;
+}
+
+.inscr-badge-status {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.inscr-status--done {
+  background: var(--green-dim, #27ae6018);
+  color: var(--green, #27ae60);
+  border: 1px solid rgba(39, 174, 96, 0.25);
+}
+
+.inscr-status--upcoming {
+  background: var(--blue-dim, #1e6fbd18);
+  color: var(--blue, #1e6fbd);
+  border: 1px solid rgba(30, 111, 189, 0.25);
+}
+
+/* ── Contenido de la tarjeta ──────────────────────────────────────────────── */
+
+.inscr-card-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--navy, #1a2545);
+  margin: 0.5rem 0 0.75rem;
+  line-height: 1.4;
+  padding-right: 4.5rem;
+}
+
+.inscr-speaker {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.inscr-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid var(--border, #d0dcea);
+}
+
+.inscr-avatar--initials {
+  background: var(--blue, #1e6fbd);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inscr-speaker-name {
+  font-size: 0.82rem;
+  color: var(--muted, #6b7fa3);
+  font-weight: 500;
+}
+
+.inscr-meta {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.79rem;
+  color: var(--muted, #6b7fa3);
+}
+
+.inscr-meta-icon { margin-right: 0.35rem; }

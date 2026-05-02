@@ -1,0 +1,44 @@
+.stats-bar {
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(1600deg,#0b1f3a,#163b6c,#dfdee4);
+  padding: 25px 0;
+  position: relative;
+}
+
+.stats-scroll {
+  display: flex;
+  width: max-content;
+  animation: scrollStats 30s linear infinite;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 50px;
+  color: rgb(0, 0, 0);
+  text-align: center;
+}
+
+.stat-num {
+  font-size: 34px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.stat-label {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-top: 4px;
+}
+
+@keyframes scrollStats {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
