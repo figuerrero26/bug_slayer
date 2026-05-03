@@ -47,8 +47,8 @@ a {
   height: 110px;        /* ← ajusta la altura de la barra aquí */
   background: linear-gradient(180deg, #ffffff 60%, #f4f7ff 100%);
   position: relative;
+  z-index: 1;           /* crea stacking context: Rogelio z-9999 queda siempre al frente */
   overflow: visible;
-    /* visible para que Rogelio no sea recortado */
 }
 
 
@@ -99,9 +99,22 @@ a {
   100% { transform: translateX(calc(100vw + 90px)); opacity: 0; }
 }
 
-/* En móvil se oculta para no romper el layout */
+/* En móvil — position:fixed saca al wrapper de cualquier stacking context
+   y garantiza que Rogelio quede siempre al frente sin ser cortado          */
 @media (max-width: 1024px) {
-  .rogelio-wrapper { display: none; }
+  .rogelio-wrapper {
+    position: fixed;   /* fuera de cualquier contexto — siempre al frente */
+    bottom: auto;
+    top: 72px;         /* ← ajusta si queda muy arriba o muy abajo en móvil */
+    left: 0;
+    width: 36px;
+    height: 24px;
+    z-index: 99999;
+  }
+  .rogelio-sprite {
+    width: 36px;
+    height: 36px;
+  }
 }
 
 /* ── LOGO (columna izquierda) ── */
