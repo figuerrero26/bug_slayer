@@ -1,205 +1,124 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaSearch } from "react-icons/fa";
 import { IoLanguage } from "react-icons/io5";
 
 import VideoConiiti from "../assets/CONIITI .mp4";
-import imgCulture from "../assets/selloycalidad.png";
+import logoMenu     from "../assets/logomenu.svg";
+import imgCulture   from "../assets/selloycalidad.png";
 
 import "../css/Home.css";
+
+const NAV_LINKS = [
+  { to: "/",              label: "Home" },
+  { to: "/nosotros",      label: "Nosotros" },
+  { to: "/ferias",        label: "Nuestras ferias" },
+  { to: "/inscripciones", label: "Inscripciones" },
+  { to: "/noticias",      label: "Noticias" },
+  { to: "/login",         label: "Login" },
+];
 
 const Barra = () => {
 
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const location                = useLocation();
 
   useEffect(() => {
-
-    const items = document.querySelectorAll(".menu li");
-    const slider = document.querySelector(".slider") as HTMLElement | null;
-
-    function moveSlider(element: HTMLElement | null) {
-      if (element && slider && element.parentElement) {
-
-        const rect = element.getBoundingClientRect();
-        const parentRect = element.parentElement.getBoundingClientRect();
-
-        slider.style.width = `${rect.width}px`;
-        slider.style.left = `${rect.left - parentRect.left}px`;
-
-      }
-    }
-
-    function handleResize() {
-
-      const activeItem = document.querySelector(".menu li.active") as HTMLElement | null;
-      moveSlider(activeItem);
-
-    }
-
-    items.forEach(item => {
-
-      item.addEventListener("mouseenter", () => moveSlider(item as HTMLElement));
-
-      item.addEventListener("click", () => {
-
-        document
-          .querySelector(".menu li.active")
-          ?.classList.remove("active");
-
-        item.classList.add("active");
-
-      });
-
-    });
-
-    window.addEventListener("resize", handleResize);
-
-    handleResize();
-
-    return () => {
-
-      window.removeEventListener("resize", handleResize);
-
-    };
-
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
+    <header className={`header${scrolled ? " header--scrolled" : ""}`}>
 
-    <header className="header">
-
-      {/* ========================
-            BARRA SUPERIOR
-      ======================== */}
-
+      {/* ── TOPBAR ── */}
       <div className="topbar">
-
-        {/* ICONOS IZQUIERDA */}
-
         <div className="topbar-icons">
-
-          <a href="tel:+576014433700">
-            <FaPhone />
-          </a>
-
-          <a href="mailto:coniiti@ucatolica.edu.co">
-            <FaEnvelope />
-          </a>
-
+          <a href="tel:+576014433700"><FaPhone /></a>
+          <a href="mailto:coniiti@ucatolica.edu.co"><FaEnvelope /></a>
           <a
-            href="https://www.google.com/maps/place/Universidad+Cat%C3%B3lica+de+Colombia+Sede+4/@4.6342232,-74.0685259,17z/data=!3m1!4b1!4m6!3m5!1s0x8e3f9a2f84cd3649:0xabd321c3ea5f9e1c!8m2!3d4.6342232!4d-74.065951!16s%2Fg%2F1pw3y1zh2?entry=ttu&g_ep=EgoyMDI2MDMwOC4wIKXMDSoASAFQAw%3D%3D"
+            href="https://www.google.com/maps/place/Universidad+Cat%C3%B3lica+de+Colombia+Sede+4/@4.6342232,-74.0685259,17z"
             target="_blank"
             rel="noreferrer"
           >
             <FaMapMarkerAlt />
           </a>
-
         </div>
-
-        {/* BUSCADOR + IDIOMA */}
-
         <div className="topbar-right">
-
           <div className="search-box">
             <FaSearch />
-            <input
-              type="text"
-              placeholder="Buscar..."
-            />
+            <input type="text" placeholder="Buscar..." />
           </div>
-
           <div className="language">
             <IoLanguage />
-
             <select>
-
               <option>ES</option>
               <option>EN</option>
-
             </select>
-
           </div>
-
         </div>
-
       </div>
 
-      {/* ========================
-            NAVBAR PRINCIPAL
-      ======================== */}
-
+      {/* ── NAV PRINCIPAL ── */}
       <nav className="nav">
 
-        {/* LOGO + VIDEO */}
-
+        {/* LOGO */}
         <div className="logo">
-
-          <video
-            autoPlay
-            muted
-            loop
-            className="logo-video"
-          >
+          <video autoPlay muted loop className="logo-video">
             <source src={VideoConiiti} type="video/mp4" />
           </video>
-
-          <img
-            src={imgCulture}
-            alt="Italia Imagen Cultural"
-          />
-
+          <img src={imgCulture} alt="Sello de calidad" className="logo-culture" />
         </div>
 
-        {/* BOTON HAMBURGUESA — solo visible en móvil */}
+        {/* HAMBURGUESA — solo móvil */}
         <button
-          className={`hamburger ${menuOpen ? "hamburger-open" : ""}`}
+          className={`hamburger${menuOpen ? " hamburger-open" : ""}`}
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Abrir menú"
         >
-          <span />
-          <span />
-          <span />
+          <span /><span /><span />
         </button>
 
-        {/* MENU */}
+        {/* MENU con contenedor glass */}
+        <div className={`menu-glass${menuOpen ? " menu-glass--open" : ""}`}>
+          <ul className="menu">
+            {NAV_LINKS.map(({ to, label }) => (
+              <li
+                key={to}
+                className={location.pathname === to ? "active" : ""}
+              >
+                <Link to={to} onClick={() => setMenuOpen(false)}>{label}</Link>
+              </li>
+            ))}
 
-        <ul className={`menu ${menuOpen ? "menu-open" : ""}`}>
+            {/* Logo al final del menú */}
+            <li className="menu-logo-item">
+              <img src={logoMenu} alt="CONIITI" className="menu-logo-icon" />
+            </li>
+          </ul>
+        </div>
 
-          <li className="active">
-            <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
-          </li>
-
-          <li>
-            <Link to="/nosotros" onClick={() => setMenuOpen(false)}>Nosotros</Link>
-          </li>
-
-          <li>
-            <Link to="/ferias" onClick={() => setMenuOpen(false)}>Nuestras ferias</Link>
-          </li>
-
-          <li>
-            <Link to="/inscripciones" onClick={() => setMenuOpen(false)}>Proceso de inscripciones</Link>
-          </li>
-
-          <li>
-            <Link to="/noticias" onClick={() => setMenuOpen(false)}>Noticias</Link>
-          </li>
-
-          <li>
-            <Link to="/login" onClick={() => setMenuOpen(false)}>
-              Login
-            </Link>
-          </li>
-
-          {/* LINEA ANIMADA — solo en desktop */}
-          <div className="slider"></div>
-
-        </ul>
+        {/*
+          ╔══════════════════════════════════════╗
+          ║  AÑO — ajustes disponibles en CSS    ║
+          ║  Busca la clase  .nav-year           ║
+          ║  en Home.css para cambiar:           ║
+          ║  • tamaño de letra  → font-size      ║
+          ║  • posición H       → justify-self   ║
+          ║                       (start / center / end) ║
+          ║  • posición fina    → margin-right / margin-left ║
+          ║  • fuente           → font-family    ║
+          ║  • color            → color          ║
+          ╚══════════════════════════════════════╝
+        */}
+        {/* El año se actualiza solo cada 1 de enero */}
+        <span className="nav-year">{new Date().getFullYear()}</span>
 
       </nav>
 
     </header>
-
   );
 
 };
