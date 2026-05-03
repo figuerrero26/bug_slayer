@@ -6,6 +6,7 @@ import { IoLanguage } from "react-icons/io5";
 import VideoConiiti from "../assets/CONIITI .mp4";
 import logoMenu     from "../assets/logomenu.svg";
 import imgCulture   from "../assets/selloycalidad.png";
+import rogelio from "../assets/rogelio.png";
 
 import "../css/Home.css";
 
@@ -127,6 +128,11 @@ const Barra = () => {
         */}
         {/* El año se actualiza solo cada 1 de enero */}
         <span className="nav-year">{new Date().getFullYear()}</span>
+
+        {/* Rogelio — dentro del nav para quedar sobre el fondo blanco */}
+        <div className="rogelio-wrapper">
+          <img src={rogelio} className="rogelio-sprite" alt="" draggable={false} />
+        </div>
 
       </nav>
 

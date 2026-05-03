@@ -26,6 +26,7 @@ a {
   z-index: 1000;
   background: #ffffff;
   transition: box-shadow 0.3s ease;
+  overflow: visible;    /* permite que Rogelio sobresalga por abajo */
 }
 
 .header--scrolled {
@@ -46,9 +47,62 @@ a {
   height: 110px;        /* ← ajusta la altura de la barra aquí */
   background: linear-gradient(180deg, #ffffff 60%, #f4f7ff 100%);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+    /* visible para que Rogelio no sea recortado */
 }
 
+
+/* ════════════════════════════════════════════════════
+   ROGELIO — personaje pixel-art que camina por el nav
+   Aparece 2s después de que terminan las líneas de Italia
+   (líneas Italia: delay 1.6s + duración 3.0s = 4.6s → Rogelio: 6.6s)
+   ════════════════════════════════════════════════════ */
+
+/* Contenedor — recorre el nav de izquierda a derecha */
+/* Rogelio — solo la cabecita asoma por el borde inferior del nav */
+.rogelio-wrapper {
+  position: absolute;
+  bottom: 0;              /* ← SUBE/BAJA: más número = más arriba */
+  left: 0;
+  width: 80px;
+  height: 52px;           /* ← más número = más cuerpo visible */
+  overflow: hidden;       /* recorta debajo de la cabeza */
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  animation: rogelioRun 6s linear 6.6s forwards;
+}
+
+.rogelio-sprite {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 80px;
+  height: 80px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.22));
+  animation: rogelioHeadBob 0.38s steps(2, end) 6.6s infinite;
+}
+
+/* Cabecita sube y baja como si estuviera caminando */
+@keyframes rogelioHeadBob {
+  0%, 100% { transform: translateY(0px);   }
+  50%      { transform: translateY(-10px); }
+}
+
+/* Camina de izquierda a derecha y sale */
+@keyframes rogelioRun {
+  0%   { transform: translateX(-90px);              opacity: 0; }
+  4%   {                                             opacity: 1; }
+  94%  {                                             opacity: 1; }
+  100% { transform: translateX(calc(100vw + 90px)); opacity: 0; }
+}
+
+/* En móvil se oculta para no romper el layout */
+@media (max-width: 1024px) {
+  .rogelio-wrapper { display: none; }
+}
 
 /* ── LOGO (columna izquierda) ── */
 .logo {
