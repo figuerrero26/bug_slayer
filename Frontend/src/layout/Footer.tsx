@@ -1,11 +1,13 @@
 import React from "react";
 import { FaFacebookF, FaInstagram, FaYoutube, FaLinkedinIn } from "react-icons/fa";
+import { useLang } from "../context/LanguageContext";
 import "../css/Home.css";
 
 import logoIcontec from "../assets/Logo_Icontec_universidad.png";
 import logoAltaCalidad from "../assets/logo-alta-calidad-ho.svg";
 
 function Footer() {
+  const { t } = useLang();
   return (
     <footer className="footer">
       <div className="footer-container">
@@ -17,8 +19,8 @@ function Footer() {
 
         <div className="footer-info">
           <h3>Universidad Católica de Colombia</h3>
-          <p>Centro de Convenciones</p>
-          <p>© 2026 CONIITI - Todos los derechos reservados</p>
+          <p>{t.footer_center}</p>
+          <p>{t.footer_rights}</p>
         </div>
 
         <div className="footer-redes">

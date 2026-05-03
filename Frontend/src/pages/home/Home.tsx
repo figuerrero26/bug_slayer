@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";//cuenta regresiva
+import { useEffect, useState } from "react";
+import { useLang } from "../../context/LanguageContext";
 import VideoConiiti from "../../assets/CONIITI .mp4";
 import VideoConiiti2 from "../../assets/videoconiiti.mp4";
 import imgItalia from "../../assets/Italiabandera.png";
@@ -8,6 +9,8 @@ import "../../css/Home.css";
 import "../../css/Statsbar.css"
 
 function Home() {
+
+  const { t } = useLang();
 
   const [timeLeft, setTimeLeft] = useState({
   days: 0,
@@ -121,9 +124,9 @@ const timer = setInterval(() => {
         <div className="hero-overlay"></div>
 
         <div className="hero-content">
-          <h1>Coniiti 2026</h1>
-          <p>País invitado: Italia</p>
-          <p>Conferencistas internacionales</p>
+          <h1>{t.hero_title}</h1>
+          <p>{t.hero_country}</p>
+          <p>{t.hero_speakers}</p>
           <img src={imgItalia} alt="Bandera Italia" className="flag" />
         </div>
 
@@ -136,20 +139,19 @@ const timer = setInterval(() => {
 
 <div className="stats-bar">
   <div className="stats-scroll">
-    <div className="stat-item"><div className="stat-num">95</div><div className="stat-label">Conferencistas</div></div>
-    <div className="stat-item"><div className="stat-num">1</div><div className="stat-label">Patrocinadores</div></div>
-    <div className="stat-item"><div className="stat-num">30</div><div className="stat-label">Ofertas de Workshops</div></div>
-    <div className="stat-item"><div className="stat-num">100+</div><div className="stat-label">Participantes del Evento</div></div>
-    <div className="stat-item"><div className="stat-num">🇮🇹</div><div className="stat-label">País anfitrion</div></div>
-    <div className="stat-item"><div className="stat-num">39</div><div className="stat-label">Días de torneo</div></div>
-
+    <div className="stat-item"><div className="stat-num">95</div><div className="stat-label">{t.stat_speakers}</div></div>
+    <div className="stat-item"><div className="stat-num">1</div><div className="stat-label">{t.stat_sponsors}</div></div>
+    <div className="stat-item"><div className="stat-num">30</div><div className="stat-label">{t.stat_workshops}</div></div>
+    <div className="stat-item"><div className="stat-num">100+</div><div className="stat-label">{t.stat_attendees}</div></div>
+    <div className="stat-item"><div className="stat-num">🇮🇹</div><div className="stat-label">{t.stat_host}</div></div>
+    <div className="stat-item"><div className="stat-num">39</div><div className="stat-label">{t.stat_days}</div></div>
     {/* duplicado para scroll infinito */}
-    <div className="stat-item"><div className="stat-num">95</div><div className="stat-label">Conferencistas</div></div>
-    <div className="stat-item"><div className="stat-num">1</div><div className="stat-label">Patrocinadores</div></div>
-    <div className="stat-item"><div className="stat-num">30</div><div className="stat-label">Ofertas de Workshops</div></div>
-    <div className="stat-item"><div className="stat-num">100+</div><div className="stat-label">Participantes del Evento</div></div>
-    <div className="stat-item"><div className="stat-num">🇮🇹</div><div className="stat-label">País anfitrion</div></div>
-    <div className="stat-item"><div className="stat-num">39</div><div className="stat-label">Días de torneo</div></div>
+    <div className="stat-item"><div className="stat-num">95</div><div className="stat-label">{t.stat_speakers}</div></div>
+    <div className="stat-item"><div className="stat-num">1</div><div className="stat-label">{t.stat_sponsors}</div></div>
+    <div className="stat-item"><div className="stat-num">30</div><div className="stat-label">{t.stat_workshops}</div></div>
+    <div className="stat-item"><div className="stat-num">100+</div><div className="stat-label">{t.stat_attendees}</div></div>
+    <div className="stat-item"><div className="stat-num">🇮🇹</div><div className="stat-label">{t.stat_host}</div></div>
+    <div className="stat-item"><div className="stat-num">39</div><div className="stat-label">{t.stat_days}</div></div>
   </div>
 </div>
 
@@ -162,22 +164,22 @@ const timer = setInterval(() => {
 
     <div className="countdown-unit">
       <span className="countdown-num">{timeLeft.days}</span>
-      <div className="countdown-unit-label">Días</div>
+      <div className="countdown-unit-label">{t.days}</div>
     </div>
 
     <div className="countdown-unit">
       <span className="countdown-num">{timeLeft.hours}</span>
-      <div className="countdown-unit-label">Horas</div>
+      <div className="countdown-unit-label">{t.hours}</div>
     </div>
 
     <div className="countdown-unit">
       <span className="countdown-num">{timeLeft.minutes}</span>
-      <div className="countdown-unit-label">Minutos</div>
+      <div className="countdown-unit-label">{t.minutes}</div>
     </div>
 
     <div className="countdown-unit">
       <span className="countdown-num">{timeLeft.seconds}</span>
-      <div className="countdown-unit-label">Segundos</div>
+      <div className="countdown-unit-label">{t.seconds}</div>
     </div>
 
   </div>
@@ -191,29 +193,23 @@ const timer = setInterval(() => {
 
           {/* CARD 1 */}
           <div className="card reveal delay-1">
-            <h4>Home</h4>
-            <p>Explora nuestra información principal.</p>
+            <h4>{t.card1_title}</h4>
+            <p>{t.card1_p}</p>
             <div className="shine"></div>
           </div>
-
-          {/* CARD 2 */}
           <div className="card reveal delay-2">
-            <h4>Nuestras Ferias</h4>
-            <p>Eventos académicos y empresariales.</p>
+            <h4>{t.card2_title}</h4>
+            <p>{t.card2_p}</p>
             <div className="shine"></div>
           </div>
-
-          {/* CARD 3 */}
           <div className="card reveal delay-3">
-            <h4>Proceso de Inscripciones</h4>
-            <p>Conoce los pasos para aplicar.</p>
+            <h4>{t.card3_title}</h4>
+            <p>{t.card3_p}</p>
             <div className="shine"></div>
           </div>
-
-          {/* CARD 4 */}
           <div className="card reveal delay-4">
-            <h4>Noticias</h4>
-            <p>Mantente informado.</p>
+            <h4>{t.card4_title}</h4>
+            <p>{t.card4_p}</p>
             <div className="shine"></div>
           </div>
 

@@ -1,67 +1,64 @@
-/* CONTENEDOR GENERAL */
+/* ── CONTENEDOR GENERAL ── */
 .login-container {
   display: flex;
+  width: 100%;
+  max-width: 100vw;
   height: 100vh;
+  overflow: hidden;
   font-family: 'Segoe UI', sans-serif;
 }
 
-/* LADO IZQUIERDO */
-/* CONTENEDOR IZQUIERDO */
-.login-left{
-    position: relative;
-    width: 50%;
-    height: 100vh;
-    overflow: hidden;
+/* ── PANEL IZQUIERDO (imagen) ── */
+.login-left {
+  position: relative;
+  width: 50%;
+  height: 100vh;
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
-/* IMAGEN DE FONDO */
-.login-image{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-/* LOGO UNIVERSIDAD */
-.logo-login{
-    position: absolute;
-    top: 50px;
-    left: 50px;
-
-    width: 200px;
-    height: auto;
-
-    z-index: 5;
+.login-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-/* TEXTO SOBRE LA IMAGEN */
-.login-text{
-    position: absolute;
-    bottom: 80px;
-    left: 40px;
-
-    color: white;
-    z-index: 5;
+.logo-login {
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  width: 200px;
+  height: auto;
+  z-index: 5;
 }
 
-/* CAPA OSCURA PARA QUE EL TEXTO SE VEA */
-.overlay{
-    position: absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-
-    background: rgba(0,0,0,0.35);
+.login-text {
+  position: absolute;
+  bottom: 80px;
+  left: 40px;
+  right: 40px;
+  color: white;
+  z-index: 5;
 }
 
+.overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 2;
+}
 
-/* LADO DERECHO */
+/* ── PANEL DERECHO (formulario) ── */
 .login-right {
   flex: 1;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background: #0f172a;
   position: relative;
+  min-width: 0;
 }
 
 .login-back {
@@ -74,6 +71,7 @@
   color: #94a3b8;
   font-size: 14px;
   transition: color 0.3s;
+  z-index: 10;
 }
 
 .login-back:hover {
@@ -99,6 +97,9 @@
   border: none;
   background: #1e293b;
   color: white;
+  font-size: 15px;
+  width: 100%;
+  box-sizing: border-box;
   transition: 0.3s;
 }
 
@@ -113,7 +114,10 @@
   border: none;
   border-radius: 8px;
   font-weight: bold;
+  font-size: 15px;
   cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
   transition: 0.3s;
 }
 
@@ -121,7 +125,6 @@
   background: #eab308;
   transform: translateY(-2px);
 }
-
 
 .extra {
   color: #94a3b8;
@@ -132,4 +135,54 @@
 .extra span {
   color: #facc15;
   cursor: pointer;
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE — móvil (≤ 768px)
+   Oculta la imagen, formulario pantalla completa
+   ════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  .login-container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .login-left {
+    display: none !important;
+  }
+
+  .login-right {
+    width: 100vw;
+    min-height: 100vh;
+    padding: 80px 28px 48px;
+    box-sizing: border-box;
+    justify-content: flex-start;
+    align-items: stretch;
+  }
+
+  .login-form {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .login-form h2 {
+    font-size: 1.6rem;
+    text-align: center;
+  }
+
+  .login-form input,
+  .login-form button {
+    padding: 13px;
+    font-size: 16px;
+  }
+
+  .login-back {
+    top: 20px;
+    left: 20px;
+    font-size: 13px;
+  }
 }

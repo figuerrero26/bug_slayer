@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
+import { LanguageProvider } from "./context/LanguageContext";
 
 import Barra from "./layout/Barra.tsx";
 
@@ -65,11 +66,11 @@ export default function App() {
   const [splashDone, setSplashDone] = useState(false);
 
   return (
-    <>
+    <LanguageProvider>
       <AnimatePresence>
         {!splashDone && <SplashScreen onDone={() => setSplashDone(true)} />}
       </AnimatePresence>
       {splashDone && <Layout />}
-    </>
+    </LanguageProvider>
   );
 }
