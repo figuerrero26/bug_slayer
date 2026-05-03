@@ -1,3 +1,10 @@
+# Este docker compose es para poder hacer cambios y que se 
+# vean reflejados en tiempo real y que no haga falta cerrar 
+# el docker compose y volver a levantarlo para poder ver los cambios efectuados
+
+# Para poder correrlo en la terminal debes ejecutar el siguiente comando en la Git Bash:
+
+# docker compose -f docker-compose.dev.yml up --build
 
 services:
 
@@ -10,7 +17,9 @@ services:
       DATABASE_URL: mysql+pymysql://coniiti:coniiti@181.79.5.78:3306/db_search
       NOTIFICATIONS_SERVICE_URL: http://notifications_service:8004
     volumes:
+      - ./services/search_service:/app
       - speaker_images:/app/uploads/speakers
+    command: uvicorn main:app --host 0.0.0.0 --port 8003 --reload
     networks:
       - coniiti_network
     restart: unless-stopped
@@ -23,6 +32,9 @@ services:
     environment:
       DATABASE_URL: mysql+pymysql://coniiti:coniiti@181.79.5.78:3306/db_dashboard
       SEARCH_SERVICE_URL: http://search_service:8003
+    volumes:
+      - ./services/dashboard_service:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8002 --reload
     depends_on:
       - search_service
     networks:
@@ -30,10 +42,18 @@ services:
     restart: unless-stopped
 
   frontend:
-    build: ./Frontend
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile.dev
     container_name: frontend
     ports:
-      - "80:80"
+      - "5173:5173"
+    environment:
+      SEARCH_SERVICE_URL: http://search_service:8003
+    volumes:
+      - ./Frontend/src:/app/src
+      - ./Frontend/public:/app/public
+      - ./Frontend/index.html:/app/index.html
     depends_on:
       - search_service
       - dashboard_service

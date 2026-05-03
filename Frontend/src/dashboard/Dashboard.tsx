@@ -1,5 +1,5 @@
 import logo_U from "../assets/logo_ucatolica.png";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { DASHBOARD_URL } from "../config.ts";
@@ -20,6 +20,7 @@ interface User {
   city?: string;
   country?: string;
   birthdate?: string;
+  birthdateRaw?: string;
   registeredAt?: string;
 }
 
@@ -71,49 +72,126 @@ const SECTION_TITLES: Record<string, string> = {
 };
 
 // ─── EDIT PROFILE MODAL ────────────────────────────────────────────────────────
-function EditProfileModal({ user, onClose }: { user: User; onClose: () => void }) {
+function EditProfileModal({
+  user,
+  userId,
+  onClose,
+  onSaved,
+}: {
+  user: User;
+  userId: number;
+  onClose: () => void;
+  onSaved: (updated: Partial<User>) => void;
+}) {
   const [form, setForm] = useState({
-    name:  user.name,
-    email: user.email,
-    phone: user.phone ?? "",
-    city:  user.city  ?? "",
+    name:      user.name,
+    phone:     user.phone        ?? "",
+    city:      user.city         ?? "",
+    birthdate: user.birthdateRaw ?? "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError]               = useState<string | null>(null);
+
+  const set = (key: keyof typeof form) =>
+    (e: React.ChangeEvent<HTMLInputElement>) =>
+      setForm((prev) => ({ ...prev, [key]: e.target.value }));
+
+  async function handleSave() {
+    setIsSubmitting(true);
+    setError(null);
+    try {
+      const res = await fetch(`${DASHBOARD_URL}/profile/${userId}`, {
+        method:  "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          full_name:    form.name      || null,
+          phone:        form.phone     || null,
+          country_city: form.city      || null,
+          birth_date:   form.birthdate || null,
+        }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      onSaved({
+        name:         form.name,
+        phone:        form.phone,
+        city:         form.city,
+        country:      form.city,
+        birthdateRaw: form.birthdate,
+        birthdate: form.birthdate
+          ? new Date(form.birthdate + "T12:00:00").toLocaleDateString("es-CO")
+          : "—",
+      });
+      onClose();
+    } catch {
+      setError("No se pudo guardar. Verifica tu conexión e inténtalo de nuevo.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
+
         <div className="modal-header">
-          <h2>Editar Perfil</h2>
-          <button className="modal-close" onClick={onClose}>✕</button>
+          <div className="modal-header-left">
+            <div className="modal-avatar">
+              {user.name.charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <h2>Editar Perfil</h2>
+              <p className="modal-subtitle">{user.email}</p>
+            </div>
+          </div>
+          <button className="modal-close" onClick={onClose} disabled={isSubmitting}>✕</button>
         </div>
+
+        <hr className="modal-divider" />
+
         <div className="modal-body">
-          <label>Nombre completo</label>
-          <input className="modal-input" value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })} />
+          <div className="modal-grid">
 
-          <label>Correo electrónico</label>
-          <input className="modal-input" value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })} />
+            <div className="modal-field modal-field--full">
+              <label>Nombre completo</label>
+              <input className="modal-input" value={form.name} onChange={set("name")} />
+            </div>
 
-          <label>Teléfono</label>
-          <input className="modal-input" value={form.phone}
-            onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+            <div className="modal-field">
+              <label>Teléfono</label>
+              <input className="modal-input" type="tel" value={form.phone}
+                onChange={set("phone")} placeholder="+57 300 000 0000" />
+            </div>
 
-          <label>Ciudad</label>
-          <input className="modal-input" value={form.city}
-            onChange={(e) => setForm({ ...form, city: e.target.value })} />
+            <div className="modal-field">
+              <label>Ciudad / País</label>
+              <input className="modal-input" value={form.city}
+                onChange={set("city")} placeholder="Bogotá, Colombia" />
+            </div>
 
-          <label>Nueva contraseña</label>
-          <input className="modal-input" type="password"
-            placeholder="Dejar vacío para no cambiar" />
+            <div className="modal-field modal-field--full">
+              <label>Fecha de nacimiento</label>
+              <input className="modal-input" type="date" value={form.birthdate} onChange={set("birthdate")} />
+            </div>
 
-          <label>Datos de facturación</label>
-          <input className="modal-input" placeholder="NIT / Nombre empresa" />
+            {error && <p className="modal-error">{error}</p>}
+
+          </div>
         </div>
+
         <div className="modal-footer">
-          <button className="btn-modal-cancel" onClick={onClose}>Cancelar</button>
-          <button className="btn-modal-save"   onClick={onClose}>Guardar cambios</button>
+          <button className="btn-modal-cancel" onClick={onClose} disabled={isSubmitting}>
+            Cancelar
+          </button>
+          <button
+            className={`btn-modal-save${isSubmitting ? " btn-modal-save--loading" : ""}`}
+            onClick={handleSave}
+            disabled={isSubmitting}
+          >
+            {isSubmitting && <span className="btn-spinner" />}
+            {isSubmitting ? "Guardando…" : "Guardar cambios"}
+          </button>
         </div>
+
       </div>
     </div>
   );
@@ -121,11 +199,14 @@ function EditProfileModal({ user, onClose }: { user: User; onClose: () => void }
 
 // ─── MAIN DASHBOARD ───────────────────────────────────────────────────────────
 export default function Dashboard() {
-  const [user, setUser]             = useState<User | null>(null);
-  const [confCount, setConfCount]   = useState(0);
-  const [loading, setLoading]       = useState(true);
+  const [user, setUser]                   = useState<User | null>(null);
+  const [confCount, setConfCount]         = useState(0);
+  const [loading, setLoading]             = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [activeNav, setActiveNav]   = useState("profile");
+  const [activeNav, setActiveNav]         = useState("profile");
+
+  const handleUserSaved = (updated: Partial<User>) =>
+    setUser((prev) => prev ? { ...prev, ...updated } : prev);
 
   const navigate       = useNavigate();
   const [searchParams] = useSearchParams();
@@ -155,15 +236,18 @@ export default function Dashboard() {
       })
       .then((data) => {
         setUser({
-          id:          data.user_id,
-          name:        data.full_name,
-          email:       session?.email ?? "",
-          phone:       data.phone,
-          city:        data.country_city,
-          country:     data.country_city,
-          birthdate:   data.birth_date
+          id:           data.user_id,
+          name:         data.full_name,
+          email:        session?.email ?? "",
+          phone:        data.phone,
+          city:         data.country_city,
+          country:      data.country_city,
+          birthdate:    data.birth_date
             ? new Date(data.birth_date).toLocaleDateString("es-CO")
             : "—",
+          birthdateRaw: data.birth_date
+            ? data.birth_date.substring(0, 10)
+            : "",
           registeredAt: data.registered_at
             ? new Date(data.registered_at).toLocaleString("es-CO", {
                 day: "2-digit", month: "short", year: "numeric",
@@ -269,7 +353,12 @@ export default function Dashboard() {
       </div>
 
       {showEditModal && user && (
-        <EditProfileModal user={user} onClose={() => setShowEditModal(false)} />
+        <EditProfileModal
+          user={user}
+          userId={userId as number}
+          onClose={() => setShowEditModal(false)}
+          onSaved={handleUserSaved}
+        />
       )}
     </>
   );
