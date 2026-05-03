@@ -64,6 +64,18 @@ const Barra = () => {
       {/* ── NAV PRINCIPAL ── */}
       <nav className="nav">
 
+        {/* Cintas animadas — se dibujan una sola vez al abrir la página */}
+        <svg className="nav-ribbons" viewBox="0 0 1440 110" preserveAspectRatio="none" aria-hidden="true">
+          {/* Universidad — azul y amarillo, entran primero */}
+          <path className="nav-ribbon nav-ribbon-1" d="M -60 98 C 200 60, 520 125, 900 85 C 1180 50, 1350 115, 1510 78" />
+          <path className="nav-ribbon nav-ribbon-2" d="M -60 112 C 220 72, 540 130, 920 92 C 1200 58, 1370 122, 1520 88" />
+          <path className="nav-ribbon nav-ribbon-3" d="M -60 82 C 210 48, 530 108, 880 70 C 1160 38, 1340 100, 1510 62" />
+          <path className="nav-ribbon nav-ribbon-4" d="M -60 90 C 230 55, 550 118, 910 78 C 1190 44, 1360 108, 1515 70" />
+          {/* Italia — verde arriba, rojo abajo, blanco del nav al centro = bandera */}
+          <path className="nav-ribbon nav-ribbon-5" d="M -60 60 C 220 46, 540 72, 900 55 C 1180 42, 1360 68, 1520 52" />
+          <path className="nav-ribbon nav-ribbon-6" d="M -60 102 C 220 88, 540 115, 900 98 C 1180 82, 1360 108, 1520 92" />
+        </svg>
+
         {/* LOGO */}
         <div className="logo">
           <video autoPlay muted loop className="logo-video">
