@@ -1,4 +1,4 @@
-export const AUTH_URL          = "http://localhost:8001";
+export const AUTH_URL          = "http://localhost:8005";
 
 export const DASHBOARD_URL     = "http://localhost:8002";
 
