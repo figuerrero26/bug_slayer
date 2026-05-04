@@ -1,5 +1,5 @@
-# Este docker compose es para poder hacer cambios y que se 
-# vean reflejados en tiempo real y que no haga falta cerrar 
+# Este docker compose es para poder hacer cambios y que se
+# vean reflejados en tiempo real y que no haga falta cerrar
 # el docker compose y volver a levantarlo para poder ver los cambios efectuados
 
 # Para poder correrlo en la terminal debes ejecutar el siguiente comando en la Git Bash:
@@ -7,6 +7,26 @@
 # docker compose -f docker-compose.dev.yml up --build
 
 services:
+
+  auth_service:
+    build: ./services/auth_service
+    container_name: auth_service
+    ports:
+      - "8001:8001"
+    environment:
+      DATABASE_URL: mysql+pymysql://coniiti:coniiti@181.79.5.78:3306/db_auth
+      JWT_SECRET: cambia-esta-clave-en-produccion
+      JWT_ALGORITHM: HS256
+      JWT_EXPIRE_MINUTES: "1440"
+      DASHBOARD_SERVICE_URL: http://dashboard_service:8002
+    volumes:
+      - ./services/auth_service:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8001 --reload
+    depends_on:
+      - dashboard_service
+    networks:
+      - coniiti_network
+    restart: unless-stopped
 
   search_service:
     build: ./services/search_service
@@ -55,6 +75,7 @@ services:
       - ./Frontend/public:/app/public
       - ./Frontend/index.html:/app/index.html
     depends_on:
+      - auth_service
       - search_service
       - dashboard_service
     networks:

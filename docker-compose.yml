@@ -1,6 +1,23 @@
 
 services:
 
+  auth_service:
+    build: ./services/auth_service
+    container_name: auth_service
+    ports:
+      - "8001:8001"
+    environment:
+      DATABASE_URL: mysql+pymysql://coniiti:coniiti@181.79.5.78:3306/db_auth
+      JWT_SECRET: cambia-esta-clave-en-produccion
+      JWT_ALGORITHM: HS256
+      JWT_EXPIRE_MINUTES: "1440"
+      DASHBOARD_SERVICE_URL: http://dashboard_service:8002
+    depends_on:
+      - dashboard_service
+    networks:
+      - coniiti_network
+    restart: unless-stopped
+
   search_service:
     build: ./services/search_service
     container_name: search_service
@@ -35,6 +52,7 @@ services:
     ports:
       - "80:80"
     depends_on:
+      - auth_service
       - search_service
       - dashboard_service
     networks:
