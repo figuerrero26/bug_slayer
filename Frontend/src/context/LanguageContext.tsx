@@ -15,7 +15,8 @@ type T = Record<string, string>;
 const ES: T = {
   /* Navbar */
   home: "Home", nosotros: "Nosotros", ferias: "Nuestras ferias",
-  inscripciones: "Inscripciones", noticias: "Noticias", login: "Login",
+  inscripciones: "Inscripciones", noticias: "Noticias", login: "Ingresar",
+  register: "Crear cuenta",
   buscar: "Buscar...",
   /* Hero */
   hero_title: "Coniiti 2026", hero_country: "País invitado: Italia",
@@ -54,6 +55,7 @@ const ES: T = {
 const EN: T = {
   home: "Home", nosotros: "About Us", ferias: "Our Fairs",
   inscripciones: "Registrations", noticias: "News", login: "Login",
+  register: "Sign Up",
   buscar: "Search...",
   hero_title: "Coniiti 2026", hero_country: "Guest Country: Italy",
   hero_speakers: "International Speakers",
@@ -85,6 +87,7 @@ const EN: T = {
 const IT: T = {
   home: "Home", nosotros: "Chi Siamo", ferias: "Le Nostre Fiere",
   inscripciones: "Iscrizioni", noticias: "Notizie", login: "Accedi",
+  register: "Registrati",
   buscar: "Cerca...",
   hero_title: "Coniiti 2026", hero_country: "Paese ospite: Italia",
   hero_speakers: "Relatori internazionali",
@@ -116,6 +119,7 @@ const IT: T = {
 const PT: T = {
   home: "Início", nosotros: "Sobre Nós", ferias: "Nossas Feiras",
   inscripciones: "Inscrições", noticias: "Notícias", login: "Entrar",
+  register: "Cadastrar",
   buscar: "Buscar...",
   hero_title: "Coniiti 2026", hero_country: "País convidado: Itália",
   hero_speakers: "Palestrantes internacionais",
@@ -147,6 +151,7 @@ const PT: T = {
 const FR: T = {
   home: "Accueil", nosotros: "À propos", ferias: "Nos Foires",
   inscripciones: "Inscriptions", noticias: "Actualités", login: "Connexion",
+  register: "S'inscrire",
   buscar: "Rechercher...",
   hero_title: "Coniiti 2026", hero_country: "Pays invité : Italie",
   hero_speakers: "Conférenciers internationaux",

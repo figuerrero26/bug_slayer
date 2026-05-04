@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { SEARCH_URL } from "../../config.ts";
 import "../../css/Inscripciones.css";
@@ -182,14 +182,15 @@ export default function Inscripciones() {
 
   // ── Filtro local por texto ──────────────────────────────────────────────────
 
-  const visible = conferences.filter((c) => {
+  const visible = useMemo(() => {
     const q = search.toLowerCase();
-    return (
+    if (!q) return conferences;
+    return conferences.filter((c) =>
       c.title.toLowerCase().includes(q) ||
       (c.speaker_name ?? "").toLowerCase().includes(q) ||
       (c.description ?? "").toLowerCase().includes(q)
     );
-  });
+  }, [conferences, search]);
 
   // ── Render ──────────────────────────────────────────────────────────────────
 
@@ -293,6 +294,8 @@ export default function Inscripciones() {
                             src={`${SEARCH_URL}${conf.speaker_image_url}`}
                             alt={conf.speaker_name}
                             className="insc-speaker-avatar"
+                            loading="lazy"
+                            decoding="async"
                           />
                         : <div className="insc-speaker-initials">
                             {conf.speaker_name[0].toUpperCase()}

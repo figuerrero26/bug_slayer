@@ -107,7 +107,7 @@ const Barra = () => {
 
         {/* LOGO */}
         <div className="logo">
-          <video autoPlay muted loop className="logo-video">
+          <video autoPlay muted loop playsInline preload="metadata" className="logo-video">
             <source src={VideoConiiti} type="video/mp4" />
           </video>
           <img src={imgCulture} alt="Sello de calidad" className="logo-culture" />
@@ -131,12 +131,32 @@ const Barra = () => {
               { to: "/ferias",        label: t.ferias        },
               { to: "/inscripciones", label: t.inscripciones },
               { to: "/noticias",      label: t.noticias      },
-              { to: "/login",         label: t.login         },
             ] as { to: string; label: string }[]).map(({ to, label }) => (
               <li key={to} className={location.pathname === to ? "active" : ""}>
                 <Link to={to} onClick={() => setMenuOpen(false)}>{label}</Link>
               </li>
             ))}
+
+            {/* Login con icono SVG personalizado */}
+            <li className={location.pathname === "/login" ? "active" : ""}>
+              <Link to="/login" onClick={() => setMenuOpen(false)} className="menu-link-icon">
+                <svg className="nav-login-svg" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  {/* Marco de puerta — tres lados */}
+                  <path d="M6 2H3.5A1.2 1.2 0 0 0 2.3 3.2v9.6A1.2 1.2 0 0 0 3.5 14H6"
+                    stroke="currentColor" strokeWidth="1.4"
+                    strokeLinecap="round" strokeLinejoin="round"/>
+                  {/* Flecha entrando */}
+                  <path d="M9 5.5L12.5 8 9 10.5"
+                    stroke="currentColor" strokeWidth="1.4"
+                    strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M6.5 8h6"
+                    stroke="currentColor" strokeWidth="1.4"
+                    strokeLinecap="round"/>
+                </svg>
+                {t.login}
+              </Link>
+            </li>
+
             <li className="menu-logo-item">
               <img src={logoMenu} alt="CONIITI" className="menu-logo-icon" />
             </li>

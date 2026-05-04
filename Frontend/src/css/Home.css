@@ -321,6 +321,26 @@ a {
   display: none;
 }
 
+/* ── LOGIN CON ICONO SVG PERSONALIZADO ── */
+.menu-link-icon {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.nav-login-svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  opacity: 0.70;
+  transition: opacity 0.2s ease;
+}
+
+.menu-link-icon:hover .nav-login-svg,
+.menu li.active .nav-login-svg {
+  opacity: 1;
+}
+
 /* ── BUSCADOR EN NAV ── */
 .nav-search {
   display: flex;
@@ -436,16 +456,19 @@ a {
   100% { stroke-dashoffset: 0;    opacity: 0;    }  /* se desvanece */
 }
 
-/* video de prueba*/
 /* HERO VIDEO */
 .hero {
     position: relative;
     width: 100%;
     height: 500px;
     overflow: hidden;
+    /* evita que la línea del body se cuele entre el header sticky y el hero */
+    margin-top: -1px;
+    padding-top: 1px;
 }
 
 .hero-video {
+    display: block;       /* elimina el gap de baseline de elementos inline */
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -745,6 +768,10 @@ a{
 .footer-redes a:hover {
   background: #0077ff;
   transform: translateY(-4px);
+}
+
+.footer-spotify:hover {
+  background: #1DB954 !important;
 }
 
 /* BARRA SUPERIOR */
@@ -1094,17 +1121,19 @@ a{
     height: auto;
     padding: 10px 20px;
     gap: 0;
+    background: #ffffff;  /* blanco sólido — evita la línea del gradiente contra el hero */
   }
 
   /* ── ORDEN MÓVIL ─────────────────────────────────
-     1 → logo (video + sello)
-     2 → 2026
-     3 → hamburger
-     El menú desplegable (order 4) baja solo al abrirse */
-  .logo        { order: 1; flex: 1;         justify-self: unset; }
-  .nav-year    { order: 2; margin: 0 10px;  justify-self: unset; }
-  .hamburger   { order: 3; margin-left: 0;  }
-  .menu-glass  { order: 4; }
+     1 → logo (video + sello) — esquina izquierda, flex:1 empuja el resto a la derecha
+     2 → nav-right-slot (2026 + avatar) — derecha, junto a la hamburguesa
+     3 → hamburger — extremo derecho
+     4 → menú desplegable — ocupa fila completa al abrirse */
+  .logo            { order: 1; flex: 1; justify-self: unset; }
+  .nav-right-slot  { order: 2; margin-right: 6px; justify-self: unset; display: flex; align-items: center; gap: 6px; }
+  .nav-year        { margin: 0; }
+  .hamburger       { order: 3; margin-left: 0; }
+  .menu-glass      { order: 4; }
 
   /* Oculta la forma D con el logo en móvil */
   .menu-logo-item { display: none; }
@@ -1167,10 +1196,16 @@ a{
   .logo-video   { height: 48px !important; }
   .logo-culture { height: 52px !important; }
 
+  .nav-right-slot {
+    gap: 4px;
+    margin-right: 4px;
+  }
+
   .nav-year {
-    font-size: 12px;
-    padding: 4px 10px;
-    margin: 0 8px;
+    font-size: 11px;
+    padding: 4px 9px;
+    margin: 0;
+    letter-spacing: 1px;
   }
 
   .hero-content h1 {

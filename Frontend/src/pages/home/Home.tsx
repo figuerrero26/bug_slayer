@@ -25,9 +25,16 @@ function Home() {
        1. SLIDER DEL MENÚ
     ========================================= */
 
+    function throttle<T extends (...args: never[]) => void>(fn: T, ms: number): T {
+      let last = 0;
+      return ((...args: Parameters<T>) => {
+        const now = Date.now();
+        if (now - last >= ms) { last = now; fn(...args); }
+      }) as T;
+    }
+
     const items = document.querySelectorAll(".menu li");
     const slider = document.querySelector(".slider") as HTMLElement | null;
-    const menu = document.querySelector(".menu");
 
     function moveSlider(element: HTMLElement | null) {
       if (element && slider && element.parentElement) {
@@ -39,8 +46,10 @@ function Home() {
       }
     }
 
+    const throttledMoveSlider = throttle((el: HTMLElement) => moveSlider(el), 50);
+
     items.forEach(item => {
-      item.addEventListener("mouseenter", () => moveSlider(item as HTMLElement));
+      item.addEventListener("mouseenter", () => throttledMoveSlider(item as HTMLElement));
 
       item.addEventListener("click", () => {
         document.querySelector(".menu li.active")?.classList.remove("active");
@@ -67,8 +76,11 @@ function Home() {
       });
     }
 
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("scroll", handleScrollReveal);
+    const throttledResize = throttle(handleResize, 150);
+    const throttledScroll = throttle(handleScrollReveal, 100);
+
+    window.addEventListener("resize", throttledResize);
+    window.addEventListener("scroll", throttledScroll, { passive: true });
 
     handleResize();
     handleScrollReveal();
@@ -95,8 +107,8 @@ const timer = setInterval(() => {
     ========================================= */
 
     return () => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("scroll", handleScrollReveal);
+      window.removeEventListener("resize", throttledResize);
+      window.removeEventListener("scroll", throttledScroll);
       clearInterval(timer);
     };
 

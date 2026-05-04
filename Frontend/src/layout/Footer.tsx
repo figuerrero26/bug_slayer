@@ -1,5 +1,5 @@
 import React from "react";
-import { FaFacebookF, FaInstagram, FaYoutube, FaLinkedinIn } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaYoutube, FaLinkedinIn, FaSpotify } from "react-icons/fa";
 import { useLang } from "../context/LanguageContext";
 import "../css/Home.css";
 
@@ -35,6 +35,9 @@ function Footer() {
           </a>
           <a href="https://co.linkedin.com/school/universidadcatólicadecolombia/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
             <FaLinkedinIn />
+          </a>
+          <a href="https://open.spotify.com/user/31j6c4bmk73citpx2xmxslv4axru" target="_blank" rel="noreferrer" aria-label="Spotify" className="footer-spotify">
+            <FaSpotify />
           </a>
         </div>
 

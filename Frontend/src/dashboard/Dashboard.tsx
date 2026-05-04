@@ -1,4 +1,4 @@
-import logo_U from "../assets/logo_ucatolica.png";
+import logo_U from "../assets/escudo-ucatolica.png";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
@@ -49,7 +49,6 @@ function getSession(): { token: string; user_id: number; email: string } | null 
 }
 
 // ─── SIDEBAR NAV ──────────────────────────────────────────────────────────────
-// "Agenda" reemplazada por "Calendario" (id: "calendar")
 const NAV_ITEMS = [
   { id: "profile",     label: "Perfil"                        },
   { id: "conferences", label: "Mis conferencias", badge: true },
@@ -58,6 +57,15 @@ const NAV_ITEMS = [
   { id: "favorites",   label: "Favoritos"                     },
   { id: "calendar",    label: "Calendario"                    },
   { id: "messages",    label: "Mensajes",         badge: false},
+];
+
+// Ítems del bottom nav en móvil (los 5 más importantes)
+const MOBILE_NAV = [
+  { id: "profile",     label: "Perfil",        emoji: "👤" },
+  { id: "conferences", label: "Mis charlas",   emoji: "🎤" },
+  { id: "calendar",    label: "Calendario",    emoji: "📅" },
+  { id: "favorites",   label: "Favoritos",     emoji: "❤️" },
+  { id: "messages",    label: "Mensajes",      emoji: "✉️" },
 ];
 
 // Título del topbar según sección activa
@@ -277,7 +285,8 @@ export default function Dashboard() {
         {/* ── SIDEBAR ─────────────────────────────────────────────── */}
         <aside className="sidebar">
           <div className="sidebar-brand">
-            <img src={logo_U} alt="Logo Universidad" className="Logo-U" />
+            <img src={logo_U} alt="Escudo Universidad" className="Logo-U" />
+            
           </div>
 
           <nav className="sidebar-nav">
@@ -323,6 +332,8 @@ export default function Dashboard() {
                 <input className="search-input-1" placeholder="Buscar…" />
               </div>
               <button className="btn-exit" title="Ir a inicio" onClick={handleGoHome}>↪</button>
+              {/* Logout visible solo en móvil (sidebar oculta) */}
+              <button className="btn-mobile-logout" title="Cerrar sesión" onClick={handleLogout}>🚪</button>
             </div>
           </header>
 
@@ -351,6 +362,20 @@ export default function Dashboard() {
           </div>
         </main>
       </div>
+
+      {/* ── BOTTOM NAV — solo móvil ──────────────────────────────── */}
+      <nav className="mobile-bottom-nav">
+        {MOBILE_NAV.map(({ id, label, emoji }) => (
+          <button
+            key={id}
+            className={`mobile-nav-btn ${activeNav === id ? "mobile-nav-active" : ""}`}
+            onClick={() => setActiveNav(id)}
+          >
+            <span className="mobile-nav-emoji">{emoji}</span>
+            <span className="mobile-nav-label">{label}</span>
+          </button>
+        ))}
+      </nav>
 
       {showEditModal && user && (
         <EditProfileModal

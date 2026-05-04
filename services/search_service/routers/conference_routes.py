@@ -34,6 +34,25 @@ def _with_count(db: Session, conf: Conference) -> ConferenceResponse:
     return out
 
 
+def _bulk_counts(db: Session, conference_ids: list[int]) -> dict[int, int]:
+    """Una sola query para obtener el conteo de inscritos de múltiples conferencias."""
+    if not conference_ids:
+        return {}
+    rows = (
+        db.query(
+            ConferenceRegistration.conference_id,
+            func.count(ConferenceRegistration.id),
+        )
+        .filter(
+            ConferenceRegistration.conference_id.in_(conference_ids),
+            ConferenceRegistration.status == "activo",
+        )
+        .group_by(ConferenceRegistration.conference_id)
+        .all()
+    )
+    return {conf_id: count for conf_id, count in rows}
+
+
 # ── CRUD conferencias ─────────────────────────────────────────────────────────
 
 @router.get("", response_model=List[ConferenceResponse])
@@ -45,12 +64,20 @@ def list_conferences(
 ):
     q = db.query(Conference).filter(Conference.is_active == True)
     if category:
-        q = q.filter(Conference.category.ilike(f"%{category}%"))
+        q = q.filter(func.lower(Conference.category) == category.lower())
     if speaker:
         q = q.filter(Conference.speaker_name.ilike(f"%{speaker}%"))
     if day:
         q = q.filter(func.date(Conference.schedule) == day)
-    return [_with_count(db, c) for c in q.order_by(Conference.schedule).all()]
+    conferences = q.order_by(Conference.schedule).all()
+
+    counts = _bulk_counts(db, [c.id for c in conferences])
+    result = []
+    for conf in conferences:
+        out = ConferenceResponse.model_validate(conf)
+        out.registered_count = counts.get(conf.id, 0)
+        result.append(out)
+    return result
 
 
 @router.get("/{conference_id}", response_model=ConferenceResponse)
