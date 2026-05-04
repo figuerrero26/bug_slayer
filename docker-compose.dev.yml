@@ -28,6 +28,20 @@ services:
       - coniiti_network
     restart: unless-stopped
 
+  notifications_service:
+    build: ./services/notifications_service
+    container_name: notifications_service
+    ports:
+      - "8004:8004"
+    environment:
+      DATABASE_URL: mysql+pymysql://coniiti:coniiti@181.79.5.78:3306/db_notifications
+    volumes:
+      - ./services/notifications_service:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8004 --reload
+    networks:
+      - coniiti_network
+    restart: unless-stopped
+
   search_service:
     build: ./services/search_service
     container_name: search_service
@@ -40,6 +54,8 @@ services:
       - ./services/search_service:/app
       - speaker_images:/app/uploads/speakers
     command: uvicorn main:app --host 0.0.0.0 --port 8003 --reload
+    depends_on:
+      - notifications_service
     networks:
       - coniiti_network
     restart: unless-stopped
