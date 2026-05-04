@@ -39,9 +39,10 @@ async def register(payload: UserRegister, db: Session = Depends(get_db)):
             resp = await client.post(
                 f"{DASHBOARD_URL}/internal/create-profile",
                 json={
-                    "user_id": new_user.id,
-                    "full_name": payload.full_name,
-                    "phone": payload.phone,
+                    "user_id":      new_user.id,
+                    "full_name":    payload.full_name,
+                    "birth_date":   payload.birth_date.isoformat() if payload.birth_date else None,
+                    "phone":        payload.phone,
                     "country_city": payload.country_city,
                 },
                 timeout=10.0,

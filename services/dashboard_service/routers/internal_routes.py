@@ -20,6 +20,7 @@ def create_profile(payload: CreateProfileInternal, db: Session = Depends(get_db)
     profile = Profile(
         user_id=payload.user_id,
         full_name=payload.full_name,
+        birth_date=payload.birth_date,
         phone=payload.phone,
         country_city=payload.country_city,
     )

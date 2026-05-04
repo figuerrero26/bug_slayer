@@ -119,8 +119,8 @@ export default function Register() {
           email:        form.email,
           password:     form.password,
           full_name:    form.full_name,
+          birth_date:   form.birth_date || null,
           phone:        form.phone,
-          // Se envía el país seleccionado como referencia de ciudad/país
           country_city: form.country_city,
         }),
       });
@@ -346,6 +346,15 @@ export default function Register() {
                 <div className="reg-summary__row">
                   <span className="reg-summary__label">Nombre</span>
                   <span className="reg-summary__value">{form.full_name}</span>
+                </div>
+
+                <div className="reg-summary__row">
+                  <span className="reg-summary__label">Fecha de nacimiento</span>
+                  <span className="reg-summary__value">
+                    {form.birth_date
+                      ? new Date(form.birth_date + "T12:00:00").toLocaleDateString("es-CO")
+                      : "—"}
+                  </span>
                 </div>
 
                 <div className="reg-summary__row">

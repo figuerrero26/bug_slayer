@@ -7,6 +7,7 @@ import VideoConiiti from "../assets/CONIITI .mp4";
 import logoMenu     from "../assets/logomenu.svg";
 import imgCulture   from "../assets/selloycalidad.png";
 import rogelio      from "../assets/rogelio.png";
+import UserAvatar   from "./UserAvatar";
 
 import "../css/Home.css";
 
@@ -142,8 +143,11 @@ const Barra = () => {
           </ul>
         </div>
 
-        {/* AÑO */}
-        <span className="nav-year">{new Date().getFullYear()}</span>
+        {/* SLOT DERECHO: año + avatar de usuario */}
+        <div className="nav-right-slot">
+          <span className="nav-year">{new Date().getFullYear()}</span>
+          <UserAvatar />
+        </div>
 
         {/* Rogelio */}
         <div className="rogelio-wrapper">

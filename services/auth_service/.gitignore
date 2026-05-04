@@ -1,0 +1,6 @@
+# Caché de python
+__pycache__
+models/__pycache__
+routers/__pycache__
+schemas/__pycache__
+utils/__pycache__

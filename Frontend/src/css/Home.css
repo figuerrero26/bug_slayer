@@ -177,23 +177,27 @@ a {
 /* ════════════════════════════════════════════════
    AÑO  "2026"  — todos los ajustes están aquí
    ════════════════════════════════════════════════ */
-.nav-year {
+/* Slot derecho del nav: contiene el año y el avatar de usuario */
+.nav-right-slot {
   justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin-right: 40px;
   position: relative;
   z-index: 10;
+}
 
+.nav-year {
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   font-weight: 500;
-
   padding: 6px 14px;
   border-radius: 20px;
-
   background: rgba(0, 85, 204, 0.08);
   color: #000000;
-
   letter-spacing: 2px;
+  white-space: nowrap;
 }
 
 /* ════════════════════════════════════════════════════

@@ -9,6 +9,7 @@ class CreateProfileInternal(BaseModel):
     """Payload que envía auth_service al crear un usuario nuevo."""
     user_id: int
     full_name: str
+    birth_date: Optional[date] = None
     phone: str
     country_city: str
 
