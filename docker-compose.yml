@@ -7,11 +7,13 @@ services:
     ports:
       - "8005:8001"
     environment:
-      DATABASE_URL: mysql+pymysql://coniiti:coniiti@181.79.5.78:3306/db_auth
+      DATABASE_URL: mysql+pymysql://coniiti:coniiti@host.docker.internal:3306/db_auth
       JWT_SECRET: cambia-esta-clave-en-produccion
       JWT_ALGORITHM: HS256
       JWT_EXPIRE_MINUTES: "1440"
       DASHBOARD_SERVICE_URL: http://dashboard_service:8002
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       - dashboard_service
     networks:
@@ -24,7 +26,9 @@ services:
     ports:
       - "8004:8004"
     environment:
-      DATABASE_URL: mysql+pymysql://coniiti:coniiti@181.79.5.78:3306/db_notifications
+      DATABASE_URL: mysql+pymysql://coniiti:coniiti@host.docker.internal:3306/db_notifications
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - coniiti_network
     restart: unless-stopped
@@ -35,8 +39,10 @@ services:
     ports:
       - "8003:8003"
     environment:
-      DATABASE_URL: mysql+pymysql://coniiti:coniiti@181.79.5.78:3306/db_search
+      DATABASE_URL: mysql+pymysql://coniiti:coniiti@host.docker.internal:3306/db_search
       NOTIFICATIONS_SERVICE_URL: http://notifications_service:8004
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - speaker_images:/app/uploads/speakers
     depends_on:
@@ -51,8 +57,10 @@ services:
     ports:
       - "8002:8002"
     environment:
-      DATABASE_URL: mysql+pymysql://coniiti:coniiti@181.79.5.78:3306/db_dashboard
+      DATABASE_URL: mysql+pymysql://coniiti:coniiti@host.docker.internal:3306/db_dashboard
       SEARCH_SERVICE_URL: http://search_service:8003
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       - search_service
     networks:
