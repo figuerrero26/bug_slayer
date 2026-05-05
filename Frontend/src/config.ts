@@ -1,4 +1,4 @@
-const isLocal = true; // 👈 tú cambias esto
+const isLocal = false; // 👈 tú cambias esto
 
 // ===== CONFIG TEAM =====
 const TEAM = {
