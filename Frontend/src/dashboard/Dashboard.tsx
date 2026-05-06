@@ -445,11 +445,10 @@ export default function Dashboard() {
 // ── Logout Overlay ────────────────────────────────────────────────────────────
 const LOGOUT_MESSAGES = [
   "Cerrando sesión de forma segura...",
-  "Protegiendo tu información...",
   "Limpiando datos de sesión...",
   "Todo listo. ¡Hasta pronto!",
 ];
-const LOGOUT_DURATION_MS = 2800;
+const LOGOUT_DURATION_MS = 1000;
 
 function DashboardLogoutOverlay({ initial }: { initial: string }) {
   const [idx, setIdx] = useState(0);

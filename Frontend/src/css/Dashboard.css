@@ -467,12 +467,11 @@
 }
 
 .section-title {
-  font-family: 'DM Sans', sans-serif;
-  letter-spacing: -0.2px;
+  font-family: 'Inter', sans-serif;
   font-size: 16px;
   font-weight: 700;
   color: var(--navy);
-  margin-bottom: 18px;
+  margin-bottom: 20px; /* Más espacio para que no se pegue al contenido */
 }
 
 .conf-list {
@@ -597,7 +596,7 @@
 
 .tickets-card{
   background:#0f1c2f;
-  padding:25px;
+  padding:30px;
   border-radius:12px;
   color:white;
   display:flex;
@@ -609,15 +608,47 @@
   
 }
 
+/* Sección Azul (Información) */
+.ua-ticket-info-side {
+  flex: 1;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: 'Inter', sans-serif; /* Tipografía más limpia */
+}
+
+/* Sección Naranja/Oro (Colilla del ticket) */
+.ua-ticket-orange-side {
+  width: 100px;
+  background: var(--gold);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  /* AQUÍ ES DONDE SE HACEN LOS HUECOS (PERFORACIÓN REAL) */
+  --mask: radial-gradient(10px at 0 50%, #0000 98%, #000);
+  -webkit-mask-image: var(--mask);
+  mask-image: var(--mask);
+  -webkit-mask-size: 100% 40px;
+  mask-size: 100% 40px;
+}
+
 .tickets-card:hover{
   transform: translateY(-6px);
   box-shadow:0 16px 40px rgba(0,0,0,0.45);
   
 }
 
-.tickets-title{
-  font-size:20px;
-  font-weight:600;
+.tickets-title {
+  font-family: 'Inter', sans-serif; /* Cambiamos a Inter para mayor claridad */
+  font-size: 24px;                 /* Aumentamos el tamaño (estaba en 20px) */
+  font-weight: 700;                /* Más grosor para destacar */
+  letter-spacing: -0.02em;         /* Tracking ligeramente cerrado para estilo premium */
+  color: #ffffff;
+  margin-bottom: 8px;
 }
 
 .tickets-empty{
