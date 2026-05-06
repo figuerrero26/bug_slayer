@@ -23,11 +23,8 @@ def notify_registration(
             print("[notification_client] email destino:", email)
             print("[notification_client] url:", f"{NOTIFICATIONS_URL}/notifications/")
             client.post(
-<<<<<<< Updated upstream
                 # trailing slash evita redirect 307
-=======
                 f"{NOTIFICATIONS_URL}/notifications/",
->>>>>>> Stashed changes
                 json={
                     "user_id": user_id,
                     "title":   "Inscripción confirmada",
