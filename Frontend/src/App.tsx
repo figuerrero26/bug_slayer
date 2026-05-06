@@ -10,6 +10,7 @@ import Nosotros from "./pages/nosotros/Nosotros.tsx";
 import Ferias from "./pages/ferias/Ferias.tsx";
 import Inscripciones from "./pages/inscripciones/Inscripciones.tsx";
 import Noticias from "./pages/noticias/Noticias.tsx";
+import Ponentes from "./pages/ponentes/Ponentes.tsx";
 import Coniiti2015 from "./pages/ferias/Coniiti2015.tsx";
 import Dashboard from "./dashboard/Dashboard.tsx";
 import Admin from "./admin/Admin.tsx";
@@ -41,6 +42,7 @@ function Layout() {
         <Route path="/ferias" element={<Ferias />} />
         <Route path="/inscripciones" element={<Inscripciones />} />
         <Route path="/noticias" element={<Noticias />} />
+        <Route path="/ponentes" element={<Ponentes />} />
         <Route path="/coniiti2015" element={<Coniiti2015 />} />
 
         {/* Auth */}
