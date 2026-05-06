@@ -78,7 +78,8 @@ class ConferenceResponse(BaseModel):
 
 class RegistrationCreate(BaseModel):
     conference_id: int
-    user_id:       int
+    user_id: int
+    email: str | None = None
 
     @field_validator("conference_id", "user_id")
     @classmethod

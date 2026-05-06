@@ -45,7 +45,13 @@ def register_to_conference(
         existing.status = "activo"
         db.commit()
         db.refresh(existing)
-        background_tasks.add_task(notify_registration, payload.user_id, conf.id, conf.title)
+        background_tasks.add_task(
+            notify_registration,
+            payload.user_id,
+            conf.id,
+            conf.title,
+            payload.email
+        )
         return existing
 
     # Validar cupos disponibles
@@ -73,7 +79,13 @@ def register_to_conference(
         db.rollback()
         raise HTTPException(status_code=409, detail="Ya estás inscrito en esta conferencia")
 
-    background_tasks.add_task(notify_registration, payload.user_id, conf.id, conf.title)
+    background_tasks.add_task(
+        notify_registration,
+        payload.user_id,
+        conf.id,
+        conf.title,
+        payload.email
+    )
     return reg
 
 
