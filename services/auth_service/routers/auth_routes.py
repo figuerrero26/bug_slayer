@@ -5,7 +5,7 @@ import os
 
 from database import get_db
 from models.user_model import User
-from schemas.user_schema import UserRegister, UserLogin, TokenResponse
+from schemas.user_schema import UserRegister, UserLogin, TokenResponse, PasswordChange
 from utils.security import hash_password, verify_password, create_token
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -87,6 +87,17 @@ async def register(payload: UserRegister, db: Session = Depends(get_db)):
         user_id=new_user.id,
         email=new_user.email,
     )
+
+
+@router.post("/change-password")
+def change_password(payload: PasswordChange, db: Session = Depends(get_db)):
+    """Cambia la contraseña del usuario verificando la contraseña actual."""
+    user = db.query(User).filter(User.id == payload.user_id).first()
+    if not user or not verify_password(payload.current_password, user.password_hash):
+        raise HTTPException(status_code=401, detail="Contraseña actual incorrecta")
+    user.password_hash = hash_password(payload.new_password)
+    db.commit()
+    return {"message": "Contraseña actualizada exitosamente"}
 
 
 @router.post("/login", response_model=TokenResponse)

@@ -26,7 +26,7 @@ function formatDate(iso: string | null): string {
   });
 }
 
-export default function InscritasView({ userId }: { userId: number }) {
+export default function InscritasView({ userId, searchQuery = "" }: { userId: number; searchQuery?: string }) {
   const [conferences, setConferences] = useState<Conference[]>([]);
   const [loading, setLoading]         = useState(true);
   const [error, setError]             = useState("");
@@ -72,16 +72,21 @@ export default function InscritasView({ userId }: { userId: number }) {
     );
   }
 
+  const q = searchQuery.toLowerCase();
+  const visible = conferences.filter(
+    (c) => !q || c.title.toLowerCase().includes(q) || (c.speaker_name ?? "").toLowerCase().includes(q)
+  );
+
   return (
     <div className="inscr-container">
 
       <h2 className="inscr-section-title">
         Mis Conferencias
-        <span className="inscr-count">{conferences.length}</span>
+        <span className="inscr-count">{visible.length}</span>
       </h2>
 
       <div className="inscr-grid">
-        {conferences.map((conf) => {
+        {visible.map((conf) => {
           const isPast = conf.schedule
             ? new Date(conf.schedule) < new Date()
             : false;

@@ -1,6 +1,9 @@
 import logo_U from "../assets/escudo-ucatolica.png";
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaArrowLeft, FaCog } from "react-icons/fa";
 
 import { DASHBOARD_URL, NOTIFICATIONS_URL } from "../config.ts";
 import "../css/Dashboard.css";
@@ -11,6 +14,7 @@ import InscritasView   from "./views/InscritasView.tsx";
 import CalendarioView  from "./views/CalendarioView.tsx";
 import PlaceholderView from "./views/PlaceholderView.tsx";
 import MessagesView    from "./views/MessagesView.tsx";
+import SettingsView    from "./views/SettingsView.tsx";
 
 // ─── TYPES ────────────────────────────────────────────────────────────────────
 interface User {
@@ -58,6 +62,7 @@ const NAV_ITEMS = [
   { id: "favorites",   label: "Favoritos"                     },
   { id: "calendar",    label: "Calendario"                    },
   { id: "messages",    label: "Mensajes",         badge: true },
+  { id: "settings",   label: "Ajustes"                       },
 ];
 
 // Ítems del bottom nav en móvil (los 5 más importantes)
@@ -78,6 +83,7 @@ const SECTION_TITLES: Record<string, string> = {
   favorites:   "Favoritos",
   calendar:    "Calendario",
   messages:    "Mensajes",
+  settings:    "Ajustes",
 };
 
 // ─── EDIT PROFILE MODAL ────────────────────────────────────────────────────────
@@ -214,6 +220,8 @@ export default function Dashboard() {
   const [loading, setLoading]             = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
   const [activeNav, setActiveNav]         = useState("profile");
+  const [searchQuery, setSearchQuery]     = useState("");
+  const [isLoggingOut, setIsLoggingOut]   = useState(false);
 
   const handleUserSaved = (updated: Partial<User>) =>
     setUser((prev) => prev ? { ...prev, ...updated } : prev);
@@ -226,9 +234,12 @@ export default function Dashboard() {
   const userId  = session?.user_id ?? Number(searchParams.get("user_id")) ?? null;
 
   const handleLogout = () => {
-    sessionStorage.removeItem("session");
-    localStorage.removeItem("token");
-    navigate("/login");
+    setIsLoggingOut(true);
+    setTimeout(() => {
+      sessionStorage.removeItem("session");
+      localStorage.removeItem("token");
+      navigate("/login");
+    }, 2800);
   };
 
   // El botón ↪ regresa al home sin borrar la sesión:
@@ -326,7 +337,15 @@ export default function Dashboard() {
           </nav>
 
           <div className="sidebar-footer">
-            <button className="btn-logout" onClick={handleLogout}>
+            <button
+              className="nav-item"
+              onClick={() => setActiveNav("settings")}
+              style={{ marginBottom: "4px" }}
+            >
+              <FaCog style={{ fontSize: 15, flexShrink: 0 }} />
+              <span className="nav-label">Ajustes</span>
+            </button>
+            <button className="btn-logout" onClick={handleLogout} disabled={isLoggingOut}>
               <span>🚪</span>
               <span>Cerrar sesión</span>
             </button>
@@ -342,39 +361,50 @@ export default function Dashboard() {
             <div className="topbar-right">
               <div className="search-box-1">
                 <span className="search-icon-1">🔍</span>
-                <input className="search-input-1" placeholder="Buscar…" />
+                <input
+                  className="search-input-1"
+                  placeholder="Buscar…"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
               </div>
-              <button className="btn-exit" title="Ir a inicio" onClick={handleGoHome}>↪</button>
-              {/* Logout visible solo en móvil (sidebar oculta) */}
+              <button className="btn-go-home" onClick={handleGoHome} title="Volver al inicio">
+                <FaArrowLeft />
+                <span>Inicio</span>
+              </button>
               <button className="btn-mobile-logout" title="Cerrar sesión" onClick={handleLogout}>🚪</button>
             </div>
           </header>
 
-          {/* ── Área de contenido — cambia según la sección activa ── */}
+          {/* ── Área de contenido con transiciones ── */}
           <div className="content-area">
-
-            {activeNav === "profile" && user && (
-              <ProfileView user={user} onEdit={() => setShowEditModal(true)} />
-            )}
-
-            {activeNav === "conferences" && userId && (
-              <InscritasView userId={userId} />
-            )}
-
-            {activeNav === "calendar" && (
-              <CalendarioView />
-            )}
-
-            {(activeNav === "favorites" ||
-              activeNav === "events"    ||
-              activeNav === "completed") && (
-              <PlaceholderView section={activeNav} />
-            )}
-
-            {activeNav === "messages" && userId && (
-              <MessagesView userId={userId} onUnreadChange={setUnreadCount} />
-            )}
-
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeNav}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0  }}
+                exit={{    opacity: 0, y: -6  }}
+                transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+              >
+                {activeNav === "profile" && user && (
+                  <ProfileView user={user} onEdit={() => setShowEditModal(true)} userId={userId as number} />
+                )}
+                {activeNav === "conferences" && userId && (
+                  <InscritasView userId={userId} searchQuery={searchQuery} />
+                )}
+                {activeNav === "calendar" && <CalendarioView />}
+                {(activeNav === "favorites" || activeNav === "events" || activeNav === "completed") && (
+                  <PlaceholderView section={activeNav} />
+                )}
+                {activeNav === "messages" && userId && (
+                  <MessagesView userId={userId} onUnreadChange={setUnreadCount} searchQuery={searchQuery} />
+                )}
+                {activeNav === "settings" && user && (
+                  <SettingsView user={user} onSaved={handleUserSaved} />
+                )}
+              </motion.div>
+            </AnimatePresence>
           </div>
         </main>
       </div>
@@ -401,6 +431,74 @@ export default function Dashboard() {
           onSaved={handleUserSaved}
         />
       )}
+
+      {isLoggingOut && user &&
+        createPortal(
+          <DashboardLogoutOverlay initial={user.name.charAt(0).toUpperCase()} />,
+          document.body
+        )
+      }
     </>
+  );
+}
+
+// ── Logout Overlay ────────────────────────────────────────────────────────────
+const LOGOUT_MESSAGES = [
+  "Cerrando sesión de forma segura...",
+  "Protegiendo tu información...",
+  "Limpiando datos de sesión...",
+  "Todo listo. ¡Hasta pronto!",
+];
+const LOGOUT_DURATION_MS = 2800;
+
+function DashboardLogoutOverlay({ initial }: { initial: string }) {
+  const [idx, setIdx] = useState(0);
+  useEffect(() => {
+    const id = setInterval(
+      () => setIdx((i) => Math.min(i + 1, LOGOUT_MESSAGES.length - 1)),
+      LOGOUT_DURATION_MS / LOGOUT_MESSAGES.length,
+    );
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <motion.div
+      className="dash-logout-overlay"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.28 }}
+    >
+      <motion.div
+        className="dash-logout-center"
+        initial={{ scale: 0.88, opacity: 0, y: 16 }}
+        animate={{ scale: 1,    opacity: 1, y: 0  }}
+        transition={{ duration: 0.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <div className="dash-logout-avatar-wrap">
+          <div className="dash-logout-spinner" />
+          <div className="dash-logout-letter">{initial}</div>
+        </div>
+        <AnimatePresence mode="wait">
+          <motion.p
+            key={idx}
+            className="dash-logout-msg"
+            initial={{ opacity: 0, y: 8  }}
+            animate={{ opacity: 1, y: 0  }}
+            exit={{    opacity: 0, y: -8 }}
+            transition={{ duration: 0.22 }}
+          >
+            {LOGOUT_MESSAGES[idx]}
+          </motion.p>
+        </AnimatePresence>
+        <div className="dash-logout-bar">
+          <motion.div
+            className="dash-logout-bar-fill"
+            initial={{ width: "0%" }}
+            animate={{ width: "100%" }}
+            transition={{ duration: LOGOUT_DURATION_MS / 1000, ease: "linear" }}
+          />
+        </div>
+      </motion.div>
+    </motion.div>
   );
 }

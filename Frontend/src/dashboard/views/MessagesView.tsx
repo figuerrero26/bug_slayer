@@ -16,6 +16,7 @@ interface Notification {
 interface Props {
   userId: number;
   onUnreadChange: (count: number) => void;
+  searchQuery?: string;
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -34,7 +35,7 @@ function formatDate(iso: string | null): string {
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
-export default function MessagesView({ userId, onUnreadChange }: Props) {
+export default function MessagesView({ userId, onUnreadChange, searchQuery = "" }: Props) {
   const [items, setItems]     = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState<string | null>(null);
@@ -93,6 +94,10 @@ export default function MessagesView({ userId, onUnreadChange }: Props) {
     );
   }
 
+  const q = searchQuery.toLowerCase();
+  const visible = items.filter(
+    (n) => !q || n.title.toLowerCase().includes(q) || n.message.toLowerCase().includes(q)
+  );
   const unreadCount = items.filter((n) => !n.is_read).length;
 
   // ── Lista ──────────────────────────────────────────────────────────────────
@@ -107,7 +112,7 @@ export default function MessagesView({ userId, onUnreadChange }: Props) {
       </div>
 
       <div className="msv-list">
-        {items.map((n) => (
+        {visible.map((n) => (
           <div
             key={n.id}
             className={`msv-card msv-card--${n.type}${n.is_read ? " msv-card--read" : ""}`}

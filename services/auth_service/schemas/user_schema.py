@@ -22,3 +22,9 @@ class TokenResponse(BaseModel):
     token_type: str
     user_id: int
     email: str
+
+
+class PasswordChange(BaseModel):
+    user_id: int
+    current_password: str
+    new_password: str

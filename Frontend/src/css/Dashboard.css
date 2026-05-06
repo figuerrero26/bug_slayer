@@ -7,6 +7,39 @@
   padding: 0;
 }
 
+/* ─── DARK MODE — se activa con data-theme="dark" en <html> ─────── */
+[data-theme="dark"] {
+  --bg:         #0d1526;
+  --surface:    #172038;
+  --surface2:   #1e2d4a;
+  --border:     #253552;
+  --text:       #dce8f8;
+  --muted:      #7a92b8;
+  --navy:       #dce8f8;
+  --navy-light: #aec4e4;
+  --blue-dim:   #1e6fbd28;
+  --gold-dim:   #e8941a28;
+  --green-dim:  #27ae6028;
+}
+
+[data-theme="dark"] .sidebar          { background: #060f1e; }
+[data-theme="dark"] .main-content     { background: var(--bg); }
+[data-theme="dark"] .topbar           { background: var(--bg); border-bottom: 1px solid var(--border); }
+[data-theme="dark"] .search-box-1     { background: #111d30; border-color: rgba(255,255,255,0.06); }
+[data-theme="dark"] .modal            { background: var(--surface); }
+[data-theme="dark"] .ua-dropdown      { background: rgba(23,32,56,0.96); border-color: rgba(255,255,255,0.08); }
+[data-theme="dark"] .stv-body         { background: var(--surface); }
+[data-theme="dark"] .stv-tabs         { background: var(--surface); border-color: var(--border); }
+[data-theme="dark"] .stv-input        { background: var(--bg); color: var(--text); border-color: var(--border); }
+[data-theme="dark"] .stv-theme-btn    { background: var(--bg); border-color: var(--border); }
+[data-theme="dark"] .stv-theme-name   { color: var(--text); }
+[data-theme="dark"] .msv-card         { background: var(--surface); border-color: var(--border); }
+[data-theme="dark"] .msv-card:not(.msv-card--read) { background: linear-gradient(135deg, #1a2e50, var(--surface)); }
+[data-theme="dark"] .inscr-card       { background: var(--surface); border-color: var(--border); }
+[data-theme="dark"] .profile-card     { background: var(--surface); border-color: var(--border); }
+[data-theme="dark"] .conferences-section { background: var(--surface); }
+[data-theme="dark"] .profv-ticket-perf-dot { background: var(--bg); }
+
 :root {
   --bg:          #eef2f7;
   --surface:     #ffffff;
@@ -96,10 +129,10 @@
 /* ─── SIDEBAR ─────────────────────────────────────────────────────────────── */
 
 .sidebar {
-  background:#0b1f3a;
+  background: #0b1f3a;
   display: flex;
   flex-direction: column;
-  padding: 28px 0 20px;
+  padding: 12px 0 20px; /* Bajamos de 28px a 12px */
   position: sticky;
   top: 0;
   height: 100vh;
@@ -110,14 +143,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px 16px 16px;
+  padding: 16px 20px; /* Reducimos el espacio vertical, damos más margen interno horizontal */
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   margin-bottom: 8px;
 }
 
 .Logo-U {
-  height: 90px;
-  width: auto;
+  width: 95%;          /* El logo ocupará el 85% del espacio disponible (aprox 170px) */
+  max-width: 200px;    /* Evita que se pegue a los bordes del sidebar */
+  height: auto;        /* Deja que la altura se calcule sola de forma simétrica */
+  max-height: 65px;    /* Límite seguro para que no se deforme ni empuje el menú */
   object-fit: contain;
 }
 
@@ -234,6 +269,32 @@
 
 
 
+/* Botón "Volver al inicio" */
+.btn-go-home {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-go-home:hover {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+  transform: translateX(-2px);
+}
+
+/* Mantenemos btn-exit por si hay referencias en otros lugares */
 .btn-exit {
   width: 36px;
   height: 36px;
@@ -1005,5 +1066,87 @@
     white-space: nowrap;
     letter-spacing: 0;
   }
+
+  .btn-go-home span { display: none; }
+  .btn-go-home { padding: 8px 10px; border-radius: 50%; }
+}
+
+/* ─── DASHBOARD LOGOUT OVERLAY ────────────────────────────────────────────── */
+
+.dash-logout-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: rgba(0, 12, 40, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dash-logout-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+.dash-logout-avatar-wrap {
+  position: relative;
+  width: 88px;
+  height: 88px;
+}
+
+.dash-logout-spinner {
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 3.5px solid rgba(255, 209, 0, 0.18);
+  border-top-color: #FFD100;
+  border-right-color: rgba(255, 209, 0, 0.55);
+  animation: spin 1.1s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+.dash-logout-letter {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #003087 0%, #1a5fd4 100%);
+  border: 3px solid #FFD100;
+  color: #ffffff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 6px rgba(255, 209, 0, 0.10), 0 12px 40px rgba(0, 48, 135, 0.45);
+}
+
+.dash-logout-msg {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  text-align: center;
+  max-width: 280px;
+  min-height: 22px;
+}
+
+.dash-logout-bar {
+  width: 200px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.10);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.dash-logout-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FFD100 0%, #fff4a0 60%, #FFD100 100%);
+  background-size: 200% 100%;
+  border-radius: 999px;
+  animation: ua-shimmer 1.4s linear infinite;
 }
 
