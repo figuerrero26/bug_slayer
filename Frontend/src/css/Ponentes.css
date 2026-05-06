@@ -1,0 +1,411 @@
+/* ══════════════════════════════════════════════════
+   PONENTES — Hoja de estilos
+   Sigue el mismo design-token que Home.css:
+   fuente Inter, azul primario #0055cc / #2b7fff,
+   glass-morphism, reveal animations, Border-radius pill
+   ══════════════════════════════════════════════════ */
+
+.ponentes-page {
+  min-height: 100vh;
+  background: #f4f6fb;
+  padding-bottom: 80px;
+}
+
+/* ── HERO ── */
+.ponentes-hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, #03124e 0%, #0055cc 55%, #2b7fff 100%);
+  min-height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px 80px;
+}
+
+.ponentes-hero-ribbons {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ponentes-hero-ribbons svg {
+  width: 100%;
+  height: 100%;
+}
+
+.p-ribbon {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  opacity: 0.18;
+}
+.p-ribbon-1 { stroke: #fff; animation: pRibbon 14s ease-in-out infinite; }
+.p-ribbon-2 { stroke: #a8d4ff; animation: pRibbon 18s ease-in-out infinite reverse; }
+.p-ribbon-3 { stroke: #fff; animation: pRibbon 22s ease-in-out infinite 2s; }
+
+@keyframes pRibbon {
+  0%, 100% { opacity: 0.18; }
+  50%       { opacity: 0.32; }
+}
+
+.ponentes-hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.ponentes-hero-badge {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 6px 18px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(6px);
+  color: #e8f2ff;
+}
+
+.ponentes-hero-content h1 {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(38px, 6vw, 64px);
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -1px;
+  line-height: 1.1;
+}
+
+.ponentes-hero-content p {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(14px, 2vw, 17px);
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0;
+  font-weight: 400;
+}
+
+/* ── KEYNOTES ── */
+.ponentes-keynotes {
+  max-width: 1100px;
+  margin: -40px auto 0;
+  padding: 0 24px;
+  position: relative;
+  z-index: 3;
+}
+
+.ponentes-section-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #0055cc;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 48px 0 28px;
+  white-space: nowrap;
+}
+
+.ponentes-section-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #0055cc44, transparent);
+}
+
+.keynotes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.keynote-card {
+  display: flex;
+  gap: 22px;
+  align-items: flex-start;
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 4px 24px rgba(0, 85, 204, 0.10);
+  border: 1px solid rgba(0, 85, 204, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.keynote-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(0, 85, 204, 0.16);
+}
+
+.keynote-avatar {
+  flex-shrink: 0;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+}
+
+.keynote-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.keynote-badge-italy {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #0055cc;
+  background: rgba(0, 85, 204, 0.08);
+  padding: 3px 10px;
+  border-radius: 20px;
+  align-self: flex-start;
+}
+
+.keynote-info h3 {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #0d0d0d;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.keynote-institution {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: #555;
+  margin: 0;
+  font-weight: 500;
+}
+
+.keynote-topic {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: #333;
+  margin: 4px 0 0;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* ── FILTROS ── */
+.ponentes-filters {
+  max-width: 1100px;
+  margin: 40px auto 0;
+  padding: 0 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filter-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1.5px solid rgba(0, 85, 204, 0.2);
+  background: #fff;
+  color: #444;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.filter-btn:hover {
+  border-color: #0055cc;
+  color: #0055cc;
+  background: rgba(0, 85, 204, 0.04);
+}
+
+.filter-btn--active {
+  background: linear-gradient(135deg, #0055cc, #2b7fff);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(0, 85, 204, 0.3);
+}
+
+.filter-btn--active:hover {
+  opacity: 0.9;
+  color: #fff;
+  background: linear-gradient(135deg, #0055cc, #2b7fff);
+}
+
+/* ── GRID DE PONENTES ── */
+.ponentes-grid-section {
+  max-width: 1100px;
+  margin: 28px auto 0;
+  padding: 0 24px;
+}
+
+.ponentes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* ── SPEAKER CARD ── */
+.speaker-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  box-shadow: 0 2px 16px rgba(0, 85, 204, 0.07);
+  border: 1px solid rgba(0, 85, 204, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.speaker-card.active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.25s ease;
+}
+
+.speaker-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(0, 85, 204, 0.14);
+}
+
+.speaker-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.16);
+  flex-shrink: 0;
+}
+
+.speaker-flag {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.speaker-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0d0d0d;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.speaker-institution {
+  font-family: 'Inter', sans-serif;
+  font-size: 11.5px;
+  color: #666;
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.speaker-country-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: #999;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 600;
+}
+
+.area-tag {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: rgba(0, 85, 204, 0.08);
+  color: #0055cc;
+  letter-spacing: 0.3px;
+}
+
+.speaker-topic {
+  font-family: 'Inter', sans-serif;
+  font-size: 11.5px;
+  color: #555;
+  font-style: italic;
+  margin: 4px 0 0;
+  line-height: 1.5;
+}
+
+/* ── EMPTY STATE ── */
+.ponentes-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #888;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+}
+
+/* ══════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════ */
+
+@media (max-width: 960px) {
+  .ponentes-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .keynotes-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .ponentes-hero {
+    padding: 50px 20px 70px;
+    min-height: 200px;
+  }
+  .ponentes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .ponentes-keynotes,
+  .ponentes-filters,
+  .ponentes-grid-section {
+    padding: 0 16px;
+  }
+  .ponentes-section-title {
+    font-size: 12px;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 420px) {
+  .ponentes-grid {
+    grid-template-columns: 1fr;
+  }
+  .keynote-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .keynote-badge-italy {
+    align-self: center;
+  }
+}

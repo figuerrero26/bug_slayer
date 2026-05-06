@@ -188,16 +188,59 @@ a {
   z-index: 10;
 }
 
+/* ── AÑO 2026 — pastilla suave, colores institucionales ── */
 .nav-year {
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   font-weight: 500;
-  padding: 6px 14px;
+  padding: 6px 16px;
   border-radius: 20px;
   background: rgba(0, 85, 204, 0.08);
-  color: #000000;
+  color: #1a1a2e;
   letter-spacing: 2px;
   white-space: nowrap;
+}
+
+/* ── BOTÓN INGRESAR — azul institucional, tipografía clara ── */
+.nav-login-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  padding: 8px 20px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #0055cc 0%, #2b7fff 100%);
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  border: none;
+  box-shadow: 0 3px 14px rgba(0, 85, 204, 0.30), inset 0 1px 0 rgba(255,255,255,0.15);
+  transition: filter 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.nav-login-pill:hover {
+  filter: brightness(1.10);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 85, 204, 0.38);
+}
+
+.nav-login-pill--active {
+  filter: brightness(0.92);
+  box-shadow: 0 2px 8px rgba(0, 85, 204, 0.25);
+}
+
+.nav-login-pill .nav-login-svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.nav-login-pill .nav-login-label {
+  line-height: 1;
 }
 
 /* ════════════════════════════════════════════════════
@@ -456,104 +499,277 @@ a {
   100% { stroke-dashoffset: 0;    opacity: 0;    }  /* se desvanece */
 }
 
-/* HERO VIDEO */
+/* ═══════════════════════════════════════════════
+   HERO
+   ═══════════════════════════════════════════════ */
 .hero {
-    position: relative;
-    width: 100%;
-    height: 500px;
-    overflow: hidden;
-    /* evita que la línea del body se cuele entre el header sticky y el hero */
-    margin-top: -1px;
-    padding-top: 1px;
+  position: relative;
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+  margin-top: -1px;
+  padding-top: 1px;
 }
 
 .hero-video {
-    display: block;       /* elimina el gap de baseline de elementos inline */
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-/* Oscurece un poco el video */
 .hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 40, 80, 0.5);
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 30, 70, 0.48);
 }
 
-/* Texto encima del video */
+/* ══ HERO — limpio, centrado, estilo Apple/TED ════════════════ */
+
+/* Overlay: oscuro en la parte baja (texto), abierto arriba (video) */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(3, 18, 78, 0.92) 0%,
+    rgba(3, 18, 78, 0.55) 40%,
+    rgba(0, 10, 50, 0.20) 100%
+  );
+}
+
+/* Contenedor: flex column centrado */
 .hero-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    text-align: center;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 24px 100px;
+  text-align: center;
+  gap: 20px;
 }
 
-.hero-content h1 {
-    font-size: 60px;
-    margin: 0;
-    font-weight: 700;
+/* Edición — etiqueta pequeña encima del título */
+.hero-edition {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #FFD100;
 }
 
-.hero-content p {
-    font-size: 20px;
-    margin-top: 10px;
+/* Título principal */
+.hero-title {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(42px, 7vw, 80px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -1px;
+  color: #fff;
+  margin: 0;
 }
 
-.hero-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    text-align: center;
+.hero-year {
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Tagline */
+.hero-tagline {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(15px, 1.6vw, 18px);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0;
+  max-width: 520px;
+  line-height: 1.6;
+}
+
+/* Botón CTA */
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 13px 30px;
+  border-radius: 30px;
+  background: #0055cc;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: 0.2px;
+  box-shadow: 0 4px 22px rgba(0, 85, 204, 0.45);
+  transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
+  margin-top: 4px;
+}
+
+.hero-cta:hover {
+  background: #2b7fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 85, 204, 0.55);
+  color: #fff;
+}
+
+/* Barra de info al pie del hero */
+.hero-bottom-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.hero-info-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.60);
+}
+
+.hero-bar-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.hero-italy-inline {
+  gap: 7px;
+}
+
+/* Bandera italiana mini */
+.it-mini {
+  display: inline-flex;
+  border-radius: 2px;
+  overflow: hidden;
+  width: 18px;
+  height: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.it-g, .it-w, .it-r { flex: 1; }
+.it-g { background: #009246; }
+.it-w { background: #fff;    }
+.it-r { background: #CE2B37; }
+
+/* Onda — color azul marino universidad + acento dorado */
+.hero-wave {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  line-height: 0;
+  pointer-events: none;
+}
+
+.hero-wave svg {
+  display: block;
+  width: 100%;
+  height: 90px;
+}
+
+/* ═══════════════════════════════════════════════
+   CIFRAS CLAVE
+   ═══════════════════════════════════════════════ */
+.highlights-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0e396d;
+  padding: 38px 24px;
+  gap: 0;
+  flex-wrap: wrap;
+}
+
+.highlight-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 0 44px;
+}
+
+.highlight-num {
+  font-family: 'Inter', sans-serif;
+  font-size: 34px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.highlight-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: rgb(255, 255, 255);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.highlight-sep {
+  width: 1px;
+  height: 44px;
+  background: rgba(244, 228, 0, 0.12);
+  flex-shrink: 0;
+}
+
+/* Bandera italiana en el strip */
+.highlight-flag-it {
+  display: flex;
+  border-radius: 4px;
+  overflow: hidden;
+  width: 46px;
+  height: 32px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+}
+
+
+
+/* ═══════════════════════════════════════════════
+   SECCIÓN DE TARJETAS
+   ═══════════════════════════════════════════════ */
+.cards-section {
+    padding: 80px 20px 100px;
+    background: #f4f6fb;
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-.flag {
-    margin-top: 50px;
-    width: 70px;   /* tamaño equilibrado */
-    height: auto;
+    gap: 48px;
 }
 
-
-
-.cards-section {
-    padding: 100px 0;
-    background: #f8f9fa;
-    display: flex;
-    justify-content: center;
-}
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); /* Esto lo hace responsivo automático */
-    gap: 40px;
-    max-width: 1200px; /* Para que no se estire infinito */
-    margin: 0 auto; /* Centrado */
-    padding: 0 20px;
-}
-/* =========================================
-   SECCIÓN DE TARJETAS (CORREGIDO PREMIUM)
-   ========================================= */
-
-.cards-section {
-    padding: 80px 20px;
-    background: #f8f9fa;
-    display: flex;
-    justify-content: center;
+.cards-header {
+    text-align: center;
 }
 
-/* CONTENEDOR GRID: Aquí está la clave para que no se estiren */
+.cards-title {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: 700;
+    color: #0a1628;
+    margin: 0 0 10px;
+}
+
+.cards-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: #6b7a99;
+    margin: 0;
+    font-weight: 400;
+}
+
+/* CONTENEDOR GRID */
 .grid {
     display: flex;
-    flex-wrap: wrap; /* Permite que bajen si no caben */
-    justify-content: center; /* Las centra horizontalmente */
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 30px; /* Espacio entre tarjetas */
     max-width: 1300px;
     width: 100%;
@@ -814,10 +1030,6 @@ a{
     transform:scale(1.1);
 }
 
-.topbar-icons a:hover{
-    color:#c8a45c;
-}
-
 /* DERECHA */
 
 .topbar-right{
@@ -937,91 +1149,95 @@ a{
   font-weight: 600;
 }
 
-/*cuenta regresiva */
-
+/* ═══════════════════════════════════════════════
+   CUENTA REGRESIVA — diseño limpio y armonioso
+   ═══════════════════════════════════════════════ */
 .countdown-section {
-  background: linear-gradient(135deg, #020a2f 0%, #070d81 100%);
-  border-top: 1px solid rgba(255, 255, 255, 0);
-  border-bottom: 1px solid rgb(232, 227, 215);
+  background: #ffffff;
+  padding: 80px 20px 90px;
   text-align: center;
-  padding: clamp(1.5rem, 4vw, 4rem) 1rem;
+  border-bottom: 1px solid rgba(0, 85, 204, 0.07);
 }
 
-.countdown-label{
-  font-size:20px;
-  margin-bottom:20px;
-  color:white;
+.countdown-eyebrow {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #0055cc;
+  margin-bottom: 12px;
+  opacity: 1; /* siempre visible, no usa reveal */
 }
 
-.countdown-units{
-  display:flex;
-  justify-content:center;
+.countdown-heading {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 300;
+  color: #1a1a2e;
+  margin: 0 0 52px;
+  letter-spacing: 0.3px;
+  opacity: 1; /* siempre visible, no usa reveal */
+}
+
+.countdown-units {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 12px;
   flex-wrap: wrap;
-  gap: clamp(20px, 5vw, 80px);
 }
 
-.countdown-unit{
-  text-align:center;
+.countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
+.countdown-card {
+  width: 106px;
+  height: 106px;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #f0f4ff, #e6eeff);
+  border: 1px solid rgba(0, 85, 204, 0.11);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 18px rgba(0, 85, 204, 0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+}
 
 .countdown-num {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(3rem, 8vw, 6rem);
+  font-family: 'Inter', sans-serif;
+  font-size: 38px;
+  font-weight: 700;
+  color: #0a1628;
   line-height: 1;
+  font-variant-numeric: tabular-nums;
+
   color: var(--white);
   display: block;
   font-weight:bold;
-  color:rgb(255, 255, 255); 
 }
 
-.countdown-unit-label{
-  font-size:14px;
-  opacity:0.9;
-  color:white;   /* texto en blanco */
+.countdown-unit-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #9aabc8;
 }
 
-
-.speakers-grid{
-  display:grid;
-  grid-template-columns:repeat(3, 260px); /* todas del mismo tamaño */
-  justify-content:center;                 /* centra la grilla */
-  gap:80px 120px;                         /* espacio entre filas y columnas */
-  margin-top:60px;
-}
-
-.speaker-card{
-  width:260px;
-  text-align:center;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-}
-
-.speaker-avatar{
-  width:90px;
-  height:90px;
-  border-radius:50%;
-  background:#f5f5fa;
-  border:3px solid #1546c3;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:28px;
-  font-weight:bold;
-  margin-bottom:15px;
-}
-
-.speaker-name{
-  font-size:18px;
-  font-weight:bold;
-  color:rgb(14, 2, 82);
-  margin-bottom:6px;
-}
-
-.speaker-role{
-  font-size:14px;
-  color:#01172e;
+.countdown-sep {
+  font-family: 'Inter', sans-serif;
+  font-size: 30px;
+  font-weight: 300;
+  color: rgba(0, 85, 204, 0.22);
+  padding-top: 38px;
+  line-height: 1;
+  user-select: none;
 }
 
 .cards-grid{
@@ -1131,8 +1347,15 @@ a{
      4 → menú desplegable — ocupa fila completa al abrirse */
   .logo            { order: 1; flex: 1; justify-self: unset; }
   .nav-right-slot  { order: 2; margin-right: 6px; justify-self: unset; display: flex; align-items: center; gap: 6px; }
-  .nav-year        { margin: 0; }
+  .nav-year        { font-size: 12px; padding: 5px 12px; letter-spacing: 1.5px; }
+  .nav-login-pill  { font-size: 12px; padding: 6px 14px; }
   .hamburger       { order: 3; margin-left: 0; }
+
+  .highlights-strip { padding: 26px 10px; }
+  .highlight-item   { padding: 0 16px; }
+  .highlight-num    { font-size: 24px; }
+  .highlight-sep    { height: 28px; }
+  .highlight-flag-it { width: 36px; height: 24px; }
   .menu-glass      { order: 4; }
 
   /* Oculta la forma D con el logo en móvil */
@@ -1201,16 +1424,28 @@ a{
     margin-right: 4px;
   }
 
-  .nav-year {
-    font-size: 11px;
-    padding: 4px 9px;
-    margin: 0;
-    letter-spacing: 1px;
+  .nav-year { font-size: 11px; padding: 4px 10px; letter-spacing: 1px; }
+
+  .nav-login-pill {
+    padding: 6px 10px;
+    gap: 0;
   }
 
-  .hero-content h1 {
-    font-size: 32px;
+  .nav-login-pill .nav-login-label { display: none; }
+
+  .nav-login-pill .nav-login-svg {
+    width: 15px;
+    height: 15px;
   }
+
+  .hero-content  { padding: 0 20px 90px; gap: 14px; }
+  .hero-title    { font-size: 36px; letter-spacing: -0.5px; }
+  .hero-tagline  { font-size: 14px; }
+
+  .countdown-section { padding: 60px 16px 70px; }
+  .countdown-card    { width: 84px; height: 84px; border-radius: 14px; }
+  .countdown-num     { font-size: 30px; }
+  .countdown-sep     { font-size: 22px; padding-top: 30px; }
 }
 
 /* ── Móvil pequeño (≤ 390px) — iPhone SE, Galaxy S ── */
@@ -1228,28 +1463,18 @@ a{
   .logo-video   { height: 38px !important; }
   .logo-culture { height: 42px !important; }
 
-  .nav-year {
-    font-size: 11px;
-    padding: 3px 8px;
-    margin: 0 5px;
-    letter-spacing: 1px;
-  }
+  .nav-year { font-size: 11px; padding: 3px 9px; letter-spacing: 1px; }
+  .nav-login-pill { padding: 5px 9px; }
 
   .hamburger {
     padding: 6px;
   }
 
-  .hero-content h1 {
-    font-size: 26px;
-  }
+  .hero-title   { font-size: 26px; }
+  .hero-tagline { font-size: 13px; }
+  .hero-cta     { font-size: 13px; padding: 11px 22px; }
 
-  .hero-content p {
-    font-size: 15px;
-  }
-
-
-  .speakers-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px 20px;
-  }
+  .countdown-card  { width: 72px; height: 72px; border-radius: 12px; }
+  .countdown-num   { font-size: 26px; }
+  .countdown-sep   { font-size: 20px; padding-top: 26px; }
 }
