@@ -132,7 +132,7 @@ export default function Inscripciones() {
       const res = await fetch(`${SEARCH_URL}/registrations`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ conference_id: conf.id, user_id: session.user_id }),
+        body: JSON.stringify({ conference_id: conf.id, user_id: session.user_id, email: session.email}),
       });
       const data = await res.json();
       if (!res.ok) {
