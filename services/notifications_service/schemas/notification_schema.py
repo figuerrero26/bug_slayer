@@ -8,6 +8,7 @@ class NotificationCreate(BaseModel):
     title: str
     message: str
     type: str = "info"
+    email: str | None = None
 
 
 class NotificationResponse(BaseModel):

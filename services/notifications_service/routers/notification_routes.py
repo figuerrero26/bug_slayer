@@ -27,7 +27,9 @@ def create_notification(payload: NotificationCreate, db: Session = Depends(get_d
     db.refresh(notif)
 
     # Intento de envío de correo (no bloquea si falla)
-    send_email(subject=payload.title, body=payload.message)
+    #send_email(subject=payload.title, body=payload.message)
+    print("[notifications_service] email recibido:", payload.email)
+    send_email(subject=payload.title, body=payload.message, to=payload.email)
 
     return notif
 
