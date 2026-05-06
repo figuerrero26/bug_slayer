@@ -10,7 +10,8 @@ from utils.security import hash_password, verify_password, create_token
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
-DASHBOARD_URL = os.getenv("DASHBOARD_SERVICE_URL", "http://localhost:8002")
+DASHBOARD_URL      = os.getenv("DASHBOARD_SERVICE_URL",      "http://localhost:8002")
+NOTIFICATIONS_URL  = os.getenv("NOTIFICATIONS_SERVICE_URL",  "http://localhost:8004")
 
 
 @router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
@@ -62,6 +63,22 @@ async def register(payload: UserRegister, db: Session = Depends(get_db)):
             status_code=503,
             detail="No se pudo conectar con el servicio de dashboard",
         )
+
+    # Notificación de bienvenida — fire-and-forget, no bloquea el registro
+    try:
+        async with httpx.AsyncClient() as client:
+            await client.post(
+                f"{NOTIFICATIONS_URL}/notifications/",
+                json={
+                    "user_id": new_user.id,
+                    "title":   "¡Bienvenido a CONIITI 2026!",
+                    "message": f"Hola {payload.full_name}, tu cuenta fue creada exitosamente. ¡Explora las conferencias disponibles!",
+                    "type":    "sistema",
+                },
+                timeout=5.0,
+            )
+    except Exception:
+        pass
 
     token = create_token(new_user.id, new_user.email)
     return TokenResponse(

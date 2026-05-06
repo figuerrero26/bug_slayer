@@ -11,7 +11,7 @@ from schemas.conference_schema import (
     RegistrationResponse,
     UserConferenceOut,
 )
-from services.notification_client import notify_registration
+from services.notification_client import notify_registration, notify_cancellation
 
 router = APIRouter(tags=["registrations"])
 
@@ -78,15 +78,26 @@ def register_to_conference(
 
 
 @router.delete("/registrations/{registration_id}", status_code=200)
-def cancel_registration(registration_id: int, db: Session = Depends(get_db)):
+def cancel_registration(
+    registration_id: int,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db),
+):
     """Cancela una inscripción (soft-delete: status = 'cancelado')."""
     reg = db.query(ConferenceRegistration).filter(
         ConferenceRegistration.id == registration_id,
     ).first()
     if not reg or reg.status == "cancelado":
         raise HTTPException(status_code=404, detail="Inscripción no encontrada o ya cancelada")
+
+    conf = db.query(Conference).filter(Conference.id == reg.conference_id).first()
+
     reg.status = "cancelado"
     db.commit()
+
+    if conf:
+        background_tasks.add_task(notify_cancellation, reg.user_id, conf.title)
+
     return {"message": "Inscripción cancelada"}
 
 
