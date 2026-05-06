@@ -16,7 +16,6 @@ const Barra = () => {
   const [menuOpen, setMenuOpen]     = useState(false);
   const [scrolled, setScrolled]     = useState(false);
   const [langOpen, setLangOpen]     = useState(false);
-  const [loggedIn, setLoggedIn]     = useState(() => !!sessionStorage.getItem("session"));
   const langRef                     = useRef<HTMLDivElement>(null);
   const location                    = useLocation();
   const { lang, setLang, t }        = useLang();
@@ -25,17 +24,6 @@ const Barra = () => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  /* Sincroniza estado de sesión con login/logout */
-  useEffect(() => {
-    const sync = () => setLoggedIn(!!sessionStorage.getItem("session"));
-    window.addEventListener("ua-session-change", sync);
-    window.addEventListener("focus", sync);
-    return () => {
-      window.removeEventListener("ua-session-change", sync);
-      window.removeEventListener("focus", sync);
-    };
   }, []);
 
   /* Cierra el dropdown de idioma al hacer click fuera */
@@ -143,12 +131,31 @@ const Barra = () => {
               { to: "/ferias",        label: t.ferias        },
               { to: "/inscripciones", label: t.inscripciones },
               { to: "/noticias",      label: t.noticias      },
-              { to: "/ponentes",     label: t.ponentes      },
             ] as { to: string; label: string }[]).map(({ to, label }) => (
               <li key={to} className={location.pathname === to ? "active" : ""}>
                 <Link to={to} onClick={() => setMenuOpen(false)}>{label}</Link>
               </li>
             ))}
+
+            {/* Login con icono SVG personalizado */}
+            <li className={location.pathname === "/login" ? "active" : ""}>
+              <Link to="/login" onClick={() => setMenuOpen(false)} className="menu-link-icon">
+                <svg className="nav-login-svg" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  {/* Marco de puerta — tres lados */}
+                  <path d="M6 2H3.5A1.2 1.2 0 0 0 2.3 3.2v9.6A1.2 1.2 0 0 0 3.5 14H6"
+                    stroke="currentColor" strokeWidth="1.4"
+                    strokeLinecap="round" strokeLinejoin="round"/>
+                  {/* Flecha entrando */}
+                  <path d="M9 5.5L12.5 8 9 10.5"
+                    stroke="currentColor" strokeWidth="1.4"
+                    strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M6.5 8h6"
+                    stroke="currentColor" strokeWidth="1.4"
+                    strokeLinecap="round"/>
+                </svg>
+                {t.login}
+              </Link>
+            </li>
 
             <li className="menu-logo-item">
               <img src={logoMenu} alt="CONIITI" className="menu-logo-icon" />
@@ -156,25 +163,9 @@ const Barra = () => {
           </ul>
         </div>
 
-        {/* SLOT DERECHO: año + ingresar + avatar */}
+        {/* SLOT DERECHO: año + avatar de usuario */}
         <div className="nav-right-slot">
-          <span className="nav-year">2026</span>
-          {!loggedIn && (
-            <Link
-              to="/login"
-              className={`nav-login-pill${location.pathname === "/login" ? " nav-login-pill--active" : ""}`}
-            >
-              <svg className="nav-login-svg" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M6 2H3.5A1.2 1.2 0 0 0 2.3 3.2v9.6A1.2 1.2 0 0 0 3.5 14H6"
-                  stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M9 5.5L12.5 8 9 10.5"
-                  stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M6.5 8h6"
-                  stroke="currentColor" strokeWidth="1" strokeLinecap="round"/>
-              </svg>
-              <span className="nav-login-label">{t.login}</span>
-            </Link>
-          )}
+          <span className="nav-year">{new Date().getFullYear()}</span>
           <UserAvatar />
         </div>
 
