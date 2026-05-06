@@ -2,7 +2,7 @@ import logo_U from "../assets/escudo-ucatolica.png";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { DASHBOARD_URL } from "../config.ts";
+import { DASHBOARD_URL, NOTIFICATIONS_URL } from "../config.ts";
 import "../css/Dashboard.css";
 
 // ── Vistas internas ────────────────────────────────────────────────────────────
@@ -10,6 +10,7 @@ import ProfileView     from "./views/ProfileView.tsx";
 import InscritasView   from "./views/InscritasView.tsx";
 import CalendarioView  from "./views/CalendarioView.tsx";
 import PlaceholderView from "./views/PlaceholderView.tsx";
+import MessagesView    from "./views/MessagesView.tsx";
 
 // ─── TYPES ────────────────────────────────────────────────────────────────────
 interface User {
@@ -56,7 +57,7 @@ const NAV_ITEMS = [
   { id: "events",      label: "Eventos",          badge: false},
   { id: "favorites",   label: "Favoritos"                     },
   { id: "calendar",    label: "Calendario"                    },
-  { id: "messages",    label: "Mensajes",         badge: false},
+  { id: "messages",    label: "Mensajes",         badge: true },
 ];
 
 // Ítems del bottom nav en móvil (los 5 más importantes)
@@ -209,6 +210,7 @@ function EditProfileModal({
 export default function Dashboard() {
   const [user, setUser]                   = useState<User | null>(null);
   const [confCount, setConfCount]         = useState(0);
+  const [unreadCount, setUnreadCount]     = useState(0);
   const [loading, setLoading]             = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
   const [activeNav, setActiveNav]         = useState("profile");
@@ -232,6 +234,15 @@ export default function Dashboard() {
   // El botón ↪ regresa al home sin borrar la sesión:
   // Inscripciones.tsx detecta sessionStorage automáticamente
   const handleGoHome = () => navigate("/");
+
+  // ── Unread messages count (badge en sidebar) ──────────────────────────────
+  useEffect(() => {
+    if (!userId) return;
+    fetch(`${NOTIFICATIONS_URL}/notifications/unread/${userId}`)
+      .then((r) => r.json())
+      .then((d) => setUnreadCount(d.unread_count ?? 0))
+      .catch(() => {});
+  }, [userId]);
 
   // ── Carga del perfil desde dashboard_service ────────────────────────────────
   useEffect(() => {
@@ -291,7 +302,9 @@ export default function Dashboard() {
 
           <nav className="sidebar-nav">
             {NAV_ITEMS.map((item) => {
-              const badgeCount = item.id === "conferences" ? confCount : 0;
+              const badgeCount = item.id === "conferences" ? confCount
+                               : item.id === "messages"    ? unreadCount
+                               : 0;
               const showBadge  = item.badge !== undefined;
 
               return (
@@ -354,9 +367,12 @@ export default function Dashboard() {
 
             {(activeNav === "favorites" ||
               activeNav === "events"    ||
-              activeNav === "completed" ||
-              activeNav === "messages") && (
+              activeNav === "completed") && (
               <PlaceholderView section={activeNav} />
+            )}
+
+            {activeNav === "messages" && userId && (
+              <MessagesView userId={userId} onUnreadChange={setUnreadCount} />
             )}
 
           </div>

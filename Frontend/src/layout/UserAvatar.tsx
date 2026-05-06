@@ -10,6 +10,7 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 
+import { NOTIFICATIONS_URL } from "../config.ts";
 import "../css/UserAvatar.css";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
@@ -19,25 +20,18 @@ interface UserSession {
   email: string;
 }
 
-interface MenuItem {
-  Icon: React.ElementType;
-  label: string;
-  to: string;
-}
-
 // ── Constants ─────────────────────────────────────────────────────────────────
-const MENU_ITEMS: MenuItem[] = [
-  { Icon: FaUser,        label: "Ver mi Perfil",    to: "/dashboard"     },
-  { Icon: FaCalendarAlt, label: "Mis Conferencias", to: "/dashboard"     },
-  { Icon: FaHeart,       label: "Favoritos",        to: "/dashboard"     },
-  { Icon: FaEnvelope,    label: "Mensajes",         to: "/dashboard"     },
+const MENU_ITEMS = [
+  { Icon: FaUser,        label: "Ver mi Perfil",    to: "/dashboard", showBadge: false },
+  { Icon: FaCalendarAlt, label: "Mis Conferencias", to: "/dashboard", showBadge: false },
+  { Icon: FaHeart,       label: "Favoritos",        to: "/dashboard", showBadge: false },
+  { Icon: FaEnvelope,    label: "Mensajes",         to: "/dashboard", showBadge: true  },
 ];
 
-const LOGOUT_DURATION_MS = 3400;
+const LOGOUT_DURATION_MS = 1000;
 
 const LOGOUT_MESSAGES = [
   "Cerrando sesión de forma segura...",
-  "Protegiendo tu información...",
   "Limpiando datos de sesión...",
   "Todo listo. ¡Hasta pronto!",
 ];
@@ -117,8 +111,22 @@ export default function UserAvatar() {
   const [session, setSession]           = useState<UserSession | null>(getSession);
   const [open, setOpen]                 = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [unreadCount, setUnreadCount]   = useState(0);
   const wrapperRef                      = useRef<HTMLDivElement>(null);
   const navigate                        = useNavigate();
+
+  // Fetch unread notifications count al montar y al recuperar el foco
+  useEffect(() => {
+    if (!session) return;
+    const fetch_ = () =>
+      fetch(`${NOTIFICATIONS_URL}/notifications/unread/${session.user_id}`)
+        .then((r) => r.json())
+        .then((d) => setUnreadCount(d.unread_count ?? 0))
+        .catch(() => {});
+    fetch_();
+    window.addEventListener("focus", fetch_);
+    return () => window.removeEventListener("focus", fetch_);
+  }, [session?.user_id]);
 
   // Sincroniza si el usuario hace login/logout en otra pestaña
   useEffect(() => {
@@ -175,6 +183,11 @@ export default function UserAvatar() {
           disabled={isLoggingOut}
         >
           {initial}
+          {unreadCount > 0 && (
+            <span className="ua-unread-badge" aria-label={`${unreadCount} mensajes sin leer`}>
+              {unreadCount > 9 ? "9+" : unreadCount}
+            </span>
+          )}
         </button>
 
         <AnimatePresence>
@@ -199,7 +212,7 @@ export default function UserAvatar() {
 
               {/* Opciones */}
               <nav className="ua-nav">
-                {MENU_ITEMS.map(({ Icon, label, to }) => (
+                {MENU_ITEMS.map(({ Icon, label, to, showBadge }) => (
                   <button
                     key={label}
                     className="ua-item"
@@ -207,6 +220,11 @@ export default function UserAvatar() {
                   >
                     <Icon className="ua-item-icon" />
                     <span>{label}</span>
+                    {showBadge && unreadCount > 0 && (
+                      <span className="ua-item-badge">
+                        {unreadCount > 9 ? "9+" : unreadCount}
+                      </span>
+                    )}
                   </button>
                 ))}
               </nav>
