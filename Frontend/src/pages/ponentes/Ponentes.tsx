@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useLang } from "../../context/LanguageContext";
 import "../../css/Ponentes.css";
 
-const AREAS_ES = ["Todos", "IA & Machine Learning", "IoT & Industria 4.0", "Sostenibilidad", "Smart Cities", "Ciberseguridad", "Bioingeniería"];
+const AREAS_ES = ["IA", "Software", "Redes", "Datos", "Robótica", "Gestión", "Innovación", "Otro"];
 
 interface Speaker {
   name: string;
