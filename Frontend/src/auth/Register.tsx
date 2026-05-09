@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 
-import { AUTH_URL } from "../config.ts";
+import { AUTH_URL } from "../services/api";
 
 // ── Imágenes ──────────────────────────────────────────
 import ImagenFondo from "../assets/C_C_08.jpg";

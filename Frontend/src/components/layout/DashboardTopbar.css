@@ -1,0 +1,139 @@
+/* ═══════════════════════════════════════════════════════════════════
+   DashboardTopbar.css — barra superior: título, búsqueda y botones
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Topbar ──────────────────────────────────────────────────────── */
+
+.topbar-size {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 25px;
+}
+
+/* ── Barra de búsqueda ───────────────────────────────────────────── */
+
+.search-box-1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #0f1c2f;
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 8px 14px;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+}
+
+.search-box-1:hover {
+  border: 1px solid rgba(255,255,255,0.18);
+}
+
+.search-box-1:focus-within {
+  border: 1px solid #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
+}
+
+.search-icon-1 {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.search-input-1 {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 14px;
+  width: 160px;
+}
+
+.search-input-1::placeholder {
+  color: #64748b;
+}
+
+/* ── Botón volver al inicio ──────────────────────────────────────── */
+
+.btn-go-home {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-go-home:hover {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+  transform: translateX(-2px);
+}
+
+.btn-exit {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.btn-exit:hover {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+
+/* ── Logout móvil (oculto en desktop) ───────────────────────────── */
+
+.btn-mobile-logout {
+  display: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 15px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.btn-mobile-logout:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: #fca5a5;
+  color: #fca5a5;
+}
+
+/* ── Dark mode ───────────────────────────────────────────────────── */
+
+[data-theme="dark"] .topbar     { background: var(--bg); border-bottom: 1px solid var(--border); }
+[data-theme="dark"] .search-box-1 { background: #111d30; border-color: rgba(255,255,255,0.06); }
+
+/* ── Responsive: móvil (≤ 768px) ────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .topbar-size        { height: 58px; padding: 0 14px; }
+  .search-box-1       { display: none; }
+  .btn-mobile-logout  { display: flex; }
+  .btn-go-home span   { display: none; }
+  .btn-go-home        { padding: 8px 10px; border-radius: 50%; }
+}

@@ -1,0 +1,56 @@
+/* ═══════════════════════════════════════════════════════════════════
+   Global.css — fuentes, reset universal y variables CSS del sistema.
+   Solo se importa UNA VEZ desde main.tsx.
+   Los overrides de componentes en dark mode van en cada component.css
+   ═══════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+/* ── Reset universal ─────────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Variables — modo claro (defecto) ───────────────────────────────────── */
+
+:root {
+  --bg:          #eef2f7;
+  --surface:     #ffffff;
+  --surface2:    #e4ecf5;
+  --border:      #d0dcea;
+  --text:        #1a2545;
+  --muted:       #6b7fa3;
+  --navy:        #1a2545;
+  --navy-light:  #243160;
+  --blue:        #1e6fbd;
+  --blue-dim:    #1e6fbd18;
+  --gold:        #e8941a;
+  --gold-dim:    #e8941a20;
+  --green:       #27ae60;
+  --green-dim:   #27ae6018;
+  --red:         #dc2626;
+  --radius:      16px;
+  --radius-sm:   10px;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: -0.2px;
+}
+
+/* ── Variables — modo oscuro ────────────────────────────────────────────── */
+
+[data-theme="dark"] {
+  --bg:         #0d1526;
+  --surface:    #172038;
+  --surface2:   #1e2d4a;
+  --border:     #253552;
+  --text:       #dce8f8;
+  --muted:      #7a92b8;
+  --navy:       #dce8f8;
+  --navy-light: #aec4e4;
+  --blue-dim:   #1e6fbd28;
+  --gold-dim:   #e8941a28;
+  --green-dim:  #27ae6028;
+}

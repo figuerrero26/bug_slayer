@@ -234,3 +234,10 @@
   .stv-grid { grid-template-columns: 1fr; }
   .stv-theme-grid { grid-template-columns: 1fr; }
 }
+
+/* ── Dark mode ───────────────────────────────────────────────────── */
+[data-theme="dark"] .stv-body       { background: var(--surface); }
+[data-theme="dark"] .stv-tabs       { background: var(--surface); border-color: var(--border); }
+[data-theme="dark"] .stv-input      { background: var(--bg); color: var(--text); border-color: var(--border); }
+[data-theme="dark"] .stv-theme-btn  { background: var(--bg); border-color: var(--border); }
+[data-theme="dark"] .stv-theme-name { color: var(--text); }

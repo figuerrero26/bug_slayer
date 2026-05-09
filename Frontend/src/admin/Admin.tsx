@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { SEARCH_URL } from "../config.ts";
+import { SEARCH_URL } from "../services/api";
 import "../css/Admin.css";
 
 // ── Tipos ─────────────────────────────────────────────────────────────────────

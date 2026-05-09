@@ -1,18 +1,11 @@
 import { useState, useEffect } from "react";
-import { DASHBOARD_URL, AUTH_URL } from "../../config.ts";
-import "../../css/SettingsView.css";
+import { DASHBOARD_URL, AUTH_URL } from "../../services/api";
+import "./SettingsView.css";
+
+import type { User } from "../../interfaces/user";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type Theme = "light" | "dark" | "system";
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  phone?: string;
-  city?: string;
-  birthdateRaw?: string;
-}
 
 interface Props {
   user: User;

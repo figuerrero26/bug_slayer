@@ -10,15 +10,10 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 
-import { NOTIFICATIONS_URL } from "../config.ts";
+import { NOTIFICATIONS_URL } from "../services/api";
 import "../css/UserAvatar.css";
 
-// ── Types ──────────────────────────────────────────────────────────────────────
-interface UserSession {
-  token: string;
-  user_id: number;
-  email: string;
-}
+import type { UserSession } from "../interfaces/user";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const MENU_ITEMS = [

@@ -1,4 +1,4 @@
-import "../../css/PlaceholderView.css";
+import "./PlaceholderView.css";
 
 interface SectionInfo {
   icon: string;

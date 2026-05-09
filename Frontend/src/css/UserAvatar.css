@@ -346,6 +346,9 @@
 /* ══════════════════════════════════════════
    RESPONSIVE — tablet y móvil
    ══════════════════════════════════════════ */
+/* ── Dark mode ───────────────────────────────────────────────────── */
+[data-theme="dark"] .ua-dropdown { background: rgba(23,32,56,0.96); border-color: rgba(255,255,255,0.08); }
+
 @media (max-width: 1024px) {
   /* Avatar más compacto en la barra de navegación móvil */
   .ua-wrapper {

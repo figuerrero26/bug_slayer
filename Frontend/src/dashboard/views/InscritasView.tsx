@@ -1,18 +1,8 @@
 import { useState, useEffect } from "react";
-import { SEARCH_URL } from "../../config.ts";
-import "../../css/InscritasView.css";
+import { SEARCH_URL } from "../../services/api";
+import "./InscritasView.css";
 
-interface Conference {
-  id: number;
-  title: string;
-  speaker_name: string | null;
-  speaker_image_url: string | null;
-  category: string | null;
-  schedule: string | null;
-  location_text: string | null;
-  registration_id: number;
-  registration_status: string;
-}
+import type { Conference } from "../../interfaces/conference";
 
 function formatDate(iso: string | null): string {
   if (!iso) return "Por definir";

@@ -544,3 +544,142 @@
   .profv-ticket { height: 155px; }
   .profv-ticket-barcode { width: 48px; height: 66px; }
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   PROFILE CARD — tarjeta principal con datos del usuario
+   ══════════════════════════════════════════════════════════════════ */
+
+.profile-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  box-shadow: 0 2px 12px #1a254510;
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.profile-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+}
+
+.profile-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--navy), #1e3a6e);
+  color: #fff;
+  font-size: 36px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: -0.2px;
+  border: 3px solid var(--gold);
+  flex-shrink: 0;
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.profile-name {
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: -0.2px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.btn-edit-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1px solid var(--blue);
+  color: var(--blue);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.22s ease;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.btn-edit-icon:hover {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+  transform: scale(1.08);
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.detail-row {
+  display: flex;
+  gap: 10px;
+  font-size: 13.5px;
+}
+
+.detail-label {
+  color: var(--muted);
+  min-width: 160px;
+  flex-shrink: 0;
+}
+
+.detail-value {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* ── Responsive: móvil (≤ 768px) ─────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .profile-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px 16px;
+    gap: 14px;
+  }
+
+  .profile-name-row {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .profile-details {
+    width: 100%;
+  }
+
+  .detail-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+  }
+
+  .detail-label {
+    min-width: unset;
+    font-size: 11.5px;
+  }
+}
+
+/* ── Dark mode ───────────────────────────────────────────────────── */
+[data-theme="dark"] .profile-card { background: var(--surface); border-color: var(--border); }

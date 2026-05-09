@@ -1,4 +1,5 @@
 
+import './styles/Global.css'
 import './css/index.css'
 import App from './App.tsx'
 import React from "react";

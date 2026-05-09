@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { SEARCH_URL } from "../../config.ts";
+import { SEARCH_URL } from "../../services/api";
 import "../../css/Inscripciones.css";
 
 // ── Tipos ─────────────────────────────────────────────────────────────────────

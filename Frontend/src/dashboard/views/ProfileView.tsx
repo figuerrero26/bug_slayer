@@ -1,29 +1,12 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence, useMotionValue } from "framer-motion";
-import { SEARCH_URL } from "../../config.ts";
-import "../../css/ProfileView.css";
+import { SEARCH_URL } from "../../services/api";
+import "./ProfileView.css";
+
+import type { User }             from "../../interfaces/user";
+import type { ConferenceTicket } from "../../interfaces/conference";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  phone?: string;
-  city?: string;
-  country?: string;
-  birthdate?: string;
-  registeredAt?: string;
-}
-
-interface ConferenceTicket {
-  id: number;
-  title: string;
-  speaker_name: string | null;
-  schedule: string | null;
-  location_text: string | null;
-  registration_id: number;
-}
-
 interface TimeLeft { days: number; hours: number; minutes: number; seconds: number; }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────

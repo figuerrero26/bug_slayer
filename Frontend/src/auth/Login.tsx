@@ -8,7 +8,7 @@ import "../css/Login.css";
 import ImagenFondo from "../assets/C_C_08.jpg";
 import logoUCatolica from "../assets/LOGO-LOGIN.svg";
 
-import { AUTH_URL } from "../config.ts";
+import { AUTH_URL } from "../services/api";
 
 export default function Login() {
 

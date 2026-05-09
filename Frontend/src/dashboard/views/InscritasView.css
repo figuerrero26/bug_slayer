@@ -194,3 +194,6 @@
 }
 
 .inscr-meta-icon { margin-right: 0.35rem; }
+
+/* ── Dark mode ───────────────────────────────────────────────────── */
+[data-theme="dark"] .inscr-card { background: var(--surface); border-color: var(--border); }

@@ -252,3 +252,7 @@
 @keyframes msv-spin {
   to { transform: rotate(360deg); }
 }
+
+/* ── Dark mode ───────────────────────────────────────────────────── */
+[data-theme="dark"] .msv-card                      { background: var(--surface); border-color: var(--border); }
+[data-theme="dark"] .msv-card:not(.msv-card--read) { background: linear-gradient(135deg, #1a2e50, var(--surface)); }
