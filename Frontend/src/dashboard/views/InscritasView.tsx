@@ -98,7 +98,7 @@ export default function InscritasView({ userId, searchQuery = "" }: { userId: nu
                 <div className="inscr-speaker">
                   {conf.speaker_image_url ? (
                     <img
-                      src={`${SEARCH_URL}${conf.speaker_image_url}`}
+                      src={conf.speaker_image_url.startsWith("http") ? conf.speaker_image_url : `${SEARCH_URL}${conf.speaker_image_url}`}
                       alt={conf.speaker_name}
                       className="inscr-avatar"
                     />

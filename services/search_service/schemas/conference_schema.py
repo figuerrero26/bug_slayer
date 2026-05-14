@@ -105,11 +105,12 @@ class UserConferenceOut(BaseModel):
     id:                  int
     title:               str
     speaker_name:        Optional[str]
-    speaker_image_url: str | None = None
+    speaker_image_url:   str | None = None
     category:            Optional[str]
     schedule:            Optional[datetime]
     location_text:       Optional[str]
     registration_id:     int
     registration_status: str
+    qr_payload:          str = ""
 
     model_config = {"from_attributes": True}

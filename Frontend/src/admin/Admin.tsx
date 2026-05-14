@@ -82,6 +82,16 @@ export default function Admin() {
   const [toDelete, setToDelete] = useState<Conference | null>(null);
   const [deleting, setDeleting] = useState(false);
 
+  const [showQrScanner, setShowQrScanner] = useState(false);
+  const [qrValidating, setQrValidating]   = useState(false);
+  const [qrResult, setQrResult]           = useState<{
+    valid: boolean;
+    message: string;
+    conference_title?: string | null;
+    attendee_name?: string | null;
+  } | null>(null);
+  const scannerRef = useRef<any>(null);
+
   // ── Fetch ──────────────────────────────────────────────────────────────────
 
   const fetchConferences = useCallback(async () => {
@@ -288,6 +298,77 @@ export default function Admin() {
     }
   }
 
+  // ── QR Scanner ────────────────────────────────────────────────────────────
+
+  async function handleQrDetected(decodedText: string) {
+    if (qrValidating) return;
+    try {
+      await scannerRef.current?.pause(true);
+    } catch {}
+
+    setQrValidating(true);
+    setQrResult(null);
+
+    try {
+      const res = await fetch(`${SEARCH_URL}/qr/validate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ qr_payload: decodedText }),
+      });
+      const data = await res.json();
+      setQrResult({
+        valid: data.valid,
+        message: data.message,
+        conference_title: data.conference_title,
+        attendee_name: data.attendee_name,
+      });
+    } catch {
+      setQrResult({ valid: false, message: "Error de conexión con el servidor" });
+    } finally {
+      setQrValidating(false);
+    }
+  }
+
+  function closeQrScanner() {
+    try { scannerRef.current?.stop(); } catch {}
+    scannerRef.current = null;
+    setShowQrScanner(false);
+    setQrResult(null);
+    setQrValidating(false);
+  }
+
+  function resetScan() {
+    setQrResult(null);
+    try { scannerRef.current?.resume(); } catch {}
+  }
+
+  useEffect(() => {
+    if (!showQrScanner) return;
+
+    const timer = setTimeout(async () => {
+      const { Html5Qrcode } = await import('html5-qrcode');
+      const scanner = new Html5Qrcode('qr-reader');
+      scannerRef.current = scanner;
+
+      try {
+        await scanner.start(
+          { facingMode: 'environment' },
+          { fps: 10, qrbox: { width: 220, height: 220 } },
+          (decodedText: string) => handleQrDetected(decodedText),
+          undefined,
+        );
+      } catch {
+        setQrResult({ valid: false, message: 'No se pudo acceder a la cámara. Verifica los permisos.' });
+      }
+    }, 120);
+
+    return () => {
+      clearTimeout(timer);
+      scannerRef.current?.stop().catch(() => {});
+      scannerRef.current = null;
+    };
+  }, [showQrScanner]);
+
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
@@ -303,7 +384,18 @@ export default function Admin() {
           <h1 className="adm-title">Panel de Conferencias</h1>
           <p className="adm-sub">CONIITTI 2026 — Gestión interna · acceso directo</p>
         </div>
-        <button className="adm-btn-primary" onClick={openCreate}>+ Nueva conferencia</button>
+        <div className="adm-header-actions">
+          <button className="adm-btn-secondary" onClick={() => { setQrResult(null); setShowQrScanner(true); }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
+              <path d="M14 14h3v3M17 20h3M20 17v3"/>
+            </svg>
+            Validar QR
+          </button>
+          <button className="adm-btn-primary" onClick={openCreate}>+ Nueva conferencia</button>
+        </div>
       </header>
 
       <div className="adm-statusbar">
@@ -494,6 +586,86 @@ export default function Admin() {
                 {deleting ? "Eliminando…" : "Sí, eliminar"}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Escáner QR ─────────────────────────────────────────────────────── */}
+      {showQrScanner && (
+        <div className="adm-overlay qr-overlay" onClick={closeQrScanner}>
+          <div className="qr-modal" onClick={e => e.stopPropagation()}>
+
+            <div className="qr-modal-head">
+              <div>
+                <span className="qr-modal-badge">Escáner de entradas</span>
+                <h2 className="qr-modal-title">Validar QR</h2>
+              </div>
+              <button className="modal-x" onClick={closeQrScanner}>✕</button>
+            </div>
+
+            <div className={
+              `qr-viewport-wrap ${
+                qrResult ? (qrResult.valid ? 'qr-glow-green' : 'qr-glow-red') : ''
+              }`
+            }>
+              <div id="qr-reader" className="qr-reader" />
+
+              {!qrResult && !qrValidating && (
+                <div className="qr-frame" aria-hidden="true">
+                  <span className="qr-corner qr-corner--tl" />
+                  <span className="qr-corner qr-corner--tr" />
+                  <span className="qr-corner qr-corner--bl" />
+                  <span className="qr-corner qr-corner--br" />
+                  <span className="qr-scan-line" />
+                </div>
+              )}
+
+              {qrValidating && (
+                <div className="qr-validating-overlay">
+                  <div className="qr-ring">
+                    <svg viewBox="0 0 80 80" fill="none">
+                      <circle cx="40" cy="40" r="34" stroke="rgba(255,255,255,0.12)" strokeWidth="6"/>
+                      <circle cx="40" cy="40" r="34" stroke="#e8941a" strokeWidth="6"
+                        strokeLinecap="round" strokeDasharray="60 154"
+                        className="qr-ring-arc"
+                      />
+                    </svg>
+                  </div>
+                  <p className="qr-validating-label">Validando…</p>
+                </div>
+              )}
+
+              {qrResult && !qrValidating && (
+                <div className={`qr-result-overlay ${
+                  qrResult.valid ? 'qr-result-ok' : 'qr-result-err'
+                }`}>
+                  <div className="qr-result-icon">
+                    {qrResult.valid ? '✓' : '✕'}
+                  </div>
+                  <p className="qr-result-msg">{qrResult.message}</p>
+                  {qrResult.valid && qrResult.conference_title && (
+                    <p className="qr-result-detail">
+                      <span className="qr-detail-label">Conferencia</span>
+                      {qrResult.conference_title}
+                    </p>
+                  )}
+                  {qrResult.valid && qrResult.attendee_name && (
+                    <p className="qr-result-detail">
+                      <span className="qr-detail-label">Asistente</span>
+                      {qrResult.attendee_name}
+                    </p>
+                  )}
+                  <button className="qr-btn-rescan" onClick={resetScan}>
+                    Escanear otro
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <p className="qr-hint">
+              {qrResult ? '' : 'Apunta la cámara al código QR del ticket'}
+            </p>
+
           </div>
         </div>
       )}

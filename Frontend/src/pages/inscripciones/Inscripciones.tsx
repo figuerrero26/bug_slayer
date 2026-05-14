@@ -291,7 +291,7 @@ export default function Inscripciones() {
                     <div className="insc-speaker-row">
                       {conf.speaker_image_url
                         ? <img
-                            src={`${SEARCH_URL}${conf.speaker_image_url}`}
+                            src={conf.speaker_image_url.startsWith("http") ? conf.speaker_image_url : `${SEARCH_URL}${conf.speaker_image_url}`}
                             alt={conf.speaker_name}
                             className="insc-speaker-avatar"
                             loading="lazy"

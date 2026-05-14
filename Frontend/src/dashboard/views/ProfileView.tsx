@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence, useMotionValue } from "framer-motion";
+import { QRCodeSVG } from "qrcode.react";
 import { SEARCH_URL } from "../../services/api";
 import "./ProfileView.css";
 
@@ -129,10 +130,13 @@ function TicketsTiltCard({ userId }: { userId: number }) {
 
             {/* ── STUB IZQUIERDO ── */}
             <div className="profv-ticket-stub">
-              <div className="profv-ticket-barcode" />
-              <span className="profv-ticket-stub-serial">
-                {conf ? serial(conf.registration_id) : "A 0000000"}
-              </span>
+              <QRCodeSVG
+                value={conf?.qr_payload ?? 'CONIITI|SIN-INSCRIPCION'}
+                size={82}
+                bgColor="transparent"
+                fgColor={conf?.qr_payload ? 'rgba(0,0,0,0.88)' : 'rgba(0,0,0,0.28)'}
+                level="H"
+              />
             </div>
 
             {/* ── PERFORACIÓN — los agujeros son CSS mask-image (sin hijos) ── */}

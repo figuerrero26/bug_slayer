@@ -12,6 +12,7 @@ from schemas.conference_schema import (
     UserConferenceOut,
 )
 from services.notification_client import notify_registration, notify_cancellation
+from utils.qr_utils import build_qr_payload
 
 router = APIRouter(tags=["registrations"])
 
@@ -152,6 +153,7 @@ def get_user_conferences(user_id: int, db: Session = Depends(get_db)):
             location_text=conf.location_text,
             registration_id=reg.id,
             registration_status=reg.status,
+            qr_payload=build_qr_payload(reg.id, reg.user_id, reg.conference_id),
         )
         for conf, reg in rows
     ]

@@ -17,4 +17,6 @@ export interface ConferenceTicket {
   schedule: string | null;
   location_text: string | null;
   registration_id: number;
+  conference_id?: number;
+  qr_payload?: string;
 }

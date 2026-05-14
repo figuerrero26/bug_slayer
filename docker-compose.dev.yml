@@ -51,6 +51,7 @@ services:
     environment:
       DATABASE_URL: mysql+pymysql://coniiti:coniiti@181.79.5.78:3306/db_search
       NOTIFICATIONS_SERVICE_URL: http://notifications_service:8004
+      QR_SECRET: coniiti-2026-ucatolica-ingsistemas-bugslayer
     volumes:
       - ./services/search_service:/app
       - speaker_images:/app/uploads/speakers

@@ -12,6 +12,7 @@ from sqlalchemy.exc import OperationalError
 from database import engine, Base, DATABASE_URL
 from routers.conference_routes import router as conference_router
 from routers.registration_routes import router as registration_router
+from routers.qr_validation import router as qr_router
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s — %(message)s")
 logger = logging.getLogger(__name__)
@@ -91,6 +92,7 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 app.include_router(conference_router)
 app.include_router(registration_router)
+app.include_router(qr_router)
 
 # Servir imágenes subidas como archivos estáticos
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
