@@ -92,42 +92,6 @@ function Footer() {
 
       </div>
 
-      {/* ── Onda divisoria de ancho completo ── */}
-      <div className="footer-wave" aria-hidden="true">
-        <svg viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            {/* Gradiente capa delantera — lee --fw-front-* del CSS */}
-            <linearGradient id="fwGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%"   style={{ stopColor: "var(--fw-front-a)" }} />
-              <stop offset="50%"  style={{ stopColor: "var(--fw-front-b)" }} />
-              <stop offset="100%" style={{ stopColor: "var(--fw-front-c)" }} />
-            </linearGradient>
-            {/* Gradiente capa trasera — lee --fw-back-* del CSS */}
-            <linearGradient id="fwGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%"   style={{ stopColor: "var(--fw-back-a)" }} />
-              <stop offset="50%"  style={{ stopColor: "var(--fw-back-b)" }} />
-              <stop offset="100%" style={{ stopColor: "var(--fw-back-c)" }} />
-            </linearGradient>
-          </defs>
-          {/* Capa trasera — azul UC Colombia, da profundidad */}
-          <path
-            d="M0,90 L0,68 C60,50 120,30 200,48 C280,66 340,20 440,38
-               C540,56 600,15 720,32 C840,49 900,18 1000,36
-               C1100,54 1160,22 1260,40 C1340,54 1400,42 1440,50
-               L1440,90 Z"
-            fill="url(#fwGrad2)" opacity="0.55"
-          />
-          {/* Capa delantera — dorado UC Colombia, alto contraste */}
-          <path
-            d="M0,90 L0,75 C80,55 160,35 260,52 C360,69 420,28 540,44
-               C660,60 720,22 840,40 C960,58 1020,25 1140,42
-               C1260,59 1360,38 1440,52
-               L1440,90 Z"
-            fill="url(#fwGrad1)" opacity="0.90"
-          />
-        </svg>
-      </div>
-
       {/* ── Franja inferior: logos + copyright + redes ── */}
       <div className="footer-bottom">
 
@@ -162,6 +126,32 @@ function Footer() {
           </a>
         </div>
 
+      </div>
+
+      {/* ── Onda al fondo del todo ── */}
+      <div className="footer-wave" aria-hidden="true">
+        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="fwGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%"   stopColor="#0b0f2b" />
+              <stop offset="40%"  stopColor="#0e2d5c" />
+              <stop offset="100%" stopColor="#0b0f2b" />
+            </linearGradient>
+            <linearGradient id="fwGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%"   stopColor="#003087" stopOpacity="0.4" />
+              <stop offset="50%"  stopColor="#1a5fd4" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="#003087" stopOpacity="0.4" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M0,60 L0,22 C180,0 380,48 600,18 C820,0 1020,40 1200,14 C1320,0 1400,28 1440,18 L1440,60 Z"
+            fill="url(#fwGrad1)"
+          />
+          <path
+            d="M0,60 L0,38 C260,12 520,52 780,30 C1040,10 1260,44 1440,30 L1440,60 Z"
+            fill="url(#fwGrad2)"
+          />
+        </svg>
       </div>
 
     </footer>

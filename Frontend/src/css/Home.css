@@ -1064,23 +1064,16 @@ a{
      capa delantera→ opacity="0.90"  (puedes bajar a 0.6 para más suave)
    ══════════════════════════════════════════════════════ */
 .footer-wave {
-  --fw-front-a: #ffd000;   /* dorado UC Colombia              */
-  --fw-front-b: #ffb700f0;   /* ámbar cálido — tono intermedio  */
-  --fw-front-c: #ffd000;   /* dorado UC Colombia              */
-
-  --fw-back-a:  #003087;   /* azul UC Colombia                */
-  --fw-back-b:  #1a5fd4;   /* azul intermedio — profundidad   */
-  --fw-back-c:  #003087;   /* azul UC Colombia                */
-
   line-height: 0;
-  background: #2e2e4928;     /* igual que footer-top            */
-  margin-bottom: -1px;
+  background: #0b0f2b;
+  margin-top: -20px;
+  margin-bottom: 0;
 }
 
 .footer-wave svg {
   display: block;
   width: 100%;
-  height: 90px;
+  height: 60px;
 }
 
 /* ── Franja inferior ── */
@@ -1579,6 +1572,11 @@ a{
   }
 }
 
+/* ── Logo video del nav — ocultar en móvil (iPhone muestra controles si no reproduce) ── */
+@media (max-width: 1024px) {
+  .logo-video { display: none; }
+}
+
 /* ── Móvil mediano (≤ 480px) — iPhone 14 Pro Max, Pixel, etc. ── */
 @media (max-width: 480px) {
 
@@ -1624,6 +1622,21 @@ a{
   .hero-content  { padding: 0 20px 90px; gap: 14px; }
   .hero-title    { font-size: 36px; letter-spacing: -0.5px; }
   .hero-tagline  { font-size: 14px; }
+
+  /* Cifras clave — sin wrap para mantener la fila única */
+  .highlights-strip {
+    flex-wrap: nowrap;
+    padding: 22px 6px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .highlights-strip::-webkit-scrollbar { display: none; }
+  .highlight-item   { padding: 0 10px; min-width: 0; }
+  .highlight-num    { font-size: 18px; }
+  .highlight-label  { font-size: 7px; letter-spacing: 1px; white-space: nowrap; }
+  .highlight-sep    { height: 22px; flex-shrink: 0; }
+  .highlight-flag-it { width: 28px; height: 20px; }
 
   .countdown-section { padding: 60px 16px 70px; }
   .countdown-card    { width: 84px; height: 84px; border-radius: 14px; }
