@@ -1572,11 +1572,6 @@ a{
   }
 }
 
-/* ── Logo video del nav — ocultar en móvil (iPhone muestra controles si no reproduce) ── */
-@media (max-width: 1024px) {
-  .logo-video { display: none; }
-}
-
 /* ── Móvil mediano (≤ 480px) — iPhone 14 Pro Max, Pixel, etc. ── */
 @media (max-width: 480px) {
 
@@ -1620,7 +1615,7 @@ a{
   }
 
   .hero-content  { padding: 0 20px 90px; gap: 14px; }
-  .hero-title    { font-size: 36px; letter-spacing: -0.5px; }
+  .hero-title    { font-size: 30px; letter-spacing: -0.5px; }
   .hero-tagline  { font-size: 14px; }
 
   /* Cifras clave — sin wrap para mantener la fila única */
@@ -1638,10 +1633,22 @@ a{
   .highlight-sep    { height: 22px; flex-shrink: 0; }
   .highlight-flag-it { width: 28px; height: 20px; }
 
-  .countdown-section { padding: 60px 16px 70px; }
-  .countdown-card    { width: 84px; height: 84px; border-radius: 14px; }
-  .countdown-num     { font-size: 30px; }
-  .countdown-sep     { font-size: 22px; padding-top: 30px; }
+  /* Cuenta regresiva — reducir para que quepan los 4 en pantalla */
+  .countdown-section    { padding: 50px 12px 60px; }
+  .countdown-units      { gap: 6px; }
+  .countdown-card       { width: 68px; height: 68px; border-radius: 12px; }
+  .countdown-num        { font-size: 24px; }
+  .countdown-sep        { font-size: 18px; padding-top: 24px; }
+  .countdown-unit-label { font-size: 8px; letter-spacing: 1.5px; }
+
+  /* Footer */
+  .footer-col    { padding: 24px 16px !important; }
+  .footer-bottom { padding: 20px 16px !important; }
+  .footer-logos img { height: 40px; }
+  .footer-info h3   { font-size: 13px; }
+  .footer-info p    { font-size: 11px; }
+  .footer-redes     { flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .footer-redes a   { width: 36px; height: 36px; font-size: 15px; }
 }
 
 /* ── Móvil pequeño (≤ 390px) — iPhone SE, Galaxy S ── */
@@ -1653,7 +1660,7 @@ a{
   }
 
   .logo {
-    gap: 6px;          /* menos espacio entre video y sello */
+    gap: 6px;
   }
 
   .logo-video   { height: 38px !important; }
@@ -1662,15 +1669,20 @@ a{
   .nav-year { font-size: 11px; padding: 3px 9px; letter-spacing: 1px; }
   .nav-login-pill { padding: 5px 9px; }
 
-  .hamburger {
-    padding: 6px;
-  }
+  .hamburger { padding: 6px; }
 
   .hero-title   { font-size: 26px; }
   .hero-tagline { font-size: 13px; }
   .hero-cta     { font-size: 13px; padding: 11px 22px; }
 
-  .countdown-card  { width: 72px; height: 72px; border-radius: 12px; }
-  .countdown-num   { font-size: 26px; }
-  .countdown-sep   { font-size: 20px; padding-top: 26px; }
+  .countdown-units      { gap: 4px; }
+  .countdown-card       { width: 60px; height: 60px; border-radius: 10px; }
+  .countdown-num        { font-size: 20px; }
+  .countdown-sep        { font-size: 16px; padding-top: 20px; }
+  .countdown-unit-label { font-size: 7px; letter-spacing: 1px; }
+
+  .highlight-item  { padding: 0 7px; }
+  .highlight-num   { font-size: 16px; }
+  .highlight-label { font-size: 6px; }
+  .highlight-sep   { height: 18px; }
 }

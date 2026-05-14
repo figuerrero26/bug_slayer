@@ -6,6 +6,7 @@ import { useLang, LANGUAGES, LangCode } from "../context/LanguageContext";
 import VideoConiiti from "../assets/CONIITI .mp4";
 import logoMenu     from "../assets/logomenu.svg";
 import imgCulture   from "../assets/selloycalidad.png";
+import escudo       from "../assets/escudo-ucatolica.png";
 import rogelio      from "../assets/rogelio.png";
 import UserAvatar   from "./UserAvatar";
 
@@ -119,7 +120,7 @@ const Barra = () => {
 
         {/* LOGO */}
         <div className="logo">
-          <video autoPlay muted loop playsInline preload="metadata" className="logo-video">
+          <video autoPlay muted loop playsInline preload="auto" poster={escudo} className="logo-video">
             <source src={VideoConiiti} type="video/mp4" />
           </video>
           <img src={imgCulture} alt="Sello de calidad" className="logo-culture" />
