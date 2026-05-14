@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { SEARCH_URL } from "../../services/api";
+import { useLang } from "../../context/LanguageContext";
 import "../../css/Inscripciones.css";
 
 // ── Tipos ─────────────────────────────────────────────────────────────────────
@@ -42,17 +43,9 @@ function getSession(): Session | null {
   }
 }
 
-function formatDate(iso: string | null): string {
-  if (!iso) return "Por definir";
-  return new Date(iso).toLocaleDateString("es-CO", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
+const LOCALE_MAP: Record<string, string> = {
+  ES: "es-CO", EN: "en-US", IT: "it-IT", PT: "pt-BR", FR: "fr-FR",
+};
 
 function spotsLeft(conf: Conference): number {
   return conf.capacity - conf.registered_count;
@@ -64,7 +57,16 @@ const CATEGORIES = ["Todas", "IA", "Software", "Redes", "Datos", "Robótica", "G
 
 export default function Inscripciones() {
   const navigate = useNavigate();
+  const { t, lang } = useLang();
   const session = getSession();
+
+  function formatDate(iso: string | null): string {
+    if (!iso) return t.insc_to_define;
+    return new Date(iso).toLocaleDateString(LOCALE_MAP[lang] ?? "es-CO", {
+      weekday: "long", year: "numeric", month: "long",
+      day: "numeric", hour: "2-digit", minute: "2-digit",
+    });
+  }
 
   const [conferences, setConferences]     = useState<Conference[]>([]);
   const [myRegs, setMyRegs]               = useState<Registration[]>([]);
@@ -202,16 +204,14 @@ export default function Inscripciones() {
 
       {/* Hero */}
       <section className="insc-hero">
-        <h1 className="insc-hero-title">Conferencias CONIITTI 2026</h1>
-        <p className="insc-hero-sub">
-          Explora el catálogo de charlas y regístrate en las que más te interesen
-        </p>
+        <h1 className="insc-hero-title">{t.insc_title}</h1>
+        <p className="insc-hero-sub">{t.insc_sub}</p>
 
         <div className="insc-search-bar">
           <span className="insc-search-icon">🔍</span>
           <input
             className="insc-search-input"
-            placeholder="Buscar por título, ponente o tema…"
+            placeholder={t.insc_search_ph}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -238,7 +238,7 @@ export default function Inscripciones() {
         {loading && (
           <div className="insc-loading">
             <div className="insc-spinner" />
-            <p>Cargando conferencias…</p>
+            <p>{t.insc_loading}</p>
           </div>
         )}
 
@@ -246,14 +246,14 @@ export default function Inscripciones() {
         {!loading && error && (
           <div className="insc-error">
             <p>{error}</p>
-            <button onClick={() => { setError(""); fetchConferences(); }}>Reintentar</button>
+            <button onClick={() => { setError(""); fetchConferences(); }}>{t.insc_retry}</button>
           </div>
         )}
 
         {/* Sin resultados */}
         {!loading && !error && visible.length === 0 && (
           <div className="insc-empty">
-            <p>No se encontraron conferencias con esos filtros.</p>
+            <p>{t.insc_empty}</p>
           </div>
         )}
 
@@ -277,7 +277,7 @@ export default function Inscripciones() {
 
                   {/* Badge inscrito */}
                   {isMine && (
-                    <span className="insc-badge-mine">Inscrito</span>
+                    <span className="insc-badge-mine">{t.insc_registered_badge}</span>
                   )}
 
                   <h2 className="insc-card-title">{conf.title}</h2>
@@ -327,8 +327,8 @@ export default function Inscripciones() {
                     <li>
                       <span className="meta-icon">🪑</span>
                       {full
-                        ? "Sin cupos disponibles"
-                        : `${spots} cupo${spots !== 1 ? "s" : ""} disponible${spots !== 1 ? "s" : ""}`}
+                        ? t.insc_spots_none
+                        : `${spots} ${spots !== 1 ? t.insc_spots_pl : t.insc_spots}`}
                     </li>
                   </ul>
 
@@ -339,7 +339,7 @@ export default function Inscripciones() {
                         disabled={isActing}
                         onClick={() => handleCancel(conf)}
                       >
-                        {isActing ? "Cancelando…" : "Cancelar inscripción"}
+                        {isActing ? t.insc_cancelling : t.insc_cancel}
                       </button>
                     ) : (
                       <button
@@ -347,7 +347,7 @@ export default function Inscripciones() {
                         disabled={isActing || full}
                         onClick={() => handleRegister(conf)}
                       >
-                        {isActing ? "Inscribiendo…" : full ? "Sin cupos" : "Inscribirme"}
+                        {isActing ? t.insc_registering : full ? t.insc_full : t.insc_register}
                       </button>
                     )}
                   </div>

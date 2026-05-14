@@ -929,65 +929,248 @@ a{
 /* ================= FOOTER ================= */
 
 .footer {
-  background: linear-gradient(135deg, #0b0f2b, #141c4f);
-  color: white;
-  padding: 50px 20px;
+  background: #0b0f2b;
+  color: #fff;
   margin-top: 80px;
 }
 
-.footer-container {
+/* ── Franja superior: 3 columnas ── */
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1.4fr;
+  background: #2e2e4928;
+}
+
+.footer-col {
   display: flex;
   flex-direction: column;
+  padding: 48px 40px;
+}
+
+/* Col 1 – Marca */
+.footer-col-brand { gap: 16px; }
+
+.footer-brand-logo {
+  width: 160px;
+  object-fit: contain;
+  margin-bottom: 4px;
+}
+
+.footer-brand-legal {
+  font-size: 12.5px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.75;
+  margin: 0;
+}
+
+.footer-brand-copy {
+  font-size: 11.5px;
+  color: rgba(255,255,255,0.38);
+  margin: 0;
+}
+
+.footer-brand-hashtag {
+  font-weight: 700;
+  color: #facc15;
+  font-size: 13px;
+  margin: 4px 0 0;
+}
+
+/* Títulos de columna */
+.footer-col-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: #facc15;
+  margin: 0 0 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+/* Col 2 – Sedes */
+.footer-sede {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.footer-sede:last-child { border-bottom: none; }
+
+.footer-sede strong {
+  font-size: 13px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.footer-sede span {
+  font-size: 12.5px;
+  color: rgba(255,255,255,0.6);
+}
+
+.footer-sede-desc {
+  font-size: 11.5px !important;
+  color: rgba(255,255,255,0.38) !important;
+  font-style: italic;
+  margin-top: 2px;
+}
+
+/* Col 3 – Legal */
+.footer-legal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 20px;
+}
+
+.footer-legal-grid ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.footer-legal-grid ul li a {
+  font-size: 12px;
+  color: rgba(255,255,255,0.58);
+  text-decoration: none;
+  line-height: 1.45;
+  transition: color 0.2s, padding-left 0.2s;
+  display: block;
+}
+
+.footer-legal-grid ul li a:hover {
+  color: #facc15;
+  padding-left: 4px;
+}
+
+/* ══════════════════════════════════════════════════════
+   ONDA DIVISORIA DEL FOOTER — ajusta colores aquí
+   ══════════════════════════════════════════════════════
+
+   Montaña delantera (la más alta y viva):
+     --fw-front-a  → color izquierda  (#FFD100 = dorado UC)
+     --fw-front-b  → color centro     (#fbbf24 = ámbar cálido)
+     --fw-front-c  → color derecha    (#FFD100 = dorado UC)
+
+   Montaña trasera (capa de profundidad):
+     --fw-back-a   → color izquierda  (#003087 = azul UC Colombia)
+     --fw-back-b   → color centro     (#1a5fd4 = azul intermedio)
+     --fw-back-c   → color derecha    (#003087 = azul UC Colombia)
+
+   Opacidades en el SVG:
+     capa trasera  → opacity="0.55"  (puedes subir a 0.8 para más presencia)
+     capa delantera→ opacity="0.90"  (puedes bajar a 0.6 para más suave)
+   ══════════════════════════════════════════════════════ */
+.footer-wave {
+  --fw-front-a: #ffd000;   /* dorado UC Colombia              */
+  --fw-front-b: #ffb700f0;   /* ámbar cálido — tono intermedio  */
+  --fw-front-c: #ffd000;   /* dorado UC Colombia              */
+
+  --fw-back-a:  #003087;   /* azul UC Colombia                */
+  --fw-back-b:  #1a5fd4;   /* azul intermedio — profundidad   */
+  --fw-back-c:  #003087;   /* azul UC Colombia                */
+
+  line-height: 0;
+  background: #2e2e4928;     /* igual que footer-top            */
+  margin-bottom: -1px;
+}
+
+.footer-wave svg {
+  display: block;
+  width: 100%;
+  height: 90px;
+}
+
+/* ── Franja inferior ── */
+.footer-bottom {
+  display: flex;
   align-items: center;
-  text-align: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 28px 60px;
+  background: #0b0f2b;
 }
 
 .footer-logos {
   display: flex;
-  gap: 40px;
-  margin-bottom: 20px;
+  align-items: center;
+  gap: 20px;
 }
 
 .footer-logos img {
-  height: 80px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.footer-info {
+  text-align: center;
+  flex: 1;
 }
 
 .footer-info h3 {
-  margin-bottom: 10px;
+  margin: 0 0 4px;
   color: #facc15;
+  font-size: 15px;
+  font-weight: 700;
 }
 
 .footer-info p {
-  font-size: 14px;
-  opacity: 0.8;
+  font-size: 12.5px;
+  color: rgba(255,255,255,0.6);
+  margin: 2px 0;
 }
 
+/* ── Redes sociales ── */
 .footer-redes {
   display: flex;
-  gap: 16px;
-  margin-top: 24px;
+  gap: 10px;
 }
 
 .footer-redes a {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  font-size: 20px;
-  transition: background 0.3s, transform 0.3s;
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  font-size: 17px;
+  transition: background 0.25s, transform 0.25s;
+  text-decoration: none;
 }
 
-.footer-redes a:hover {
-  background: #0077ff;
-  transform: translateY(-4px);
-}
+.footer-redes a:hover        { transform: translateY(-4px); }
+.footer-facebook:hover       { background: #1877F2 !important; }
+.footer-instagram:hover      { background: #E4405F !important; }
+.footer-youtube:hover        { background: #FF0000 !important; }
+.footer-linkedin:hover       { background: #0A66C2 !important; }
+.footer-twitter:hover        { background: #000000 !important; }
+.footer-spotify:hover        { background: #1DB954 !important; }
 
-.footer-spotify:hover {
-  background: #1DB954 !important;
+/* ── Responsive ── */
+@media (max-width: 960px) {
+  .footer-top { grid-template-columns: 1fr; }
+
+  .footer-col {
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    padding: 32px 24px;
+  }
+
+  .footer-col:last-child { border-bottom: none; }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 24px 20px;
+  }
+
+  .footer-legal-grid { grid-template-columns: 1fr; }
 }
 
 /* BARRA SUPERIOR */

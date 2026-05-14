@@ -74,16 +74,14 @@ function Home() {
         <div className="hero-overlay" />
 
         <div className="hero-content">
-          <span className="hero-edition">XII Edición · Bogotá, Colombia</span>
+          <span className="hero-edition">{t.hero_edition}</span>
 
           <h1 className="hero-title">CONIITI <span className="hero-year">2026</span></h1>
 
-          <p className="hero-tagline">
-            El congreso internacional que conecta la ingeniería del futuro.
-          </p>
+          <p className="hero-tagline">{t.hero_tagline}</p>
 
           <Link to="/inscripciones" className="hero-cta">
-            Inscríbete al congreso
+            {t.hero_cta}
             <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
@@ -95,13 +93,13 @@ function Home() {
               <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
               </svg>
-              Bogotá, Colombia
+              {t.hero_city}
             </span>
             <span className="hero-bar-dot" />
-            <span className="hero-info-item">23 de septiembre, 2026</span>
+            <span className="hero-info-item">{t.hero_date}</span>
             <span className="hero-bar-dot" />
             <span className="hero-info-item hero-italy-inline">
-              País invitado
+              {t.hero_guest}
               <span className="it-mini">
                 <span className="it-g"/><span className="it-w"/><span className="it-r"/>
               </span>
@@ -173,8 +171,8 @@ function Home() {
 
       {/* ── CUENTA REGRESIVA ── */}
       <section className="countdown-section">
-        <span className="countdown-eyebrow">CONIITI 2026 · Bogotá, Colombia</span>
-        <h2 className="countdown-heading">El congreso comienza en</h2>
+        <span className="countdown-eyebrow">CONIITI 2026 · {t.hero_city}</span>
+        <h2 className="countdown-heading">{t.countdown_label}</h2>
         <div className="countdown-units">
           <div className="countdown-unit reveal delay-1">
             <div className="countdown-card">
@@ -209,8 +207,8 @@ function Home() {
       {/* ── TARJETAS ── */}
       <section className="cards-section">
         <div className="cards-header reveal">
-          <h2 className="cards-title">Descubre CONIITI 2026</h2>
-          <p className="cards-subtitle">Explora cada rincón del congreso internacional de ingeniería</p>
+          <h2 className="cards-title">{t.home_discover}</h2>
+          <p className="cards-subtitle">{t.home_discover_sub}</p>
         </div>
         <div className="grid">
           <div className="card reveal delay-1">
