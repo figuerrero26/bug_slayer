@@ -22,6 +22,20 @@ function serial(n: number) {
   return `A ${String(n).padStart(7, "0")}`;
 }
 
+function fmtDateShort(iso: string | null): string {
+  if (!iso) return "POR DEFINIR";
+  return new Date(iso)
+    .toLocaleDateString("es-CO", { day: "numeric", month: "short" })
+    .toUpperCase();
+}
+
+function fmtTime(iso: string | null): string {
+  if (!iso) return "";
+  return new Date(iso).toLocaleTimeString("es-CO", {
+    hour: "2-digit", minute: "2-digit", hour12: false,
+  });
+}
+
 // ── CountdownCard ─────────────────────────────────────────────────────────────
 function CountdownCard() {
   const TARGET = useMemo(() => new Date("2026-10-20T08:00:00"), []);
@@ -128,20 +142,6 @@ function TicketsTiltCard({ userId }: { userId: number }) {
             transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
           >
 
-            {/* ── STUB IZQUIERDO ── */}
-            <div className="profv-ticket-stub">
-              <QRCodeSVG
-                value={conf?.qr_payload ?? 'CONIITI|SIN-INSCRIPCION'}
-                size={82}
-                bgColor="transparent"
-                fgColor={conf?.qr_payload ? 'rgba(0,0,0,0.88)' : 'rgba(0,0,0,0.28)'}
-                level="H"
-              />
-            </div>
-
-            {/* ── PERFORACIÓN — los agujeros son CSS mask-image (sin hijos) ── */}
-            <div className="profv-ticket-perf" aria-hidden="true" />
-
             {/* ── CUERPO PRINCIPAL ── */}
             <div className="profv-ticket-body">
               <div className="profv-ticket-inner">
@@ -151,41 +151,79 @@ function TicketsTiltCard({ userId }: { userId: number }) {
                   <span className="profv-ticket-year-tag">2026</span>
                 </div>
 
-                <div className="profv-ticket-rule" />
-
                 {loading ? (
                   <p className="profv-ticket-misc">Cargando…</p>
                 ) : conf ? (
                   <>
-                    <h3 className="profv-ticket-title">{conf.title}</h3>
+                    <h2 className="profv-ticket-conf-title">{conf.title}</h2>
                     {conf.speaker_name && (
-                      <p className="profv-ticket-misc">{conf.speaker_name}</p>
+                      <p className="profv-ticket-speaker">{conf.speaker_name}</p>
                     )}
-                    <div className="profv-ticket-serial-box">
-                      {serial(conf.registration_id)}
+                    <div className="profv-ticket-meta-row">
+                      <span className="profv-ticket-meta-date">
+                        {fmtDateShort(conf.schedule)}
+                        {fmtTime(conf.schedule) ? ` · ${fmtTime(conf.schedule)}` : ""}
+                      </span>
+                      <span className="profv-ticket-meta-venue">Universidad Católica de Colombia</span>
                     </div>
-                    <p className="profv-ticket-admit">
-                      CONFERENCIA · {fmtDate(conf.schedule)}
-                    </p>
+                    <div className="profv-ticket-rule profv-ticket-rule--dim" />
+                    <div className="profv-ticket-grid">
+                      <div className="profv-ticket-grid-cell">
+                        <span className="profv-ticket-grid-label">SEDE</span>
+                        <span className="profv-ticket-grid-value">—</span>
+                      </div>
+                      <div className="profv-ticket-grid-cell">
+                        <span className="profv-ticket-grid-label">SALA</span>
+                        <span className="profv-ticket-grid-value">
+                          {conf.location_text ? conf.location_text.slice(0, 4) : "—"}
+                        </span>
+                      </div>
+                      <div className="profv-ticket-grid-cell">
+                        <span className="profv-ticket-grid-label">SERIAL</span>
+                        <span className="profv-ticket-grid-value profv-ticket-grid-value--serial">
+                          {serial(conf.registration_id)}
+                        </span>
+                      </div>
+                    </div>
                   </>
                 ) : (
                   <>
-                    <h3 className="profv-ticket-title profv-ticket-title--empty">
-                      ADMIT ONE
-                    </h3>
-                    <div className="profv-ticket-serial-box">A 0000000</div>
-                    <p className="profv-ticket-admit">Sin conferencias inscritas</p>
+                    <h2 className="profv-ticket-conf-title profv-ticket-conf-title--empty">ADMIT ONE</h2>
+                    <p className="profv-ticket-speaker" style={{ opacity: 0.3 }}>Sin conferencias inscritas</p>
+                    <div className="profv-ticket-rule profv-ticket-rule--dim" />
+                    <div className="profv-ticket-grid">
+                      {["SEDE", "SALA", "SERIAL"].map(l => (
+                        <div key={l} className="profv-ticket-grid-cell">
+                          <span className="profv-ticket-grid-label">{l}</span>
+                          <span className="profv-ticket-grid-value">—</span>
+                        </div>
+                      ))}
+                    </div>
                   </>
                 )}
 
               </div>
             </div>
 
-            {/* ── STUB DERECHO ── */}
+            {/* ── PERFORACIÓN ── */}
+            <div className="profv-ticket-perf" aria-hidden="true" />
+
+            {/* ── STUB DERECHO — QR ── */}
             <div className="profv-ticket-stub profv-ticket-stub--right">
-              <span className="profv-ticket-stub-serial profv-ticket-stub-serial--right">
-                {conf ? serial(conf.registration_id) : "A 0000000"}
-              </span>
+              <div className="profv-ticket-stub-header">
+                <span className="profv-ticket-stub-brand">CONIITI</span>
+                <span className="profv-ticket-stub-year">2026</span>
+              </div>
+              <div className="profv-ticket-qr-wrap">
+                <QRCodeSVG
+                  value={conf?.qr_payload ?? "CONIITI|SIN-INSCRIPCION"}
+                  size={84}
+                  bgColor="transparent"
+                  fgColor={conf?.qr_payload ? "#0b1628" : "rgba(11,22,40,0.22)"}
+                  level="H"
+                />
+                <span className="profv-ticket-qr-label">CONIITI</span>
+              </div>
             </div>
 
           </motion.div>
