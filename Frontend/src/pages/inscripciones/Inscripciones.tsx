@@ -147,6 +147,9 @@ export default function Inscripciones() {
           )
         );
         showToast(`Inscrito en "${conf.title}"`);
+        // Avisa a UserAvatar después de un delay para que la notificación
+        // ya esté guardada (el backend la crea en un BackgroundTask)
+        setTimeout(() => window.dispatchEvent(new Event("new-notification")), 1500);
       }
     } catch {
       showToast("Error de conexión");

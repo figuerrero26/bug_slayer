@@ -38,7 +38,10 @@ const MOBILE_NAV = [
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function Dashboard() {
-  const [activeNav, setActiveNav]         = useState("profile");
+  const [activeNav, setActiveNav]         = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("section") ?? "profile";
+  });
   const [searchQuery, setSearchQuery]     = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
 

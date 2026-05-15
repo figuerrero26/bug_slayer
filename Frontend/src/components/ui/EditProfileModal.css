@@ -222,11 +222,30 @@
 
 [data-theme="dark"] .modal { background: var(--surface); }
 
-/* ── Responsive: bottom-sheet en móvil (≤ 768px) ────────────────── */
+/* ── Responsive: centrado en móvil (≤ 768px) ────────────────────── */
 
 @media (max-width: 768px) {
-  .modal-overlay    { align-items: flex-end; padding: 0; }
-  .modal            { max-width: 100%; width: 100%; border-radius: 20px 20px 0 0; padding: 22px 18px; max-height: 92vh; overflow-y: auto; }
-  .modal-grid       { grid-template-columns: 1fr; }
-  .modal-field--full{ grid-column: 1; }
+  .modal-overlay {
+    align-items: center;
+    padding: 16px;
+  }
+
+  .modal {
+    max-width: 100%;
+    width: 100%;
+    border-radius: var(--radius);
+    padding: 22px 18px;
+    max-height: 88dvh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-body {
+    flex: 1;
+    margin-bottom: 0;
+  }
+
+  .modal-grid        { grid-template-columns: 1fr; }
+  .modal-field--full { grid-column: 1; }
 }

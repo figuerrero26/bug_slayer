@@ -7,6 +7,7 @@ import {
   FaCalendarAlt,
   FaHeart,
   FaEnvelope,
+  FaCog,
   FaSignOutAlt,
 } from "react-icons/fa";
 
@@ -17,10 +18,11 @@ import type { UserSession } from "../interfaces/user";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const MENU_ITEMS = [
-  { Icon: FaUser,        label: "Ver mi Perfil",    to: "/dashboard", showBadge: false },
-  { Icon: FaCalendarAlt, label: "Mis Conferencias", to: "/dashboard", showBadge: false },
-  { Icon: FaHeart,       label: "Favoritos",        to: "/dashboard", showBadge: false },
-  { Icon: FaEnvelope,    label: "Mensajes",         to: "/dashboard", showBadge: true  },
+  { Icon: FaUser,        label: "Ver mi Perfil",    to: "/dashboard?section=profile",     showBadge: false },
+  { Icon: FaCalendarAlt, label: "Mis Conferencias", to: "/dashboard?section=conferences", showBadge: false },
+  { Icon: FaHeart,       label: "Favoritos",        to: "/dashboard?section=favorites",   showBadge: false },
+  { Icon: FaEnvelope,    label: "Mensajes",         to: "/dashboard?section=messages",    showBadge: true  },
+  { Icon: FaCog,         label: "Ajustes",          to: "/dashboard?section=settings",    showBadge: false },
 ];
 
 const LOGOUT_DURATION_MS = 1000;
@@ -110,7 +112,8 @@ export default function UserAvatar() {
   const wrapperRef                      = useRef<HTMLDivElement>(null);
   const navigate                        = useNavigate();
 
-  // Fetch unread notifications count al montar y al recuperar el foco
+  // Fetch unread notifications count al montar, al recuperar el foco
+  // y cuando otro componente dispara "new-notification"
   useEffect(() => {
     if (!session) return;
     const fetch_ = () =>
@@ -120,7 +123,11 @@ export default function UserAvatar() {
         .catch(() => {});
     fetch_();
     window.addEventListener("focus", fetch_);
-    return () => window.removeEventListener("focus", fetch_);
+    window.addEventListener("new-notification", fetch_);
+    return () => {
+      window.removeEventListener("focus", fetch_);
+      window.removeEventListener("new-notification", fetch_);
+    };
   }, [session?.user_id]);
 
   // Sincroniza si el usuario hace login/logout en otra pestaña

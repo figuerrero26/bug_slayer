@@ -256,3 +256,45 @@
 /* ── Dark mode ───────────────────────────────────────────────────── */
 [data-theme="dark"] .msv-card                      { background: var(--surface); border-color: var(--border); }
 [data-theme="dark"] .msv-card:not(.msv-card--read) { background: linear-gradient(135deg, #1a2e50, var(--surface)); }
+
+/* ── Responsive móvil (≤ 768px) ─────────────────────────────────── */
+@media (max-width: 768px) {
+  .msv-wrapper {
+    max-width: 100%;
+    gap: 12px;
+  }
+
+  .msv-list {
+    max-height: calc(100dvh - 180px);
+    padding-right: 0;
+  }
+
+  .msv-card {
+    padding: 12px 14px 10px;
+  }
+
+  /* Título y meta en columna: título arriba, badge+fecha debajo */
+  .msv-card-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .msv-card-right {
+    gap: 6px;
+  }
+
+  /* Permite que el título ocupe toda la línea */
+  .msv-card-left {
+    width: 100%;
+  }
+
+  .msv-title {
+    white-space: normal;
+    font-size: 13px;
+  }
+
+  .msv-date {
+    font-size: 10.5px;
+  }
+}

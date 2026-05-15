@@ -22,7 +22,7 @@
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(30, 111, 189, 0.12);
   border-radius: var(--radius, 16px);
-  padding: 1.75rem;
+  padding: 1.25rem;
   box-shadow:
     0 4px 20px rgba(26, 37, 69, 0.07),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
@@ -106,6 +106,7 @@
 
 .cal-day {
   aspect-ratio: 1;
+  max-height: 70px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -113,7 +114,7 @@
   border: 1.5px solid transparent;
   background: transparent;
   color: var(--text, #1a2545);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s, transform 0.12s;
   position: relative;

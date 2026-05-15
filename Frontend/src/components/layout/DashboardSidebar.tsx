@@ -10,7 +10,6 @@ const NAV_ITEMS = [
   { id: "favorites",   label: "Favoritos"                      },
   { id: "calendar",    label: "Calendario"                     },
   { id: "messages",    label: "Mensajes",         badge: true  },
-  { id: "settings",    label: "Ajustes"                        },
 ];
 
 interface Props {
@@ -63,7 +62,7 @@ export default function DashboardSidebar({
 
       <div className="sidebar-footer">
         <button
-          className="nav-item"
+          className={`nav-item${activeNav === "settings" ? " nav-active" : ""}`}
           onClick={() => setActiveNav("settings")}
           style={{ marginBottom: "4px" }}
         >
