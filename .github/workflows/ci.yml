@@ -1,69 +1,36 @@
-# Nombre del flujo de trabajo que aparecerá en la pestaña "Actions"
 name: Node.js CI
 
-# ---------------------------------------------------------
-# EVENTOS QUE ACTIVAN EL WORKFLOW
-# Este flujo se ejecuta cuando hay cambios en la rama main
-# ---------------------------------------------------------
 on:
-  # Se ejecuta cuando alguien hace push al repositorio
   push:
     branches:
-      - main   # rama principal del repositorio
-
-  # También se ejecuta cuando alguien crea o actualiza un Pull Request
+      - main
   pull_request:
     branches:
-      - main   # rama donde se revisan los cambios
+      - main
 
-# ---------------------------------------------------------
-# DEFINICIÓN DE LOS TRABAJOS (JOBS)
-# ---------------------------------------------------------
 jobs:
-
-  # Nombre del trabajo
   build:
+    runs-on: ubuntu-latest
 
-    # Sistema operativo donde se ejecutará el proceso
-    runs-on: windows-latest
-
-    # -----------------------------------------------------
-    # PASOS QUE SE EJECUTAN EN EL JOB
-    # -----------------------------------------------------
     steps:
-
-      # -------------------------------------------------
-      # PASO 1: Descargar el código del repositorio
-      # -------------------------------------------------
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      # -------------------------------------------------
-      # PASO 2: Instalar y configurar Node.js
-      # -------------------------------------------------
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '14'   # versión de Node que usará el servidor
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: Frontend/package-lock.json
 
-          # -------------------------------------------------
-      # PASO 3: Instalar dependencias
-      # -------------------------------------------------
       - name: Install dependencies
         run: npm install
-        working-directory:  Frontend
-      
-      # -------------------------------------------------
-      # PASO 4: Ejecutar pruebas automáticas
-      # (solo funciona si el proyecto tiene tests)
-      # -------------------------------------------------
-      - name: Run tests
-        run: npm test
         working-directory: Frontend
-      
-      # -------------------------------------------------
-      # PASO 5: Compilar el proyecto
-      # -------------------------------------------------
+
+      - name: Run tests
+        run: npm test -- --run
+        working-directory: Frontend
+
       - name: Build project
         run: npm run build
-        working-directory:  Frontend
+        working-directory: Frontend
