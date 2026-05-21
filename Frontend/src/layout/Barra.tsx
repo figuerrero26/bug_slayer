@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaSearch, FaChevronDown } from "react-icons/fa";
 import { useLang, LANGUAGES, LangCode } from "../context/LanguageContext";
 
-import VideoConiiti from "../assets/CONIITI .mp4";
+import GifConiiti from "../assets/CONIITI3.gif";
 import logoMenu     from "../assets/logomenu.svg";
 import imgCulture   from "../assets/selloycalidad.png";
 import escudo       from "../assets/escudo-ucatolica.png";
@@ -120,9 +120,7 @@ const Barra = () => {
 
         {/* LOGO */}
         <div className="logo">
-          <video autoPlay muted loop playsInline preload="auto" poster={escudo} className="logo-video">
-            <source src={VideoConiiti} type="video/mp4" />
-          </video>
+          <img src={GifConiiti} alt="CONIITI" className="logo-video" />
           <img src={imgCulture} alt="Sello de calidad" className="logo-culture" />
         </div>
 
