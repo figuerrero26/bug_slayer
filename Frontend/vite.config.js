@@ -35,6 +35,9 @@ export default defineConfig({
       },
     },
   },
+  optimizeDeps: {
+    exclude: ['html5-qrcode'],
+  },
   build: {
     rollupOptions: {
       output: {
@@ -42,6 +45,7 @@ export default defineConfig({
           vendor:  ['react', 'react-dom'],
           router:  ['react-router-dom'],
           motion:  ['framer-motion'],
+          qr:      ['qrcode.react'],
         },
       },
     },
