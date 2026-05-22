@@ -1,0 +1,114 @@
+# =============================================================================
+# docker-compose.prod.yml — Producción | CONIITI Bug Slayer
+#
+# Hardening aplicado:
+#   · Único punto de entrada a internet: servicio 'nginx' (puertos 80 y 443)
+#   · Microservicios con expose: únicamente (no vinculados al host)
+#   · Sin volúmenes de código fuente; solo persistencia de datos (speaker_images)
+#   · Dos redes internas: red_perimetral (gateway) y red_interna (microservicios)
+#   · Secretos y configuración fuera del compose, en archivos .env.prod
+#
+# Comando de despliegue:
+#   docker compose -f docker-compose.prod.yml up --build -d
+# =============================================================================
+
+services:
+
+  # ── Puerta de entrada única ────────────────────────────────────────────────
+  # Sirve el SPA compilado y actúa como reverse proxy hacia red_interna.
+  # Es el ÚNICO servicio con puertos vinculados al host.
+  nginx:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    image: coniiti/nginx-frontend:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - auth_service
+      - dashboard_service
+      - search_service
+      - notifications_service
+    networks:
+      - red_perimetral   # acepta tráfico de internet
+      - red_interna      # alcanza los microservicios
+    restart: unless-stopped
+
+  # ── Microservicios (aislados en red_interna) ───────────────────────────────
+
+  auth_service:
+    build:
+      context: ./services/auth_service
+    image: coniiti/auth-service:latest
+    container_name: auth_service
+    expose:
+      - "8001"
+    env_file:
+      - ./services/auth_service/.env.prod
+    depends_on:
+      - dashboard_service
+    networks:
+      - red_interna
+    restart: unless-stopped
+
+  dashboard_service:
+    build:
+      context: ./services/dashboard_service
+    image: coniiti/dashboard-service:latest
+    container_name: dashboard_service
+    expose:
+      - "8002"
+    env_file:
+      - ./services/dashboard_service/.env.prod
+    depends_on:
+      - search_service
+    networks:
+      - red_interna
+    restart: unless-stopped
+
+  search_service:
+    build:
+      context: ./services/search_service
+    image: coniiti/search-service:latest
+    container_name: search_service
+    expose:
+      - "8003"
+    env_file:
+      - ./services/search_service/.env.prod
+    volumes:
+      - speaker_images:/app/uploads/speakers  # único volumen: datos físicos
+    depends_on:
+      - notifications_service
+    networks:
+      - red_interna
+    restart: unless-stopped
+
+  notifications_service:
+    build:
+      context: ./services/notifications_service
+    image: coniiti/notifications-service:latest
+    container_name: notifications_service
+    expose:
+      - "8004"
+    env_file:
+      - ./services/notifications_service/.env.prod
+    networks:
+      - red_interna
+    restart: unless-stopped
+
+# ── Persistencia ──────────────────────────────────────────────────────────────
+volumes:
+  speaker_images:
+    driver: local
+
+# ── Segmentación de red ───────────────────────────────────────────────────────
+networks:
+  red_perimetral:
+    driver: bridge
+    name: coniiti_perimetral
+
+  red_interna:
+    driver: bridge
+    name: coniiti_interna
