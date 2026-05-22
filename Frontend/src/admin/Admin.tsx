@@ -30,7 +30,7 @@ interface ConferenceForm {
 
 // ── Constantes ────────────────────────────────────────────────────────────────
 
-const CATEGORIES = ["IAAA", "Software", "Redes", "Datos", "Robótica", "Gestión", "Innovación", "Otro"];
+const CATEGORIES = ["IA", "Software", "Redes", "Datos", "Robótica", "Gestión", "Innovación", "Otro"];
 
 const EMPTY_FORM: ConferenceForm = {
   title: "", description: "", speaker_name: "",
