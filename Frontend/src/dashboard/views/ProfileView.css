@@ -22,6 +22,75 @@
   align-items: stretch;   /* ambas columnas idéntica altura */
 }
 
+/* ── Estado vacío del ticket ────────────────────────────────────── */
+.profv-empty-ticket {
+  background: linear-gradient(145deg, #07101f 0%, #0f1f40 55%, #172a55 100%);
+  border-radius: var(--radius);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 32px 24px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.profv-empty-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(232, 148, 26, 0.12);
+  border: 1.5px solid rgba(232, 148, 26, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #e8941a;
+  margin-bottom: 4px;
+}
+
+.profv-empty-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.profv-empty-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+  max-width: 220px;
+  line-height: 1.55;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.profv-empty-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 8px;
+  padding: 9px 20px;
+  background: #e8941a;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  letter-spacing: 0.02em;
+}
+
+.profv-empty-btn:hover {
+  background: #d4810f;
+  transform: translateY(-1px);
+}
+
 /* ══════════════════════════════════════════════════════════════════
    COUNTDOWN CARD
    ══════════════════════════════════════════════════════════════════ */
@@ -45,6 +114,7 @@
 }
 
 .profv-cd-badge {
+  font-family: 'DM Sans', sans-serif;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -58,14 +128,15 @@
 }
 
 .profv-cd-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 22px;
-  font-weight: 800;
+  font-weight: 800px;
   margin: 0;
   letter-spacing: -0.5px;
 }
 
 .profv-cd-subtitle {
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: rgba(255,255,255,0.45);
   margin: 0;
@@ -87,7 +158,7 @@
 
 .profv-cd-num {
   display: block;
-  font-family: 'Syne', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 26px;
   font-weight: 800;
   color: #e8941a;
@@ -97,6 +168,7 @@
 
 .profv-cd-label {
   display: block;
+  font-family: 'DM Sans', sans-serif;
   font-size: 9px;
   color: rgba(255,255,255,0.40);
   margin-top: 6px;
@@ -114,6 +186,7 @@
   align-items: center;
   gap: 5px;
   flex: 1;
+  font-family: 'DM Sans', sans-serif;
   font-size: 10.5px;
   color: rgba(255,255,255,0.38);
 }
@@ -439,6 +512,7 @@
 }
 
 .profv-ticket-meta-date {
+  font-family: 'DM Sans', sans-serif;
   font-size: 9.5px;
   font-weight: 800;
   color: #ffffff;
@@ -448,6 +522,7 @@
 }
 
 .profv-ticket-meta-venue {
+  font-family: 'DM Sans', sans-serif;
   font-size: 8.5px;
   font-weight: 600;
   color: rgba(255,255,255,0.45);
@@ -472,6 +547,7 @@
 }
 
 .profv-ticket-grid-label {
+  font-family: 'DM Sans', sans-serif;
   font-size: 7.5px;
   font-weight: 800;
   letter-spacing: 0.14em;
@@ -481,7 +557,7 @@
 }
 
 .profv-ticket-grid-value {
-  font-family: 'Syne', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 800;
   color: #ffffff;
@@ -498,6 +574,7 @@
 
 /* misc — solo para el loading state */
 .profv-ticket-misc {
+  font-family: 'DM Sans', sans-serif;
   font-size: 9.5px;
   color: rgba(255,255,255,0.45);
   margin: 0;
@@ -669,6 +746,7 @@
 .detail-row {
   display: flex;
   gap: 10px;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13.5px;
 }
 

@@ -1,120 +1,336 @@
 /* ═══════════════════════════════════════════════════════════════════
-   DashboardTopbar.css — barra superior: título, búsqueda y botones
+   DashboardTopbar.css
+   El header ocupa el FULL WIDTH del grid (grid-area: topbar, span 2).
+   Estructura interna (flex, izq → der):
+     [logo-slot 220px] [topbar-greeting flex:1] [topbar-right]
    ═══════════════════════════════════════════════════════════════════ */
 
-/* ── Topbar ──────────────────────────────────────────────────────── */
+/* ── Posición en el grid + estilos base ─────────────────────────── */
 
 .topbar-size {
-  height: 80px;
+  grid-area: topbar;
+
+  /* Sticky para que permanezca visible al hacer scroll */
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  height: var(--hdr-height, 96px);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 25px;
+  gap: 0;
+
+  /* SIN overflow: hidden — el dropdown del idioma necesita salir del header */
+  overflow: visible;
+
+  background: linear-gradient(
+    108deg,
+    #0b1628 0%,
+    #0e1e3a 30%,
+    #122448 60%,
+    #162c58 100%
+  );
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.30);
 }
 
-/* ── Barra de búsqueda ───────────────────────────────────────────── */
+/* ── Olas SVG (absolutas, no afectan el layout) ─────────────────── */
 
-.search-box-1 {
+.topbar-waves {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  /* Las paths del SVG están dentro del viewBox — no desbordan nunca */
+}
+
+/* ── SLOT IZQUIERDO: Logo ───────────────────────────────────────── */
+
+.topbar-logo-slot {
+  /* width exacto = columna del sidebar, sin que el border lo comprima */
+  width: var(--sb-width, 220px);
+  flex-shrink: 0;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;   /* logo centrado dentro de los 220px */
+  padding: 0 18px;
+
+  /* Sin border-right aquí para evitar el desplazamiento de box-sizing.
+     La línea separadora se pone con ::after fuera del flujo de caja. */
+  position: relative;
+  z-index: 1;
+}
+
+/* Separador: absolutamente posicionado en el borde derecho real del slot.
+   No participa en el box-model → coincide exactamente con el sidebar. */
+.topbar-logo-slot::after {
+  content: '';
+  position: absolute;
+  right: 0;            /* borde derecho del slot = borde derecho del sidebar */
+  top: 16%;
+  bottom: 16%;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.13);
+  border-radius: 1px;
+}
+
+.topbar-logo {
+  display: block;
+  width: auto;
+  max-width: 158px;
+  max-height: 62px;
+  object-fit: contain;
+}
+
+/* ── Saludo (centro) ────────────────────────────────────────────── */
+
+.topbar-greeting {
+  flex: 1;
+  min-width: 0;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.topbar-welcome {
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(180, 208, 240, 0.85);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+  line-height: 1.3;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.topbar-welcome strong {
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 0 20px rgba(94, 168, 245, 0.35);
+}
+
+.topbar-welcome--first {
+  font-size: 17px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* ── Herramientas (derecha) ─────────────────────────────────────── */
+
+.topbar-right {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #0f1c2f;
-  border: 1px solid rgba(255,255,255,0.08);
-  padding: 8px 14px;
-  border-radius: 20px;
-  transition: all 0.2s ease;
+  flex-shrink: 0;
+  padding-right: 28px;
+  position: relative;
+  z-index: 1;
 }
 
-.search-box-1:hover {
-  border: 1px solid rgba(255,255,255,0.18);
-}
-
-.search-box-1:focus-within {
-  border: 1px solid #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
-}
-
-.search-icon-1 {
-  font-size: 14px;
-  color: #94a3b8;
-}
-
-.search-input-1 {
-  background: transparent;
-  border: none;
-  outline: none;
-  color: white;
-  font-size: 14px;
-  width: 160px;
-}
-
-.search-input-1::placeholder {
-  color: #64748b;
-}
-
-/* ── Botón volver al inicio ──────────────────────────────────────── */
+/* ── Botón volver al inicio ─────────────────────────────────────── */
 
 .btn-go-home {
   display: flex;
   align-items: center;
   gap: 7px;
-  padding: 8px 16px;
+  padding: 7px 15px;
   border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--bg);
-  color: var(--muted);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(200, 220, 245, 0.90);
   font-size: 13px;
   font-weight: 500;
   font-family: 'DM Sans', sans-serif;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+  backdrop-filter: blur(4px);
 }
 
 .btn-go-home:hover {
-  background: var(--navy);
-  border-color: var(--navy);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.30);
+  color: #ffffff;
   transform: translateX(-2px);
 }
 
-.btn-exit {
-  width: 36px;
-  height: 36px;
+/* ── Iconos de toolbar ──────────────────────────────────────────── */
+
+.tb-icon-btn {
+  position: relative;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  color: var(--muted);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(180, 210, 245, 0.80);
   font-size: 16px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  backdrop-filter: blur(4px);
 }
 
-.btn-exit:hover {
-  background: var(--red);
-  border-color: var(--red);
+.tb-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+  transform: scale(1.08);
+  box-shadow: 0 0 12px rgba(94, 168, 245, 0.25);
+}
+
+/* ── Badge de notificaciones ────────────────────────────────────── */
+
+.tb-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: #ef4444;
   color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #0b1628;
+  line-height: 1;
+  pointer-events: none;
+  animation: badge-pop 0.25s ease;
 }
 
-/* ── Logout móvil (oculto en desktop) ───────────────────────────── */
+@keyframes badge-pop {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+/* ── Selector de idioma ─────────────────────────────────────────── */
+
+.tb-lang {
+  position: relative;
+}
+
+.tb-lang-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.20);
+  background: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  overflow: hidden;
+  backdrop-filter: blur(4px);
+}
+
+.tb-lang-btn:hover {
+  border-color: rgba(255, 255, 255, 0.50);
+  box-shadow: 0 0 14px rgba(94, 168, 245, 0.30);
+  transform: scale(1.07);
+}
+
+/* ── Bandera circular ───────────────────────────────────────────── */
+
+.tb-flag-circle {
+  display: block;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+/* ── Dropdown de idiomas (ya NO se corta por overflow:hidden) ───── */
+
+.tb-lang-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: #0f1c2f;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 14px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 160px;
+  box-shadow:
+    0 20px 48px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
+  /* z-index alto dentro del stacking context del topbar sticky */
+  z-index: 200;
+  animation: dropdown-appear 0.16s ease;
+}
+
+@keyframes dropdown-appear {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)   scale(1);    }
+}
+
+.tb-lang-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: rgba(180, 205, 240, 0.80);
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.tb-lang-option:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: #ffffff;
+}
+
+.tb-lang-option--active {
+  background: rgba(30, 111, 189, 0.20);
+  color: #7ec8f8;
+}
+
+.tb-lang-option .tb-flag-circle {
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+}
+
+/* ── Logout móvil (oculto en desktop) ──────────────────────────── */
 
 .btn-mobile-logout {
   display: none;
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.65);
-  font-size: 0;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(200, 220, 245, 0.70);
   cursor: pointer;
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
   flex-shrink: 0;
+  padding: 0;
 }
 
 .btn-mobile-logout::before {
@@ -123,11 +339,11 @@
   width: 17px;
   height: 17px;
   background-color: currentColor;
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='-3.12 -3.12 30.24 30.24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.9999 2C10.2385 2 7.99991 4.23858 7.99991 7C7.99991 7.55228 8.44762 8 8.99991 8C9.55219 8 9.99991 7.55228 9.99991 7C9.99991 5.34315 11.3431 4 12.9999 4H16.9999C18.6568 4 19.9999 5.34315 19.9999 7V17C19.9999 18.6569 18.6568 20 16.9999 20H12.9999C11.3431 20 9.99991 18.6569 9.99991 17C9.99991 16.4477 9.55219 16 8.99991 16C8.44762 16 7.99991 16.4477 7.99991 17C7.99991 19.7614 10.2385 22 12.9999 22H16.9999C19.7613 22 21.9999 19.7614 21.9999 17V7C21.9999 4.23858 19.7613 2 16.9999 2H12.9999Z' fill='black'/%3E%3Cpath d='M13.9999 11C14.5522 11 14.9999 11.4477 14.9999 12C14.9999 12.5523 14.5522 13 13.9999 13V11Z' fill='black'/%3E%3Cpath d='M5.71783 11C5.80685 10.8902 5.89214 10.7837 5.97282 10.682C6.21831 10.3723 6.42615 10.1004 6.57291 9.90549C6.64636 9.80795 6.70468 9.72946 6.74495 9.67492L6.79152 9.61162L6.804 9.59454L6.80842 9.58848C6.80846 9.58842 6.80892 9.58778 5.99991 9L6.80842 9.58848C7.13304 9.14167 7.0345 8.51561 6.58769 8.19098C6.14091 7.86637 5.51558 7.9654 5.19094 8.41215L5.18812 8.41602L5.17788 8.43002L5.13612 8.48679C5.09918 8.53682 5.04456 8.61033 4.97516 8.7025C4.83623 8.88702 4.63874 9.14542 4.40567 9.43937C3.93443 10.0337 3.33759 10.7481 2.7928 11.2929L2.08569 12L2.7928 12.7071C3.33759 13.2519 3.93443 13.9663 4.40567 14.5606C4.63874 14.8546 4.83623 15.113 4.97516 15.2975C5.04456 15.3897 5.09918 15.4632 5.13612 15.5132L5.17788 15.57L5.18812 15.584L5.19045 15.5872C5.51509 16.0339 6.14091 16.1336 6.58769 15.809C7.0345 15.4844 7.13355 14.859 6.80892 14.4122L5.99991 15C6.80892 14.4122 6.80897 14.4123 6.80892 14.4122L6.804 14.4055L6.79152 14.3884L6.74495 14.3251C6.70468 14.2705 6.64636 14.1921 6.57291 14.0945C6.42615 13.8996 6.21831 13.6277 5.97282 13.318C5.89214 13.2163 5.80685 13.1098 5.71783 13H13.9999V11H5.71783Z' fill='black'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='-3.12 -3.12 30.24 30.24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.9999 2C10.2385 2 7.99991 4.23858 7.99991 7C7.99991 7.55228 8.44762 8 8.99991 8C9.55219 8 9.99991 7.55228 9.99991 7C9.99991 5.34315 11.3431 4 12.9999 4H16.9999C18.6568 4 19.9999 5.34315 19.9999 7V17C19.9999 18.6569 18.6568 20 16.9999 20H12.9999C11.3431 20 9.99991 18.6569 9.99991 17C9.99991 16.4477 9.55219 16 8.99991 16C8.44762 16 7.99991 16.4477 7.99991 17C7.99991 19.7614 10.2385 22 12.9999 22H16.9999C19.7613 22 21.9999 19.7614 21.9999 17V7C21.9999 4.23858 19.7613 2 16.9999 2H12.9999Z' fill='black'/%3E%3Cpath d='M5.71783 11H13.9999V13H5.71783C5.80685 13.1098 5.89214 13.2163 5.97282 13.318C6.21831 13.6277 6.42615 13.8996 6.57291 14.0945C6.64636 14.1921 6.70468 14.2705 6.74495 14.3251L6.79152 14.3884L6.804 14.4055L6.80892 14.4122C7.13355 14.859 7.0345 15.4844 6.58769 15.809C6.14091 16.1336 5.51509 16.0339 5.19045 15.5872L5.18812 15.584L5.17788 15.57L5.13612 15.5132C5.09918 15.4632 5.04456 15.3897 4.97516 15.2975C4.83623 15.113 4.63874 14.8546 4.40567 14.5606C3.93443 13.9663 3.33759 13.2519 2.7928 12.7071L2.08569 12L2.7928 11.2929C3.33759 10.7481 3.93443 10.0337 4.40567 9.43937C4.63874 9.14542 4.83623 8.88702 4.97516 8.7025C5.04456 8.61033 5.09918 8.53682 5.13612 8.48679L5.17788 8.43002L5.18812 8.41602L5.19094 8.41215C5.51558 7.9654 6.14091 7.86637 6.58769 8.19098C7.0345 8.51561 7.13304 9.14167 6.80842 9.58848L5.99991 9C6.80892 9.58778 6.80846 9.58842 6.80842 9.58848L6.804 9.59454L6.79152 9.61162L6.74495 9.67492C6.70468 9.72946 6.64636 9.80795 6.57291 9.90549C6.42615 10.1004 6.21831 10.3723 5.97282 10.682C5.89214 10.7837 5.80685 10.8902 5.71783 11Z' fill='black'/%3E%3C/svg%3E");
   -webkit-mask-size: contain;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
-  mask-image: url("data:image/svg+xml,%3Csvg viewBox='-3.12 -3.12 30.24 30.24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.9999 2C10.2385 2 7.99991 4.23858 7.99991 7C7.99991 7.55228 8.44762 8 8.99991 8C9.55219 8 9.99991 7.55228 9.99991 7C9.99991 5.34315 11.3431 4 12.9999 4H16.9999C18.6568 4 19.9999 5.34315 19.9999 7V17C19.9999 18.6569 18.6568 20 16.9999 20H12.9999C11.3431 20 9.99991 18.6569 9.99991 17C9.99991 16.4477 9.55219 16 8.99991 16C8.44762 16 7.99991 16.4477 7.99991 17C7.99991 19.7614 10.2385 22 12.9999 22H16.9999C19.7613 22 21.9999 19.7614 21.9999 17V7C21.9999 4.23858 19.7613 2 16.9999 2H12.9999Z' fill='black'/%3E%3Cpath d='M13.9999 11C14.5522 11 14.9999 11.4477 14.9999 12C14.9999 12.5523 14.5522 13 13.9999 13V11Z' fill='black'/%3E%3Cpath d='M5.71783 11C5.80685 10.8902 5.89214 10.7837 5.97282 10.682C6.21831 10.3723 6.42615 10.1004 6.57291 9.90549C6.64636 9.80795 6.70468 9.72946 6.74495 9.67492L6.79152 9.61162L6.804 9.59454L6.80842 9.58848C6.80846 9.58842 6.80892 9.58778 5.99991 9L6.80842 9.58848C7.13304 9.14167 7.0345 8.51561 6.58769 8.19098C6.14091 7.86637 5.51558 7.9654 5.19094 8.41215L5.18812 8.41602L5.17788 8.43002L5.13612 8.48679C5.09918 8.53682 5.04456 8.61033 4.97516 8.7025C4.83623 8.88702 4.63874 9.14542 4.40567 9.43937C3.93443 10.0337 3.33759 10.7481 2.7928 11.2929L2.08569 12L2.7928 12.7071C3.33759 13.2519 3.93443 13.9663 4.40567 14.5606C4.63874 14.8546 4.83623 15.113 4.97516 15.2975C5.04456 15.3897 5.09918 15.4632 5.13612 15.5132L5.17788 15.57L5.18812 15.584L5.19045 15.5872C5.51509 16.0339 6.14091 16.1336 6.58769 15.809C7.0345 15.4844 7.13355 14.859 6.80892 14.4122L5.99991 15C6.80892 14.4122 6.80897 14.4123 6.80892 14.4122L6.804 14.4055L6.79152 14.3884L6.74495 14.3251C6.70468 14.2705 6.64636 14.1921 6.57291 14.0945C6.42615 13.8996 6.21831 13.6277 5.97282 13.318C5.89214 13.2163 5.80685 13.1098 5.71783 13H13.9999V11H5.71783Z' fill='black'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg viewBox='-3.12 -3.12 30.24 30.24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.9999 2C10.2385 2 7.99991 4.23858 7.99991 7C7.99991 7.55228 8.44762 8 8.99991 8C9.55219 8 9.99991 7.55228 9.99991 7C9.99991 5.34315 11.3431 4 12.9999 4H16.9999C18.6568 4 19.9999 5.34315 19.9999 7V17C19.9999 18.6569 18.6568 20 16.9999 20H12.9999C11.3431 20 9.99991 18.6569 9.99991 17C9.99991 16.4477 9.55219 16 8.99991 16C8.44762 16 7.99991 16.4477 7.99991 17C7.99991 19.7614 10.2385 22 12.9999 22H16.9999C19.7613 22 21.9999 19.7614 21.9999 17V7C21.9999 4.23858 19.7613 2 16.9999 2H12.9999Z' fill='black'/%3E%3Cpath d='M5.71783 11H13.9999V13H5.71783C5.80685 13.1098 5.89214 13.2163 5.97282 13.318C6.21831 13.6277 6.42615 13.8996 6.57291 14.0945C6.64636 14.1921 6.70468 14.2705 6.74495 14.3251L6.79152 14.3884L6.804 14.4055L6.80892 14.4122C7.13355 14.859 7.0345 15.4844 6.58769 15.809C6.14091 16.1336 5.51509 16.0339 5.19045 15.5872L5.18812 15.584L5.17788 15.57L5.13612 15.5132C5.09918 15.4632 5.04456 15.3897 4.97516 15.2975C4.83623 15.113 4.63874 14.8546 4.40567 14.5606C3.93443 13.9663 3.33759 13.2519 2.7928 12.7071L2.08569 12L2.7928 11.2929C3.33759 10.7481 3.93443 10.0337 4.40567 9.43937C4.63874 9.14542 4.83623 8.88702 4.97516 8.7025C5.04456 8.61033 5.09918 8.53682 5.13612 8.48679L5.17788 8.43002L5.18812 8.41602L5.19094 8.41215C5.51558 7.9654 6.14091 7.86637 6.58769 8.19098C7.0345 8.51561 7.13304 9.14167 6.80842 9.58848L5.99991 9C6.80892 9.58778 6.80846 9.58842 6.80842 9.58848L6.804 9.59454L6.79152 9.61162L6.74495 9.67492C6.70468 9.72946 6.64636 9.80795 6.57291 9.90549C6.42615 10.1004 6.21831 10.3723 5.97282 10.682C5.89214 10.7837 5.80685 10.8902 5.71783 11Z' fill='black'/%3E%3C/svg%3E");
   mask-size: contain;
   mask-repeat: no-repeat;
   mask-position: center;
@@ -135,21 +351,31 @@
 
 .btn-mobile-logout:hover {
   background: rgba(239, 68, 68, 0.15);
-  border-color: #fca5a5;
+  border-color: rgba(252, 165, 165, 0.50);
   color: #fca5a5;
 }
 
-/* ── Dark mode ───────────────────────────────────────────────────── */
+/* ── Dark mode ──────────────────────────────────────────────────── */
 
-[data-theme="dark"] .topbar     { background: var(--bg); border-bottom: 1px solid var(--border); }
-[data-theme="dark"] .search-box-1 { background: #111d30; border-color: rgba(255,255,255,0.06); }
+[data-theme="dark"] .topbar-size { border-bottom-color: rgba(255,255,255,0.07); }
 
-/* ── Responsive: móvil (≤ 768px) ────────────────────────────────── */
+/* ── Responsive: móvil (≤ 768px) ───────────────────────────────── */
 
 @media (max-width: 768px) {
-  .topbar-size        { height: 58px; padding: 0 14px; }
-  .search-box-1       { display: none; }
-  .btn-mobile-logout  { display: flex; }
-  .btn-go-home span   { display: none; }
-  .btn-go-home        { padding: 8px 10px; border-radius: 50%; }
+  .topbar-size {
+    height: 58px;
+    /* En móvil ocupa todo el ancho (sidebar oculto) */
+  }
+  .topbar-logo-slot {
+    width: 52px;
+    padding: 0 10px;
+    border-right: none;
+  }
+  .topbar-logo      { max-width: 36px; max-height: 36px; }
+  .topbar-welcome   { font-size: 14px; }
+  .topbar-greeting  { padding: 0 10px; }
+  .topbar-right     { padding-right: 12px; gap: 6px; }
+  .btn-mobile-logout { display: flex; }
+  .btn-go-home span  { display: none; }
+  .btn-go-home       { padding: 7px 10px; border-radius: 50%; }
 }

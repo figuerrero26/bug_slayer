@@ -1,18 +1,13 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { SEARCH_URL } from "../../services/api";
+import { useLang } from "../../context/LanguageContext";
 import "./InscritasView.css";
 
 import type { Conference } from "../../interfaces/conference";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type Status = "confirmada" | "en-curso" | "finalizada";
-
-const STATUS_LABEL: Record<Status, string> = {
-  "confirmada": "Confirmada",
-  "en-curso":   "En curso",
-  "finalizada": "Finalizada",
-};
 
 const STATUS_PRIORITY: Record<Status, number> = {
   "en-curso":   0,
@@ -64,6 +59,7 @@ function ActionsMenu({
   onCancel,
   cancelling,
   dropUp,
+  cancelLabel,
 }: {
   open: boolean;
   onOpen: () => void;
@@ -71,6 +67,7 @@ function ActionsMenu({
   onCancel: () => void;
   cancelling: boolean;
   dropUp: boolean;
+  cancelLabel: string;
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
 
@@ -115,7 +112,7 @@ function ActionsMenu({
               <path d="M10 11v6M14 11v6"/>
               <path d="M9 6V4h6v2"/>
             </svg>
-            Cancelar inscripción
+            {cancelLabel}
           </button>
         </div>
       )}
@@ -131,6 +128,7 @@ export default function InscritasView({
   userId: number;
   searchQuery?: string;
 }) {
+  const { t } = useLang();
   const navigate = useNavigate();
 
   const [conferences, setConferences]   = useState<Conference[]>([]);
@@ -147,7 +145,7 @@ export default function InscritasView({
   useEffect(() => {
     fetch(`${SEARCH_URL}/users/${userId}/conferences`)
       .then((res) => {
-        if (!res.ok) throw new Error("No se pudieron cargar las conferencias");
+        if (!res.ok) throw new Error(t.iv_load_error);
         return res.json();
       })
       .then(setConferences)
@@ -155,13 +153,20 @@ export default function InscritasView({
       .finally(() => setLoading(false));
   }, [userId]);
 
+  // ── Status labels (reactive) ───────────────────────────────────────────────
+  const statusLabel: Record<Status, string> = {
+    "confirmada": t.iv_status_confirmed,
+    "en-curso":   t.iv_status_ongoing,
+    "finalizada": t.iv_status_finished,
+  };
+
   // ── Toast ──────────────────────────────────────────────────────────────────
   function showToast(msg: string, ok: boolean) {
     setToast({ msg, ok });
     setTimeout(() => setToast(null), 3500);
   }
 
-  // ── Cancel inscription → DELETE /registrations/{registration_id} ───────────
+  // ── Cancel inscription ─────────────────────────────────────────────────────
   async function handleCancelInscription(conf: Conference) {
     if (cancellingId !== null) return;
     setCancellingId(conf.id);
@@ -171,16 +176,16 @@ export default function InscritasView({
       });
       if (res.ok) {
         setConferences((prev) => prev.filter((c) => c.id !== conf.id));
-        showToast(`Inscripción a "${conf.title}" cancelada`, true);
+        showToast(t.iv_cancel_ok.replace("{0}", conf.title), true);
       } else {
         const errMsg = await res
           .json()
-          .then((d: { detail?: string }) => d.detail ?? "No se pudo cancelar la inscripción")
-          .catch(() => "No se pudo cancelar la inscripción");
+          .then((d: { detail?: string }) => d.detail ?? t.iv_cancel_fail)
+          .catch(() => t.iv_cancel_fail);
         showToast(errMsg, false);
       }
     } catch {
-      showToast("Error de conexión", false);
+      showToast(t.iv_conn_error, false);
     } finally {
       setCancellingId(null);
     }
@@ -197,25 +202,18 @@ export default function InscritasView({
     };
   }, [conferences]);
 
-  // Unique categories extracted dynamically — no hardcoded strings
   const categories = useMemo(() => (
     [...new Set(conferences.map((c) => c.category).filter((c): c is string => !!c))]
   ), [conferences]);
 
-  // Sorted + filtered.
-  // When selectedCategory is null AND search is active (global search),
-  // the category filter is bypassed — results span all categories.
   const visible = useMemo(() => {
     const q = localSearch.toLowerCase();
-
     const filtered = conferences.filter((c) => {
       if (
         selectedCategory !== null &&
         selectedCategory !== "TODAS" &&
         c.category !== selectedCategory
-      ) {
-        return false;
-      }
+      ) return false;
       return (
         !q ||
         c.title.toLowerCase().includes(q) ||
@@ -224,7 +222,6 @@ export default function InscritasView({
         (c.category      ?? "").toLowerCase().includes(q)
       );
     });
-
     return [...filtered].sort(
       (a, b) => STATUS_PRIORITY[getStatus(a.schedule)] - STATUS_PRIORITY[getStatus(b.schedule)]
     );
@@ -234,7 +231,7 @@ export default function InscritasView({
   if (loading) return (
     <div className="iv-center">
       <div className="iv-spinner" />
-      <p>Cargando tus conferencias…</p>
+      <p>{t.iv_loading}</p>
     </div>
   );
 
@@ -262,24 +259,19 @@ export default function InscritasView({
           <rect x="43" y="6" width="5" height="13" rx="2.5" fill="#4361ee"/>
         </svg>
       </div>
-      <h3 className="iv-empty-title">
-        Aún no tienes conferencias inscritas en la CONIITI 2026
-      </h3>
-      <p className="iv-empty-sub">
-        ¡Explora el cronograma e inscríbete a tus favoritas!
-      </p>
+      <h3 className="iv-empty-title">{t.iv_empty_title}</h3>
+      <p className="iv-empty-sub">{t.iv_empty_sub}</p>
       <button className="iv-empty-cta" onClick={() => navigate("/inscripciones")}>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="11" cy="11" r="8"/>
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        Explorar conferencias
+        {t.iv_explore}
       </button>
     </div>
   );
 
-  // Typing in the search while the category grid is visible triggers global search
   const isGlobalSearch = localSearch.length > 0 && selectedCategory === null;
   const showGrid       = !isGlobalSearch && selectedCategory === null;
 
@@ -320,7 +312,7 @@ export default function InscritasView({
             </svg>
           </div>
           <div>
-            <p className="iv-kpi-label">Total inscritas</p>
+            <p className="iv-kpi-label">{t.iv_kpi_total}</p>
             <p className="iv-kpi-value">{kpis.total}</p>
           </div>
         </div>
@@ -330,7 +322,7 @@ export default function InscritasView({
             <span className="iv-kpi-dot" />
           </div>
           <div>
-            <p className="iv-kpi-label">Confirmadas</p>
+            <p className="iv-kpi-label">{t.iv_kpi_confirmed}</p>
             <p className="iv-kpi-value">{kpis.confirmada}</p>
           </div>
         </div>
@@ -340,7 +332,7 @@ export default function InscritasView({
             <span className="iv-kpi-dot" />
           </div>
           <div>
-            <p className="iv-kpi-label">En curso</p>
+            <p className="iv-kpi-label">{t.iv_kpi_ongoing}</p>
             <p className="iv-kpi-value">{kpis.enCurso}</p>
           </div>
         </div>
@@ -350,7 +342,7 @@ export default function InscritasView({
             <span className="iv-kpi-dot" />
           </div>
           <div>
-            <p className="iv-kpi-label">Finalizadas</p>
+            <p className="iv-kpi-label">{t.iv_kpi_finished}</p>
             <p className="iv-kpi-value">{kpis.finalizada}</p>
           </div>
         </div>
@@ -369,7 +361,7 @@ export default function InscritasView({
           value={localSearch}
           onChange={(e) => setLocalSearch(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Escape") setLocalSearch(""); }}
-          placeholder="Buscar por conferencia, ponente, salón o categoría..."
+          placeholder={t.iv_search_ph}
         />
         {localSearch && (
           <button
@@ -390,7 +382,6 @@ export default function InscritasView({
       {showGrid ? (
         <div className="iv-categories-grid">
 
-          {/* Static "Mostrar Todas" — clears search to avoid cross-filter conflicts */}
           <button
             className="iv-cat-card iv-cat-card--all"
             onClick={() => { setSelectedCategory("TODAS"); setLocalSearch(""); }}
@@ -404,13 +395,12 @@ export default function InscritasView({
                 <rect x="14" y="14" width="7" height="7" rx="1"/>
               </svg>
             </div>
-            <span className="iv-cat-card-label">Mostrar Todas</span>
+            <span className="iv-cat-card-label">{t.iv_show_all}</span>
             <span className="iv-cat-card-count">
-              {conferences.length} conferencia{conferences.length !== 1 ? "s" : ""}
+              {conferences.length} {conferences.length !== 1 ? t.iv_conference_pl : t.iv_conference_s}
             </span>
           </button>
 
-          {/* Dynamic cards — strings come directly from the DB */}
           {categories.map((cat) => {
             const count = conferences.filter((c) => c.category === cat).length;
             return (
@@ -429,7 +419,7 @@ export default function InscritasView({
                 </div>
                 <span className="iv-cat-card-label">{cat}</span>
                 <span className="iv-cat-card-count">
-                  {count} conferencia{count !== 1 ? "s" : ""}
+                  {count} {count !== 1 ? t.iv_conference_pl : t.iv_conference_s}
                 </span>
               </button>
             );
@@ -437,9 +427,7 @@ export default function InscritasView({
         </div>
 
       ) : (
-        /* ── Table area (category drill-down OR real-time global search) ── */
         <>
-          {/* Back button shown only in explicit drill-down, not during global search */}
           {selectedCategory !== null && (
             <div className="iv-drill-header">
               <button
@@ -451,7 +439,7 @@ export default function InscritasView({
                   <line x1="19" y1="12" x2="5" y2="12"/>
                   <polyline points="12 19 5 12 12 5"/>
                 </svg>
-                Volver a Categorías
+                {t.iv_back_cats}
               </button>
               {selectedCategory !== "TODAS" && (
                 <span className="iv-drill-label">{selectedCategory}</span>
@@ -459,7 +447,6 @@ export default function InscritasView({
             </div>
           )}
 
-          {/* Global search: no results → centered message instead of empty table */}
           {isGlobalSearch && visible.length === 0 ? (
             <div className="iv-center iv-center--search">
               <svg width="46" height="46" viewBox="0 0 24 24" fill="none"
@@ -468,9 +455,9 @@ export default function InscritasView({
                 <circle cx="11" cy="11" r="8"/>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"/>
               </svg>
-              <h3 className="iv-empty-title">No se encontraron conferencias</h3>
+              <h3 className="iv-empty-title">{t.iv_no_results}</h3>
               <p className="iv-empty-sub">
-                que coincidan con "<strong>{localSearch}</strong>"
+                {t.iv_matching} "<strong>{localSearch}</strong>"
               </p>
             </div>
           ) : (
@@ -479,17 +466,17 @@ export default function InscritasView({
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Conferencia</th>
-                    <th>Eje Temático</th>
-                    <th>Estado</th>
-                    <th>Ponente</th>
-                    <th>Ubicación</th>
-                    <th>Horario</th>
+                    <th>{t.iv_th_conference}</th>
+                    <th>{t.iv_th_category}</th>
+                    <th>{t.iv_th_status}</th>
+                    <th>{t.iv_th_speaker}</th>
+                    <th>{t.iv_th_location}</th>
+                    <th>{t.iv_th_schedule}</th>
                     <th></th>
                   </tr>
                 </thead>
                 <tbody>
-                  {visible.map((conf, idx) => {
+                  {visible.map((conf, rowIdx) => {
                     const status         = getStatus(conf.schedule);
                     const { sede, sala } = parseLocation(conf.location_text);
                     return (
@@ -506,7 +493,7 @@ export default function InscritasView({
 
                         <td>
                           <span className={`iv-badge iv-badge--${status}`}>
-                            {STATUS_LABEL[status]}
+                            {statusLabel[status]}
                           </span>
                         </td>
 
@@ -539,7 +526,8 @@ export default function InscritasView({
                             onClose={() => setOpenMenuId(null)}
                             onCancel={() => handleCancelInscription(conf)}
                             cancelling={cancellingId === conf.id}
-                            dropUp={idx >= visible.length - 2}
+                            dropUp={rowIdx >= visible.length - 2}
+                            cancelLabel={t.iv_cancel_action}
                           />
                         </td>
                       </tr>
@@ -551,8 +539,8 @@ export default function InscritasView({
               {visible.length === 0 && (
                 <div className="iv-no-results">
                   {localSearch
-                    ? <>Sin resultados para "<strong>{localSearch}</strong>"</>
-                    : "No hay conferencias en esta categoría"}
+                    ? <>{t.iv_no_results_q} "<strong>{localSearch}</strong>"</>
+                    : t.iv_no_results_cat}
                 </div>
               )}
             </div>

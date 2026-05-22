@@ -35,6 +35,8 @@
   --red:         #dc2626;
   --radius:      16px;
   --radius-sm:   10px;
+  --hdr-height:  96px;   /* altura topbar = sb__brand */
+  --sb-width:    220px;  /* ancho del sidebar = logo slot del topbar */
   font-family: 'DM Sans', sans-serif;
   letter-spacing: -0.2px;
 }

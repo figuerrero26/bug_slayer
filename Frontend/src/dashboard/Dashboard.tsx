@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,6 +10,7 @@ import { getSession }       from "../hooks/useSession";
 import { useDashboard }     from "../hooks/useDashboard";
 import { useNotifications } from "../hooks/useNotifications";
 import { useLogout }        from "../hooks/useLogout";
+import { useLang }          from "../context/LanguageContext";
 
 // ── Layout components ─────────────────────────────────────────────────────────
 import DashboardSidebar from "../components/layout/DashboardSidebar";
@@ -27,22 +28,14 @@ import PlaceholderView from "./views/PlaceholderView";
 import MessagesView    from "./views/MessagesView";
 import SettingsView    from "./views/SettingsView";
 
-// ── Constants ─────────────────────────────────────────────────────────────────
-const MOBILE_NAV = [
-  { id: "profile",     label: "Perfil",      emoji: "👤" },
-  { id: "conferences", label: "Mis charlas", emoji: "🎤" },
-  { id: "calendar",    label: "Calendario",  emoji: "📅" },
-  { id: "favorites",   label: "Favoritos",   emoji: "❤️" },
-  { id: "messages",    label: "Mensajes",    emoji: "✉️" },
-];
-
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function Dashboard() {
+  const { t } = useLang();
+
   const [activeNav, setActiveNav]         = useState(() => {
     const params = new URLSearchParams(window.location.search);
     return params.get("section") ?? "profile";
   });
-  const [searchQuery, setSearchQuery]     = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
 
   const navigate       = useNavigate();
@@ -55,7 +48,12 @@ export default function Dashboard() {
   const { unreadCount, setUnreadCount }               = useNotifications(userId);
   const { isLoggingOut, handleLogout }                = useLogout();
 
-  const handleGoHome = () => navigate("/");
+  const isFirstVisit = useMemo(() => {
+    if (!userId) return false;
+    const key = `coniiti_visited_${userId}`;
+    if (!localStorage.getItem(key)) { localStorage.setItem(key, "1"); return true; }
+    return false;
+  }, [userId]);
 
   if (!userId) { navigate("/login"); return null; }
 
@@ -63,15 +61,44 @@ export default function Dashboard() {
     return (
       <div className="loading-screen">
         <div className="loader-ring" />
-        <p>Cargando…</p>
+        <p>{t.dash_loading}</p>
       </div>
     );
   }
 
+  const MOBILE_NAV = [
+    { id: "profile",     label: t.dash_profile,     emoji: "👤" },
+    { id: "conferences", label: t.dash_mobile_talks, emoji: "🎤" },
+    { id: "calendar",    label: t.dash_calendar,     emoji: "📅" },
+    { id: "favorites",   label: t.dash_favorites,    emoji: "❤️" },
+    { id: "messages",    label: t.dash_messages,     emoji: "✉️" },
+  ];
+
   return (
     <>
+      {/*
+        ┌─────────────────────────────────────────────────────────┐
+        │  TOPBAR  (grid-area: topbar — span ambas columnas)      │
+        │  [Logo 220px │ Bienvenido de nuevo…  ⚙ 🔔 🌐]         │
+        ├──────────────┬──────────────────────────────────────────┤
+        │  SIDEBAR     │  CONTENT                                 │
+        │  (nav items) │  (vistas)                                │
+        └──────────────┴──────────────────────────────────────────┘
+      */}
       <div className="dashboard-root">
 
+        {/* Topbar — hijo directo del grid, ocupa ambas columnas */}
+        <DashboardTopbar
+          activeNav={activeNav}
+          user={user}
+          unreadCount={unreadCount}
+          isFirstVisit={isFirstVisit}
+          onGoHome={() => navigate("/")}
+          onLogout={handleLogout}
+          onNavigate={setActiveNav}
+        />
+
+        {/* Sidebar — hijo directo del grid, columna izquierda */}
         <DashboardSidebar
           activeNav={activeNav}
           setActiveNav={setActiveNav}
@@ -81,15 +108,8 @@ export default function Dashboard() {
           onLogout={handleLogout}
         />
 
+        {/* Content — hijo directo del grid, columna derecha */}
         <main className="main-content">
-          <DashboardTopbar
-            activeNav={activeNav}
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-            onGoHome={handleGoHome}
-            onLogout={handleLogout}
-          />
-
           <div className="content-area">
             <AnimatePresence mode="wait">
               <motion.div
@@ -103,15 +123,13 @@ export default function Dashboard() {
                 {activeNav === "profile" && user && (
                   <ProfileView user={user} onEdit={() => setShowEditModal(true)} userId={userId} />
                 )}
-                {activeNav === "conferences" && (
-                  <InscritasView userId={userId} searchQuery={searchQuery} />
-                )}
-                {activeNav === "calendar" && <CalendarioView />}
+                {activeNav === "conferences" && <InscritasView userId={userId} />}
+                {activeNav === "calendar"    && <CalendarioView />}
                 {(activeNav === "favorites" || activeNav === "events" || activeNav === "completed") && (
                   <PlaceholderView section={activeNav} />
                 )}
                 {activeNav === "messages" && (
-                  <MessagesView userId={userId} onUnreadChange={setUnreadCount} searchQuery={searchQuery} />
+                  <MessagesView userId={userId} onUnreadChange={setUnreadCount} />
                 )}
                 {activeNav === "settings" && user && (
                   <SettingsView user={user} onSaved={handleUserSaved} />

@@ -1,39 +1,36 @@
+import { useLang } from "../../context/LanguageContext";
 import "./PlaceholderView.css";
 
-interface SectionInfo {
-  icon: string;
-  title: string;
-  message: string;
-}
-
-const SECTIONS: Record<string, SectionInfo> = {
-  favorites: {
-    icon: "⭐",
-    title: "Favoritos",
-    message: "Función de favoritos próximamente disponible.",
-  },
-  events: {
-    icon: "🎟️",
-    title: "Eventos",
-    message: "El sistema está listo para recibir estos datos en la siguiente fase del proyecto.",
-  },
-  completed: {
-    icon: "✅",
-    title: "Completadas",
-    message: "El sistema está listo para recibir estos datos en la siguiente fase del proyecto.",
-  },
-  messages: {
-    icon: "💬",
-    title: "Mensajes",
-    message: "El sistema está listo para recibir estos datos en la siguiente fase del proyecto.",
-  },
-};
-
 export default function PlaceholderView({ section }: { section: string }) {
+  const { t } = useLang();
+
+  const SECTIONS: Record<string, { icon: string; title: string; message: string }> = {
+    favorites: {
+      icon:    "⭐",
+      title:   t.ph_favorites_title,
+      message: t.ph_favorites_msg,
+    },
+    events: {
+      icon:    "🎟️",
+      title:   t.ph_events_title,
+      message: t.ph_system_ready,
+    },
+    completed: {
+      icon:    "✅",
+      title:   t.ph_completed_title,
+      message: t.ph_system_ready,
+    },
+    messages: {
+      icon:    "💬",
+      title:   t.dash_messages,
+      message: t.ph_system_ready,
+    },
+  };
+
   const info = SECTIONS[section] ?? {
-    icon: "🔧",
-    title: "Sección en desarrollo",
-    message: "Esta funcionalidad estará disponible próximamente.",
+    icon:    "🔧",
+    title:   t.ph_dev_title,
+    message: t.ph_dev_msg,
   };
 
   return (
@@ -42,7 +39,7 @@ export default function PlaceholderView({ section }: { section: string }) {
         <div className="ph-icon">{info.icon}</div>
         <h2 className="ph-title">{info.title}</h2>
         <p className="ph-message">{info.message}</p>
-        <span className="ph-badge">Próximamente</span>
+        <span className="ph-badge">{t.ph_soon}</span>
       </div>
     </div>
   );

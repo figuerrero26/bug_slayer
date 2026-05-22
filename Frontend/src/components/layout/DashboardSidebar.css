@@ -1,160 +1,187 @@
 /* ═══════════════════════════════════════════════════════════════════
-   DashboardSidebar.css — barra lateral de navegación del dashboard
+   DashboardSidebar.css
+   El sidebar es grid-area: sidebar (fila 2, columna 1 de Dashboard).
+   El logo fue movido al topbar — el sidebar solo tiene nav + footer.
    ═══════════════════════════════════════════════════════════════════ */
 
-.sidebar {
-  background: #0b1f3a;
-  display: flex;
-  flex-direction: column;
-  padding: 12px 0 20px;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  box-shadow: 4px 0 24px #1a254528;
-}
+/* ── Raíz ────────────────────────────────────────────────────────── */
 
-.sidebar-brand {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  margin-bottom: 8px;
-}
+.sb {
+  grid-area: sidebar;
 
-.Logo-U {
-  width: 95%;
-  max-width: 200px;
-  height: auto;
-  max-height: 65px;
-  object-fit: contain;
-}
-
-.sidebar-nav {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 16px 14px;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  padding: 12px 18px;
-  border-radius: 999px;
-  border: none;
-  background: transparent;
-  color: #ffffffaa;
-  cursor: pointer;
-  font-size: 13.5px;
-  font-family: 'DM Sans', sans-serif;
-  letter-spacing: -0.2px;
-  transition: all 0.25s ease;
-  text-align: left;
   width: 100%;
-  position: relative;
+  height: calc(100vh - var(--hdr-height, 96px));
+  position: sticky;
+  top: var(--hdr-height, 96px);
+
+  display: flex;
+  flex-direction: column;
+
+  background: #0b1628;
+  box-shadow: 4px 0 24px rgba(11, 22, 40, 0.50);
+  overflow: hidden;
+
+  /* Necesario para que .sb__waves quede absolutamente posicionada */
+  isolation: isolate;
 }
 
-.nav-item:hover {
-  background: #ffffff12;
-  color: #fff;
+/* ── Olas decorativas SVG ──────────────────────────────────────── */
+
+.sb__waves {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
 }
 
-.nav-active {
-  background: var(--blue) !important;
-  color: #fff !important;
-}
+/* ════════════════════════════════════════════════════════════════════
+   BLOQUE 1 — Navegación principal (flex: 1)
+   ════════════════════════════════════════════════════════════════════ */
 
-.nav-icon {
-  font-size: 16px;
-  flex-shrink: 0;
-  width: 20px;
-  text-align: center;
-}
-
-.nav-label {
-  font-weight: 500;
+.sb__nav {
   flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  position: relative;
+  z-index: 1;
 }
 
-.nav-badge {
-  background: var(--blue);
-  color: #fff;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 999px;
-  min-width: 22px;
-  text-align: center;
-  margin-left: auto;
-}
+.sb__nav::-webkit-scrollbar         { width: 3px; }
+.sb__nav::-webkit-scrollbar-track   { background: transparent; }
+.sb__nav::-webkit-scrollbar-thumb   { background: rgba(255,255,255,0.10); border-radius: 99px; }
 
-.nav-active .nav-badge {
-  background: #ffffff30;
-}
+/* ── Ítem de navegación ─────────────────────────────────────────── */
 
-.badge-zero {
-  background: #ffffff20;
-  color: #ffffffaa;
-}
-
-.sidebar-footer {
-  padding: 14px 12px 0;
-  border-top: 1px solid #ffffff12;
-}
-
-.btn-logout {
+.sb__item {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 12px;
   width: 100%;
+  padding: 10px 14px;
   border: none;
+  border-radius: 12px;
   background: transparent;
-  color: #ffffffaa;
-  cursor: pointer;
+  color: rgba(255, 255, 255, 0.52);
   font-size: 13.5px;
-  border-radius: var(--radius-sm);
+  font-weight: 500;
   font-family: 'DM Sans', sans-serif;
   letter-spacing: -0.2px;
-  transition: all 0.2s;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s ease-in-out,
+              color      0.2s ease-in-out,
+              box-shadow 0.2s ease-in-out;
 }
 
-.btn-logout:hover {
-  background: #ef444420;
-  color: #fca5a5;
+.sb__item:hover:not(.sb__item--active):not(:disabled) {
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.90);
 }
 
-/* Oculta el emoji 🚪 y lo reemplaza con el SVG vía mask */
-.btn-logout span:first-child {
-  display: none;
+.sb__item:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
-.btn-logout::before {
-  content: '';
-  display: inline-block;
-  width: 20px;
-  height: 20px;
+.sb__item--active {
+  background: var(--blue);
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(30, 111, 189, 0.30);
+}
+
+/* ── Icono ──────────────────────────────────────────────────────── */
+
+.sb__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
   flex-shrink: 0;
-  background-color: currentColor;
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='-3.12 -3.12 30.24 30.24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.9999 2C10.2385 2 7.99991 4.23858 7.99991 7C7.99991 7.55228 8.44762 8 8.99991 8C9.55219 8 9.99991 7.55228 9.99991 7C9.99991 5.34315 11.3431 4 12.9999 4H16.9999C18.6568 4 19.9999 5.34315 19.9999 7V17C19.9999 18.6569 18.6568 20 16.9999 20H12.9999C11.3431 20 9.99991 18.6569 9.99991 17C9.99991 16.4477 9.55219 16 8.99991 16C8.44762 16 7.99991 16.4477 7.99991 17C7.99991 19.7614 10.2385 22 12.9999 22H16.9999C19.7613 22 21.9999 19.7614 21.9999 17V7C21.9999 4.23858 19.7613 2 16.9999 2H12.9999Z' fill='black'/%3E%3Cpath d='M13.9999 11C14.5522 11 14.9999 11.4477 14.9999 12C14.9999 12.5523 14.5522 13 13.9999 13V11Z' fill='black'/%3E%3Cpath d='M5.71783 11C5.80685 10.8902 5.89214 10.7837 5.97282 10.682C6.21831 10.3723 6.42615 10.1004 6.57291 9.90549C6.64636 9.80795 6.70468 9.72946 6.74495 9.67492L6.79152 9.61162L6.804 9.59454L6.80842 9.58848C6.80846 9.58842 6.80892 9.58778 5.99991 9L6.80842 9.58848C7.13304 9.14167 7.0345 8.51561 6.58769 8.19098C6.14091 7.86637 5.51558 7.9654 5.19094 8.41215L5.18812 8.41602L5.17788 8.43002L5.13612 8.48679C5.09918 8.53682 5.04456 8.61033 4.97516 8.7025C4.83623 8.88702 4.63874 9.14542 4.40567 9.43937C3.93443 10.0337 3.33759 10.7481 2.7928 11.2929L2.08569 12L2.7928 12.7071C3.33759 13.2519 3.93443 13.9663 4.40567 14.5606C4.63874 14.8546 4.83623 15.113 4.97516 15.2975C5.04456 15.3897 5.09918 15.4632 5.13612 15.5132L5.17788 15.57L5.18812 15.584L5.19045 15.5872C5.51509 16.0339 6.14091 16.1336 6.58769 15.809C7.0345 15.4844 7.13355 14.859 6.80892 14.4122L5.99991 15C6.80892 14.4122 6.80897 14.4123 6.80892 14.4122L6.804 14.4055L6.79152 14.3884L6.74495 14.3251C6.70468 14.2705 6.64636 14.1921 6.57291 14.0945C6.42615 13.8996 6.21831 13.6277 5.97282 13.318C5.89214 13.2163 5.80685 13.1098 5.71783 13H13.9999V11H5.71783Z' fill='black'/%3E%3C/svg%3E");
-  -webkit-mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-image: url("data:image/svg+xml,%3Csvg viewBox='-3.12 -3.12 30.24 30.24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.9999 2C10.2385 2 7.99991 4.23858 7.99991 7C7.99991 7.55228 8.44762 8 8.99991 8C9.55219 8 9.99991 7.55228 9.99991 7C9.99991 5.34315 11.3431 4 12.9999 4H16.9999C18.6568 4 19.9999 5.34315 19.9999 7V17C19.9999 18.6569 18.6568 20 16.9999 20H12.9999C11.3431 20 9.99991 18.6569 9.99991 17C9.99991 16.4477 9.55219 16 8.99991 16C8.44762 16 7.99991 16.4477 7.99991 17C7.99991 19.7614 10.2385 22 12.9999 22H16.9999C19.7613 22 21.9999 19.7614 21.9999 17V7C21.9999 4.23858 19.7613 2 16.9999 2H12.9999Z' fill='black'/%3E%3Cpath d='M13.9999 11C14.5522 11 14.9999 11.4477 14.9999 12C14.9999 12.5523 14.5522 13 13.9999 13V11Z' fill='black'/%3E%3Cpath d='M5.71783 11C5.80685 10.8902 5.89214 10.7837 5.97282 10.682C6.21831 10.3723 6.42615 10.1004 6.57291 9.90549C6.64636 9.80795 6.70468 9.72946 6.74495 9.67492L6.79152 9.61162L6.804 9.59454L6.80842 9.58848C6.80846 9.58842 6.80892 9.58778 5.99991 9L6.80842 9.58848C7.13304 9.14167 7.0345 8.51561 6.58769 8.19098C6.14091 7.86637 5.51558 7.9654 5.19094 8.41215L5.18812 8.41602L5.17788 8.43002L5.13612 8.48679C5.09918 8.53682 5.04456 8.61033 4.97516 8.7025C4.83623 8.88702 4.63874 9.14542 4.40567 9.43937C3.93443 10.0337 3.33759 10.7481 2.7928 11.2929L2.08569 12L2.7928 12.7071C3.33759 13.2519 3.93443 13.9663 4.40567 14.5606C4.63874 14.8546 4.83623 15.113 4.97516 15.2975C5.04456 15.3897 5.09918 15.4632 5.13612 15.5132L5.17788 15.57L5.18812 15.584L5.19045 15.5872C5.51509 16.0339 6.14091 16.1336 6.58769 15.809C7.0345 15.4844 7.13355 14.859 6.80892 14.4122L5.99991 15C6.80892 14.4122 6.80897 14.4123 6.80892 14.4122L6.804 14.4055L6.79152 14.3884L6.74495 14.3251C6.70468 14.2705 6.64636 14.1921 6.57291 14.0945C6.42615 13.8996 6.21831 13.6277 5.97282 13.318C5.89214 13.2163 5.80685 13.1098 5.71783 13H13.9999V11H5.71783Z' fill='black'/%3E%3C/svg%3E");
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  mask-position: center;
+  font-size: 14px;
+  opacity: 0.80;
+  transition: opacity 0.2s ease-in-out;
 }
 
-/* ── Dark mode ───────────────────────────────────────────────────── */
+.sb__item--active .sb__icon,
+.sb__item:hover   .sb__icon { opacity: 1; }
 
-[data-theme="dark"] .sidebar { background: #060f1e; }
+/* ── Etiqueta de texto ──────────────────────────────────────────── */
 
-/* ── Responsive: móvil (≤ 768px) ────────────────────────────────── */
+.sb__label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Badge de contador ──────────────────────────────────────────── */
+
+.sb__badge {
+  flex-shrink: 0;
+  margin-left: auto;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(30, 111, 189, 0.85);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.sb__item--active .sb__badge {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+.sb__badge--zero {
+  background: rgba(255, 255, 255, 0.10);
+  color: rgba(255, 255, 255, 0.38);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   BLOQUE 2 — Footer (Ajustes + Logout)
+   ════════════════════════════════════════════════════════════════════ */
+
+.sb__footer {
+  flex-shrink: 0;
+  padding: 8px 10px 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  position: relative;
+  z-index: 1;
+}
+
+.sb__item--logout {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.sb__item--logout:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.14) !important;
+  color: #fca5a5 !important;
+  box-shadow: none !important;
+}
+
+/* ── Dark mode ──────────────────────────────────────────────────── */
+
+[data-theme="dark"] .sb { background: #060d1a; }
+
+/* ── Responsive: móvil ──────────────────────────────────────────── */
 
 @media (max-width: 768px) {
-  .sidebar { display: none; }
+  .sb { display: none; }
 }
