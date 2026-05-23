@@ -1,4 +1,5 @@
 import { useState, useEffect, memo } from "react";
+import edificioImg from "../../assets/ucatolica-edificio3.jpg";
 import "../../css/Noticias.css";
 
 interface Noticia {
