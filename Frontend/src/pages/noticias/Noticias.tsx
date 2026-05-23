@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import edificioImg from "../../assets/ucatolica-edificio3.jpg";
 import "../../css/Noticias.css";
 
 interface Noticia {
@@ -187,11 +188,8 @@ export default function Noticias() {
 
       {/* HERO */}
       <section className="noticias-hero">
-        <div className="noticias-hero-bg">
-          <div className="noticias-orb noticias-orb-1" />
-          <div className="noticias-orb noticias-orb-2" />
-          <div className="noticias-orb noticias-orb-3" />
-        </div>
+        <img src={edificioImg} alt="" className="noticias-hero-img" aria-hidden="true" />
+        <div className="noticias-hero-overlay" />
         <div className="noticias-hero-content">
           <div className="noticias-live-pill">
             <span className="noticias-live-dot" /> CONIITI 2026 · Noticias
@@ -267,7 +265,11 @@ export default function Noticias() {
             </div>
 
             <div className="noticias-search-wrap">
-              <span className="noticias-search-icon">🔍</span>
+              <span className="noticias-search-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+              </span>
               <input
                 className="noticias-search"
                 placeholder="Buscar noticias..."

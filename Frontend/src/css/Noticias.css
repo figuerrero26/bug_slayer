@@ -68,13 +68,33 @@
 .noticias-hero {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #0b0f2b, #141c4f);
-  min-height: 260px;
+  background: #0b0f2b;
+  min-height: 340px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 60px 24px 80px;
+  padding: 80px 24px 100px;
   border-bottom: 4px solid #facc15;
+}
+
+.noticias-hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+}
+
+.noticias-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(11, 15, 43, 0.82) 0%,
+    rgba(20, 28, 79, 0.72) 60%,
+    rgba(11, 15, 43, 0.85) 100%
+  );
 }
 
 .noticias-hero-bg {
@@ -87,7 +107,7 @@
 
 .noticias-hero-content {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   text-align: center;
   color: #fff;
   display: flex;
@@ -260,9 +280,9 @@
 }
 .noticias-search {
   width: 100%;
-  padding: 13px 44px 13px 44px;
-  border: 1px solid #c5cfe0;
-  border-radius: 4px;
+  padding: 12px 44px 12px 44px;
+  border: 1.5px solid #c5cfe0;
+  border-radius: 999px;
   font-size: 0.92rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: #fff;
@@ -274,22 +294,27 @@
 .noticias-search::placeholder { color: #aaa; }
 .noticias-search:focus {
   border-color: #0b0f2b;
-  box-shadow: 0 0 0 2px rgba(11,15,43,0.1);
+  box-shadow: 0 0 0 3px rgba(11,15,43,0.08);
 }
 .noticias-search-clear {
   position: absolute;
-  right: 14px;
+  right: 16px;
   top: 50%;
   transform: translateY(-50%);
-  background: none;
+  background: #e0e8f7;
   border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
   cursor: pointer;
-  font-size: 0.8rem;
-  color: #888;
-  transition: color 0.2s;
-  padding: 0;
+  font-size: 0.65rem;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
 }
-.noticias-search-clear:hover { color: #0b0f2b; }
+.noticias-search-clear:hover { background: #0b0f2b; color: #facc15; }
 
 /* ── CATEGORÍAS ── */
 .noticias-cats {
