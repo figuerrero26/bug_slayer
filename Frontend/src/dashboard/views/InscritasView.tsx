@@ -300,207 +300,256 @@ export default function InscritasView({
         </div>
       )}
 
-      {/* ── Search ── */}
-      <div className="iv-search-wrap">
-        <svg className="iv-search-icon" width="15" height="15" viewBox="0 0 24 24"
-          fill="none" stroke="currentColor" strokeWidth="2.5"
-          strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="11" cy="11" r="8"/>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input
-          className="iv-search"
-          value={localSearch}
-          onChange={(e) => setLocalSearch(e.target.value)}
-          onKeyDown={(e) => { if (e.key === "Escape") setLocalSearch(""); }}
-          placeholder={t.iv_search_ph}
-        />
-        {localSearch && (
-          <button
-            className="iv-search-clear"
-            aria-label="Limpiar búsqueda"
-            onClick={() => setLocalSearch("")}
-          >
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
+      {/* ══════════════════════════════════════════════════════════════
+          OPCIÓN A — Layout de dos columnas (ACTIVO)
+          Columna izquierda: búsqueda + filtros + tabla
+          Columna derecha:   widget estadístico sticky
+         ══════════════════════════════════════════════════════════════ */}
+      <div className="iv-layout">
+
+        {/* ── Columna principal (3fr) ── */}
+        <div className="iv-layout__main">
+
+          {/* Búsqueda */}
+          <div className="iv-search-wrap">
+            <svg className="iv-search-icon" width="15" height="15" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" strokeWidth="2.5"
+              strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
-          </button>
-        )}
-      </div>
-
-      {/* ── Category cards grid ── */}
-      {showGrid ? (
-        <div className="iv-categories-grid">
-
-          <button
-            className="iv-cat-card iv-cat-card--all"
-            onClick={() => { setSelectedCategory("TODAS"); setLocalSearch(""); }}
-          >
-            <div className="iv-cat-card-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="3" width="7" height="7" rx="1"/>
-                <rect x="14" y="3" width="7" height="7" rx="1"/>
-                <rect x="3" y="14" width="7" height="7" rx="1"/>
-                <rect x="14" y="14" width="7" height="7" rx="1"/>
-              </svg>
-            </div>
-            <span className="iv-cat-card-label">{t.iv_show_all}</span>
-            <span className="iv-cat-card-count">
-              {conferences.length} {conferences.length !== 1 ? t.iv_conference_pl : t.iv_conference_s}
-            </span>
-          </button>
-
-          {categories.map((cat) => {
-            const count = conferences.filter((c) => c.category === cat).length;
-            return (
+            <input
+              className="iv-search"
+              value={localSearch}
+              onChange={(e) => setLocalSearch(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Escape") setLocalSearch(""); }}
+              placeholder={t.iv_search_ph}
+            />
+            {localSearch && (
               <button
-                key={cat}
-                className="iv-cat-card"
-                onClick={() => setSelectedCategory(cat)}
+                className="iv-search-clear"
+                aria-label="Limpiar búsqueda"
+                onClick={() => setLocalSearch("")}
               >
-                <div className="iv-cat-card-icon iv-cat-card-icon--accent">
-                  <svg width="19" height="19" viewBox="0 0 24 24" fill="none"
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            )}
+          </div>
+
+          {/* Categorías o tabla */}
+          {showGrid ? (
+            <div className="iv-categories-grid">
+
+              <button
+                className="iv-cat-card iv-cat-card--all"
+                onClick={() => { setSelectedCategory("TODAS"); setLocalSearch(""); }}
+              >
+                <div className="iv-cat-card-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                    <path d="M2 17l10 5 10-5"/>
-                    <path d="M2 12l10 5 10-5"/>
+                    <rect x="3" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1"/>
                   </svg>
                 </div>
-                <span className="iv-cat-card-label">{cat}</span>
+                <span className="iv-cat-card-label">{t.iv_show_all}</span>
                 <span className="iv-cat-card-count">
-                  {count} {count !== 1 ? t.iv_conference_pl : t.iv_conference_s}
+                  {conferences.length} {conferences.length !== 1 ? t.iv_conference_pl : t.iv_conference_s}
                 </span>
               </button>
-            );
-          })}
-        </div>
 
-      ) : (
-        <>
-          {selectedCategory !== null && (
-            <div className="iv-drill-header">
-              <button
-                className="iv-back-btn"
-                onClick={() => { setSelectedCategory(null); setOpenMenuId(null); }}
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="19" y1="12" x2="5" y2="12"/>
-                  <polyline points="12 19 5 12 12 5"/>
-                </svg>
-                {t.iv_back_cats}
-              </button>
-              {selectedCategory !== "TODAS" && (
-                <span className="iv-drill-label">{selectedCategory}</span>
-              )}
+              {categories.map((cat) => {
+                const count = conferences.filter((c) => c.category === cat).length;
+                return (
+                  <button
+                    key={cat}
+                    className="iv-cat-card"
+                    onClick={() => setSelectedCategory(cat)}
+                  >
+                    <div className="iv-cat-card-icon iv-cat-card-icon--accent">
+                      <svg width="19" height="19" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5"/>
+                        <path d="M2 12l10 5 10-5"/>
+                      </svg>
+                    </div>
+                    <span className="iv-cat-card-label">{cat}</span>
+                    <span className="iv-cat-card-count">
+                      {count} {count !== 1 ? t.iv_conference_pl : t.iv_conference_s}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
-          )}
 
-          {isGlobalSearch && visible.length === 0 ? (
-            <div className="iv-center iv-center--search">
-              <svg width="46" height="46" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
-                style={{ color: "#a0aec0" }}>
-                <circle cx="11" cy="11" r="8"/>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-              </svg>
-              <h3 className="iv-empty-title">{t.iv_no_results}</h3>
-              <p className="iv-empty-sub">
-                {t.iv_matching} "<strong>{localSearch}</strong>"
-              </p>
-            </div>
           ) : (
-            <div className="iv-table-wrap">
-              <table className="iv-table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>{t.iv_th_conference}</th>
-                    <th>{t.iv_th_category}</th>
-                    <th>{t.iv_th_status}</th>
-                    <th>{t.iv_th_speaker}</th>
-                    <th>{t.iv_th_location}</th>
-                    <th>{t.iv_th_schedule}</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {visible.map((conf, rowIdx) => {
-                    const status         = getStatus(conf.schedule);
-                    const { sede, sala } = parseLocation(conf.location_text);
-                    return (
-                      <tr key={conf.id}>
-                        <td className="iv-td-id">#{conf.registration_id}</td>
-
-                        <td className="iv-td-title">{conf.title}</td>
-
-                        <td>
-                          {conf.category
-                            ? <span className="iv-cat">{conf.category}</span>
-                            : <span className="iv-muted">—</span>}
-                        </td>
-
-                        <td>
-                          <span className={`iv-badge iv-badge--${status}`}>
-                            {statusLabel[status]}
-                          </span>
-                        </td>
-
-                        <td className="iv-td-speaker">
-                          {conf.speaker_name ?? <span className="iv-muted">—</span>}
-                        </td>
-
-                        <td className="iv-td-location">
-                          {conf.location_text ? (
-                            <>
-                              <span className="iv-loc-sede">{sede}</span>
-                              {sala !== "—" && <span className="iv-loc-sala">{sala}</span>}
-                            </>
-                          ) : (
-                            <span className="iv-muted">—</span>
-                          )}
-                        </td>
-
-                        <td className="iv-td-time">
-                          <span className="iv-time-date">{fmtDate(conf.schedule)}</span>
-                          {conf.schedule && (
-                            <span className="iv-time-hour">{fmtTime(conf.schedule)}</span>
-                          )}
-                        </td>
-
-                        <td className="iv-td-actions">
-                          <ActionsMenu
-                            open={openMenuId === conf.id}
-                            onOpen={() => setOpenMenuId(conf.id)}
-                            onClose={() => setOpenMenuId(null)}
-                            onCancel={() => handleCancelInscription(conf)}
-                            cancelling={cancellingId === conf.id}
-                            dropUp={rowIdx >= visible.length - 2}
-                            cancelLabel={t.iv_cancel_action}
-                          />
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-
-              {visible.length === 0 && (
-                <div className="iv-no-results">
-                  {localSearch
-                    ? <>{t.iv_no_results_q} "<strong>{localSearch}</strong>"</>
-                    : t.iv_no_results_cat}
+            <>
+              {selectedCategory !== null && (
+                <div className="iv-drill-header">
+                  <button
+                    className="iv-back-btn"
+                    onClick={() => { setSelectedCategory(null); setOpenMenuId(null); }}
+                  >
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="19" y1="12" x2="5" y2="12"/>
+                      <polyline points="12 19 5 12 12 5"/>
+                    </svg>
+                    {t.iv_back_cats}
+                  </button>
+                  {selectedCategory !== "TODAS" && (
+                    <span className="iv-drill-label">{selectedCategory}</span>
+                  )}
                 </div>
               )}
-            </div>
-          )}
-        </>
-      )}
 
-      {/* ── KPI footer minimalista ── */}
+              {isGlobalSearch && visible.length === 0 ? (
+                <div className="iv-center iv-center--search">
+                  <svg width="46" height="46" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+                    style={{ color: "#a0aec0" }}>
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  </svg>
+                  <h3 className="iv-empty-title">{t.iv_no_results}</h3>
+                  <p className="iv-empty-sub">
+                    {t.iv_matching} "<strong>{localSearch}</strong>"
+                  </p>
+                </div>
+              ) : (
+                <div className="iv-table-wrap">
+                  <table className="iv-table">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>{t.iv_th_conference}</th>
+                        <th>{t.iv_th_category}</th>
+                        <th>{t.iv_th_status}</th>
+                        <th>{t.iv_th_speaker}</th>
+                        <th>{t.iv_th_location}</th>
+                        <th>{t.iv_th_schedule}</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {visible.map((conf, rowIdx) => {
+                        const status         = getStatus(conf.schedule);
+                        const { sede, sala } = parseLocation(conf.location_text);
+                        return (
+                          <tr key={conf.id}>
+                            <td className="iv-td-id">#{conf.registration_id}</td>
+                            <td className="iv-td-title">{conf.title}</td>
+                            <td>
+                              {conf.category
+                                ? <span className="iv-cat">{conf.category}</span>
+                                : <span className="iv-muted">—</span>}
+                            </td>
+                            <td>
+                              <span className={`iv-badge iv-badge--${status}`}>
+                                {statusLabel[status]}
+                              </span>
+                            </td>
+                            <td className="iv-td-speaker">
+                              {conf.speaker_name ?? <span className="iv-muted">—</span>}
+                            </td>
+                            <td className="iv-td-location">
+                              {conf.location_text ? (
+                                <>
+                                  <span className="iv-loc-sede">{sede}</span>
+                                  {sala !== "—" && <span className="iv-loc-sala">{sala}</span>}
+                                </>
+                              ) : (
+                                <span className="iv-muted">—</span>
+                              )}
+                            </td>
+                            <td className="iv-td-time">
+                              <span className="iv-time-date">{fmtDate(conf.schedule)}</span>
+                              {conf.schedule && (
+                                <span className="iv-time-hour">{fmtTime(conf.schedule)}</span>
+                              )}
+                            </td>
+                            <td className="iv-td-actions">
+                              <ActionsMenu
+                                open={openMenuId === conf.id}
+                                onOpen={() => setOpenMenuId(conf.id)}
+                                onClose={() => setOpenMenuId(null)}
+                                onCancel={() => handleCancelInscription(conf)}
+                                cancelling={cancellingId === conf.id}
+                                dropUp={rowIdx >= visible.length - 2}
+                                cancelLabel={t.iv_cancel_action}
+                              />
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+
+                  {visible.length === 0 && (
+                    <div className="iv-no-results">
+                      {localSearch
+                        ? <>{t.iv_no_results_q} "<strong>{localSearch}</strong>"</>
+                        : t.iv_no_results_cat}
+                    </div>
+                  )}
+                </div>
+              )}
+            </>
+          )}
+
+        </div>{/* fin iv-layout__main */}
+
+        {/* ── Columna lateral derecha: widget de estadísticas (1fr) ── */}
+        <aside className="iv-stats-widget">
+
+          <div className="iv-stat-item">
+            <CalendarDays size={22} strokeWidth={1.75} className="iv-stat-icon iv-stat-icon--blue" />
+            <div className="iv-stat-info">
+              <span className="iv-stat-value">{kpis.total}</span>
+              <span className="iv-stat-label">{t.iv_kpi_total}</span>
+            </div>
+          </div>
+
+          <div className="iv-stat-item">
+            <CircleCheck size={22} strokeWidth={1.75} className="iv-stat-icon iv-stat-icon--green" />
+            <div className="iv-stat-info">
+              <span className="iv-stat-value">{kpis.confirmada}</span>
+              <span className="iv-stat-label">{t.iv_kpi_confirmed}</span>
+            </div>
+          </div>
+
+          <div className="iv-stat-item">
+            <Clock size={22} strokeWidth={1.75} className="iv-stat-icon iv-stat-icon--yellow" />
+            <div className="iv-stat-info">
+              <span className="iv-stat-value">{kpis.enCurso}</span>
+              <span className="iv-stat-label">{t.iv_kpi_ongoing}</span>
+            </div>
+          </div>
+
+          <div className="iv-stat-item">
+            <Flag size={22} strokeWidth={1.75} className="iv-stat-icon iv-stat-icon--red" />
+            <div className="iv-stat-info">
+              <span className="iv-stat-value">{kpis.finalizada}</span>
+              <span className="iv-stat-label">{t.iv_kpi_finished}</span>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>{/* fin iv-layout */}
+
+      {/*
+        ══════════════════════════════════════════════════════════════
+        OPCIÓN B — Fila de resumen compacta al final (COMENTADA)
+        Para activar: descomenta este bloque y elimina iv-layout arriba.
+        ══════════════════════════════════════════════════════════════
+
       <div className="iv-kpi-footer">
         <div className="iv-kpi-mini">
           <CalendarDays size={20} strokeWidth={1.75} className="iv-kpi-mini-icon iv-kpi-mini-icon--blue" />
@@ -509,7 +558,6 @@ export default function InscritasView({
             <span className="iv-kpi-mini-label">{t.iv_kpi_total}</span>
           </div>
         </div>
-
         <div className="iv-kpi-mini">
           <CircleCheck size={20} strokeWidth={1.75} className="iv-kpi-mini-icon iv-kpi-mini-icon--green" />
           <div className="iv-kpi-mini-info">
@@ -517,7 +565,6 @@ export default function InscritasView({
             <span className="iv-kpi-mini-label">{t.iv_kpi_confirmed}</span>
           </div>
         </div>
-
         <div className="iv-kpi-mini">
           <Clock size={20} strokeWidth={1.75} className="iv-kpi-mini-icon iv-kpi-mini-icon--yellow" />
           <div className="iv-kpi-mini-info">
@@ -525,7 +572,6 @@ export default function InscritasView({
             <span className="iv-kpi-mini-label">{t.iv_kpi_ongoing}</span>
           </div>
         </div>
-
         <div className="iv-kpi-mini">
           <Flag size={20} strokeWidth={1.75} className="iv-kpi-mini-icon iv-kpi-mini-icon--red" />
           <div className="iv-kpi-mini-info">
@@ -534,6 +580,8 @@ export default function InscritasView({
           </div>
         </div>
       </div>
+
+      */}
 
     </div>
   );
