@@ -57,7 +57,7 @@ const ES: T = {
   dash_mobile_talks: "Mis charlas", dash_go_home: "Inicio", dash_loading: "Cargando…",
   dash_welcome_back: "Bienvenido de nuevo,", dash_welcome_first: "¡Bienvenido al CONIITI 2026!",
   dash_notifications: "Notificaciones",
-  dash_account_settings: "Ajustes de cuenta",
+  dash_account_settings: "Ajustes de cuenta", dash_section_account: "Cuenta",
   /* ProfileView */
   prof_reg_date: "Fecha de registro:", prof_country: "País, ciudad:",
   prof_birthdate: "Fecha de nacimiento:", prof_email: "E-mail:", prof_phone: "Teléfono:",
@@ -160,7 +160,7 @@ const EN: T = {
   dash_mobile_talks: "My talks", dash_go_home: "Home", dash_loading: "Loading…",
   dash_welcome_back: "Welcome back,", dash_welcome_first: "Welcome to CONIITI 2026!",
   dash_notifications: "Notifications",
-  dash_account_settings: "Account settings",
+  dash_account_settings: "Account settings", dash_section_account: "Account",
   /* ProfileView */
   prof_reg_date: "Registration date:", prof_country: "Country, city:",
   prof_birthdate: "Date of birth:", prof_email: "E-mail:", prof_phone: "Phone:",
@@ -345,7 +345,7 @@ const IT: T = {
   dash_mobile_talks: "I miei talk", dash_go_home: "Inizio", dash_loading: "Caricamento…",
   dash_welcome_back: "Bentornato,", dash_welcome_first: "Benvenuto al CONIITI 2026!",
   dash_notifications: "Notifiche",
-  dash_account_settings: "Impostazioni account",
+  dash_account_settings: "Impostazioni account", dash_section_account: "Account",
   /* ProfileView */
   prof_reg_date: "Data di registrazione:", prof_country: "Paese, città:",
   prof_birthdate: "Data di nascita:", prof_email: "E-mail:", prof_phone: "Telefono:",
@@ -475,7 +475,7 @@ const PT: T = {
   dash_mobile_talks: "Minhas palestras", dash_go_home: "Início", dash_loading: "Carregando…",
   dash_welcome_back: "Bem-vindo de volta,", dash_welcome_first: "Bem-vindo ao CONIITI 2026!",
   dash_notifications: "Notificações",
-  dash_account_settings: "Configurações da conta",
+  dash_account_settings: "Configurações da conta", dash_section_account: "Conta",
   /* ProfileView */
   prof_reg_date: "Data de registro:", prof_country: "País, cidade:",
   prof_birthdate: "Data de nascimento:", prof_email: "E-mail:", prof_phone: "Telefone:",
@@ -605,7 +605,7 @@ const FR: T = {
   dash_mobile_talks: "Mes conférences", dash_go_home: "Accueil", dash_loading: "Chargement…",
   dash_welcome_back: "Bon retour,", dash_welcome_first: "Bienvenue au CONIITI 2026 !",
   dash_notifications: "Notifications",
-  dash_account_settings: "Paramètres du compte",
+  dash_account_settings: "Paramètres du compte", dash_section_account: "Compte",
   /* ProfileView */
   prof_reg_date: "Date d'inscription :", prof_country: "Pays, ville :",
   prof_birthdate: "Date de naissance :", prof_email: "E-mail :", prof_phone: "Téléphone :",

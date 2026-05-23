@@ -166,6 +166,20 @@
   z-index: 1;
 }
 
+/* ── Etiqueta de sección ────────────────────────────────────────── */
+
+.sb__section-label {
+  display: block;
+  padding: 4px 14px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(160, 195, 235, 0.38);
+  user-select: none;
+}
+
 /* ── Tarjeta de perfil (reemplaza botón Ajustes) ────────────────── */
 
 .sb__profile {

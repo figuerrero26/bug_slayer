@@ -1,14 +1,13 @@
 import type { ReactNode } from "react";
 import {
-  FaUser, FaMicrophone, FaCheck, FaCalendar,
-  FaHeart, FaCalendarAlt, FaEnvelope, FaSignOutAlt, FaChevronRight,
-} from "react-icons/fa";
+  Home, CalendarDays, CheckSquare, Compass,
+  Heart, Calendar, Mail, LogOut, ChevronRight,
+} from "lucide-react";
 import { useLang } from "../../context/LanguageContext";
 import type { User } from "../../interfaces/user";
 import "./DashboardSidebar.css";
 
 // ── Decoración SVG del sidebar ────────────────────────────────────────────────
-// Estilo diferente al header: arcos circulares + curva vertical derecha
 function SidebarWaves() {
   return (
     <svg
@@ -18,20 +17,12 @@ function SidebarWaves() {
       aria-hidden="true"
       focusable="false"
     >
-      {/* Arco circular grande — esquina superior derecha */}
       <circle cx="240" cy="-20" r="160" fill="#1e6fbd" fillOpacity="0.07" />
-
-      {/* Curva vertical fluida — borde derecho del sidebar */}
       <path
         d="M205,0 C185,120 220,240 200,360 C180,480 220,600 200,720 C190,780 210,800 200,800 L220,800 L220,0 Z"
-        fill="#4a90d9"
-        fillOpacity="0.09"
+        fill="#4a90d9" fillOpacity="0.09"
       />
-
-      {/* Arco circular mediano — esquina inferior izquierda */}
       <circle cx="-30" cy="820" r="130" fill="#5ba8f5" fillOpacity="0.06" />
-
-      {/* Destellos de luz difusos en el centro */}
       <ellipse cx="110" cy="400" rx="90" ry="60" fill="#1e6fbd" fillOpacity="0.04" />
     </svg>
   );
@@ -40,13 +31,13 @@ function SidebarWaves() {
 interface NavDef { id: string; icon: ReactNode; badge: boolean; }
 
 const NAV_DEFS: NavDef[] = [
-  { id: "profile",     icon: <FaUser />,       badge: false },
-  { id: "conferences", icon: <FaMicrophone />,  badge: true  },
-  { id: "completed",   icon: <FaCheck />,       badge: false },
-  { id: "events",      icon: <FaCalendar />,    badge: false },
-  { id: "favorites",   icon: <FaHeart />,       badge: false },
-  { id: "calendar",    icon: <FaCalendarAlt />, badge: false },
-  { id: "messages",    icon: <FaEnvelope />,    badge: true  },
+  { id: "profile",     icon: <Home        size={18} strokeWidth={2} />, badge: false },
+  { id: "conferences", icon: <CalendarDays size={18} strokeWidth={2} />, badge: true  },
+  { id: "completed",   icon: <CheckSquare  size={18} strokeWidth={2} />, badge: false },
+  { id: "events",      icon: <Compass      size={18} strokeWidth={2} />, badge: false },
+  { id: "favorites",   icon: <Heart        size={18} strokeWidth={2} />, badge: false },
+  { id: "calendar",    icon: <Calendar     size={18} strokeWidth={2} />, badge: false },
+  { id: "messages",    icon: <Mail         size={18} strokeWidth={2} />, badge: true  },
 ];
 
 interface Props {
@@ -77,7 +68,6 @@ export default function DashboardSidebar({
   return (
     <aside className="sb">
 
-      {/* Decoración SVG — absolutas, detrás del contenido */}
       <SidebarWaves />
 
       {/* BLOQUE 1 — Navegación principal */}
@@ -95,8 +85,10 @@ export default function DashboardSidebar({
               <span className="sb__icon" aria-hidden="true">{icon}</span>
               <span className="sb__label">{LABELS[id]}</span>
               {badge && (
-                <span className={`sb__badge${count === 0 ? " sb__badge--zero" : ""}`}
-                  aria-label={`${count} pendientes`}>
+                <span
+                  className={`sb__badge${count === 0 ? " sb__badge--zero" : ""}`}
+                  aria-label={`${count} pendientes`}
+                >
                   {count}
                 </span>
               )}
@@ -105,10 +97,13 @@ export default function DashboardSidebar({
         })}
       </nav>
 
-      {/* BLOQUE 2 — Footer (Perfil → Ajustes + Logout) */}
+      {/* BLOQUE 2 — Footer: sección "Cuenta" */}
       <footer className="sb__footer">
 
-        {/* Tarjeta de perfil — reemplaza el botón de Ajustes */}
+        {/* Etiqueta de sección */}
+        <span className="sb__section-label">{t.dash_section_account}</span>
+
+        {/* Tarjeta de perfil → Ajustes */}
         <button
           className={`sb__profile${activeNav === "settings" ? " sb__profile--active" : ""}`}
           onClick={() => setActiveNav("settings")}
@@ -125,18 +120,22 @@ export default function DashboardSidebar({
             </span>
             <span className="sb__profile-sub">{t.dash_account_settings}</span>
           </div>
-          <FaChevronRight className="sb__profile-chevron" aria-hidden="true" />
+          <ChevronRight size={14} strokeWidth={2} className="sb__profile-chevron" aria-hidden="true" />
         </button>
 
+        {/* Cerrar sesión */}
         <button
           className="sb__item sb__item--logout"
           onClick={onLogout}
           disabled={isLoggingOut}
           aria-busy={isLoggingOut}
         >
-          <span className="sb__icon" aria-hidden="true"><FaSignOutAlt /></span>
+          <span className="sb__icon" aria-hidden="true">
+            <LogOut size={18} strokeWidth={2} />
+          </span>
           <span className="sb__label">{t.dash_logout}</span>
         </button>
+
       </footer>
 
     </aside>

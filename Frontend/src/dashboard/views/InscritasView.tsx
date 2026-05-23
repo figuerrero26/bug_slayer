@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useRef, memo } from "react";
 import { useNavigate } from "react-router-dom";
+import { CalendarDays, CircleCheck, Clock, Flag } from "lucide-react";
 import { SEARCH_URL } from "../../services/api";
 import { useLang } from "../../context/LanguageContext";
 import "./InscritasView.css";
@@ -299,55 +300,6 @@ export default function InscritasView({
         </div>
       )}
 
-      {/* ── KPIs ── */}
-      <div className="iv-kpi-row">
-        <div className="iv-kpi-card">
-          <div className="iv-kpi-icon iv-kpi-icon--blue">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="4" width="18" height="18" rx="2"/>
-              <line x1="16" y1="2" x2="16" y2="6"/>
-              <line x1="8"  y1="2" x2="8"  y2="6"/>
-              <line x1="3"  y1="10" x2="21" y2="10"/>
-            </svg>
-          </div>
-          <div>
-            <p className="iv-kpi-label">{t.iv_kpi_total}</p>
-            <p className="iv-kpi-value">{kpis.total}</p>
-          </div>
-        </div>
-
-        <div className="iv-kpi-card">
-          <div className="iv-kpi-icon iv-kpi-icon--green">
-            <span className="iv-kpi-dot" />
-          </div>
-          <div>
-            <p className="iv-kpi-label">{t.iv_kpi_confirmed}</p>
-            <p className="iv-kpi-value">{kpis.confirmada}</p>
-          </div>
-        </div>
-
-        <div className="iv-kpi-card">
-          <div className="iv-kpi-icon iv-kpi-icon--yellow">
-            <span className="iv-kpi-dot" />
-          </div>
-          <div>
-            <p className="iv-kpi-label">{t.iv_kpi_ongoing}</p>
-            <p className="iv-kpi-value">{kpis.enCurso}</p>
-          </div>
-        </div>
-
-        <div className="iv-kpi-card">
-          <div className="iv-kpi-icon iv-kpi-icon--red">
-            <span className="iv-kpi-dot" />
-          </div>
-          <div>
-            <p className="iv-kpi-label">{t.iv_kpi_finished}</p>
-            <p className="iv-kpi-value">{kpis.finalizada}</p>
-          </div>
-        </div>
-      </div>
-
       {/* ── Search ── */}
       <div className="iv-search-wrap">
         <svg className="iv-search-icon" width="15" height="15" viewBox="0 0 24 24"
@@ -547,6 +499,42 @@ export default function InscritasView({
           )}
         </>
       )}
+
+      {/* ── KPI footer minimalista ── */}
+      <div className="iv-kpi-footer">
+        <div className="iv-kpi-mini">
+          <CalendarDays size={20} strokeWidth={1.75} className="iv-kpi-mini-icon iv-kpi-mini-icon--blue" />
+          <div className="iv-kpi-mini-info">
+            <span className="iv-kpi-mini-value">{kpis.total}</span>
+            <span className="iv-kpi-mini-label">{t.iv_kpi_total}</span>
+          </div>
+        </div>
+
+        <div className="iv-kpi-mini">
+          <CircleCheck size={20} strokeWidth={1.75} className="iv-kpi-mini-icon iv-kpi-mini-icon--green" />
+          <div className="iv-kpi-mini-info">
+            <span className="iv-kpi-mini-value">{kpis.confirmada}</span>
+            <span className="iv-kpi-mini-label">{t.iv_kpi_confirmed}</span>
+          </div>
+        </div>
+
+        <div className="iv-kpi-mini">
+          <Clock size={20} strokeWidth={1.75} className="iv-kpi-mini-icon iv-kpi-mini-icon--yellow" />
+          <div className="iv-kpi-mini-info">
+            <span className="iv-kpi-mini-value">{kpis.enCurso}</span>
+            <span className="iv-kpi-mini-label">{t.iv_kpi_ongoing}</span>
+          </div>
+        </div>
+
+        <div className="iv-kpi-mini">
+          <Flag size={20} strokeWidth={1.75} className="iv-kpi-mini-icon iv-kpi-mini-icon--red" />
+          <div className="iv-kpi-mini-info">
+            <span className="iv-kpi-mini-value">{kpis.finalizada}</span>
+            <span className="iv-kpi-mini-label">{t.iv_kpi_finished}</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }
