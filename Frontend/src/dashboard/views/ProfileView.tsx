@@ -201,24 +201,24 @@ function TicketsTiltCard({ userId }: { userId: number }) {
                         {fmtDateShort(conf.schedule)}
                         {fmtTime(conf.schedule) ? ` · ${fmtTime(conf.schedule)}` : ""}
                       </span>
-                      <span className="profv-ticket-meta-venue">Universidad Católica de Colombia</span>
+                      <span className="profv-ticket-meta-venue">{t.prof_ticket_venue}</span>
                     </div>
                     <div className="profv-ticket-rule profv-ticket-rule--dim" />
                     <div className="profv-ticket-grid">
                       <div className="profv-ticket-grid-cell">
-                        <span className="profv-ticket-grid-label">SEDE</span>
+                        <span className="profv-ticket-grid-label">{t.prof_ticket_sede}</span>
                         <span className="profv-ticket-grid-value">
                           {parseLocation(conf.location_text).sede}
                         </span>
                       </div>
                       <div className="profv-ticket-grid-cell">
-                        <span className="profv-ticket-grid-label">SALA</span>
+                        <span className="profv-ticket-grid-label">{t.prof_ticket_sala}</span>
                         <span className="profv-ticket-grid-value">
                           {parseLocation(conf.location_text).sala}
                         </span>
                       </div>
                       <div className="profv-ticket-grid-cell">
-                        <span className="profv-ticket-grid-label">SERIAL</span>
+                        <span className="profv-ticket-grid-label">{t.prof_ticket_serial}</span>
                         <span className="profv-ticket-grid-value profv-ticket-grid-value--serial">
                           {serial(conf.registration_id)}
                         </span>
@@ -231,7 +231,7 @@ function TicketsTiltCard({ userId }: { userId: number }) {
                     <p className="profv-ticket-speaker" style={{ opacity: 0.3 }}>{t.prof_no_tickets}</p>
                     <div className="profv-ticket-rule profv-ticket-rule--dim" />
                     <div className="profv-ticket-grid">
-                      {["SEDE", "SALA", "SERIAL"].map(l => (
+                      {[t.prof_ticket_sede, t.prof_ticket_sala, t.prof_ticket_serial].map(l => (
                         <div key={l} className="profv-ticket-grid-cell">
                           <span className="profv-ticket-grid-label">{l}</span>
                           <span className="profv-ticket-grid-value">—</span>

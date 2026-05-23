@@ -643,17 +643,38 @@
 }
 
 /* ── Responsive ─────────────────────────────────────────────────── */
+
+/* Tablet con sidebar: el ancho disponible no alcanza para 2 columnas */
+@media (max-width: 1023px) and (min-width: 769px) {
+  .profv-lower-grid  { grid-template-columns: 1fr; gap: 16px; }
+  .profv-cd-card     { padding: 22px 20px; }
+}
+
 @media (max-width: 900px) {
   .profv-lower-grid { grid-template-columns: 1fr; }
 }
 
+@media (max-width: 768px) {
+  .profv-wrapper   { gap: 14px; }
+  .profv-lower-grid { gap: 14px; }
+
+  /* Ticket: contener el drop-shadow para evitar scroll horizontal */
+  .profv-ticket-tilt { overflow: hidden; border-radius: 10px; }
+  .profv-ticket      { filter: drop-shadow(0 10px 20px rgba(0,0,0,0.45)); }
+
+  /* Detail values largos (email, etc.) no desbordan */
+  .detail-value { word-break: break-word; overflow-wrap: break-word; }
+}
+
 @media (max-width: 500px) {
   .profv-cd-grid { gap: 6px; }
-  .profv-cd-num  { font-size: 22px; }
+  .profv-cd-num  { font-size: 20px; }
+  .profv-cd-label { font-size: 8px; }
 
-  .profv-ticket-outer  { --stub-rw: 100px; --perf-w: 20px; }
-  .profv-ticket        { height: 170px; }
-  .profv-ticket-conf-title { font-size: 15px; }
+  .profv-ticket-outer  { --stub-rw: 88px; --perf-w: 16px; }
+  .profv-ticket        { height: 165px; }
+  .profv-ticket-conf-title { font-size: 13px; }
+  .profv-ticket-grid-value { font-size: 12px; }
 }
 
 /* ══════════════════════════════════════════════════════════════════

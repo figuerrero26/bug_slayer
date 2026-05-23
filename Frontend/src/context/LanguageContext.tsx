@@ -119,6 +119,9 @@ const ES: T = {
   ph_system_ready: "El sistema está listo para recibir estos datos en la siguiente fase del proyecto.",
   ph_soon: "Próximamente", ph_dev_title: "Sección en desarrollo",
   ph_dev_msg: "Esta funcionalidad estará disponible próximamente.",
+  /* Ticket */
+  prof_ticket_sede: "SEDE", prof_ticket_sala: "SALA", prof_ticket_serial: "SERIAL",
+  prof_ticket_venue: "Universidad Católica de Colombia",
   /* Home hardcoded */
   hero_edition: "XII Edición · Bogotá, Colombia",
   hero_tagline: "El congreso internacional que conecta la ingeniería del futuro.",
@@ -273,6 +276,9 @@ const EN: T = {
   insc_full: "Full",
   insc_registered_badge: "Registered",
   insc_to_define: "To be defined",
+  /* Ticket */
+  prof_ticket_sede: "VENUE", prof_ticket_sala: "ROOM", prof_ticket_serial: "SERIAL",
+  prof_ticket_venue: "Universidad Católica de Colombia",
 };
 
 const IT: T = {
@@ -399,6 +405,9 @@ const IT: T = {
   ph_system_ready: "Il sistema è pronto per ricevere questi dati nella prossima fase del progetto.",
   ph_soon: "Prossimamente", ph_dev_title: "Sezione in sviluppo",
   ph_dev_msg: "Questa funzionalità sarà disponibile a breve.",
+  /* Ticket */
+  prof_ticket_sede: "SEDE", prof_ticket_sala: "SALA", prof_ticket_serial: "SERIALE",
+  prof_ticket_venue: "Universidad Católica de Colombia",
 };
 
 const PT: T = {
@@ -525,6 +534,9 @@ const PT: T = {
   ph_system_ready: "O sistema está pronto para receber estes dados na próxima fase do projeto.",
   ph_soon: "Em breve", ph_dev_title: "Seção em desenvolvimento",
   ph_dev_msg: "Esta funcionalidade estará disponível em breve.",
+  /* Ticket */
+  prof_ticket_sede: "LOCAL", prof_ticket_sala: "SALA", prof_ticket_serial: "SERIAL",
+  prof_ticket_venue: "Universidad Católica de Colombia",
 };
 
 const FR: T = {
@@ -651,6 +663,9 @@ const FR: T = {
   ph_system_ready: "Le système est prêt à recevoir ces données lors de la prochaine phase du projet.",
   ph_soon: "Bientôt", ph_dev_title: "Section en développement",
   ph_dev_msg: "Cette fonctionnalité sera disponible prochainement.",
+  /* Ticket */
+  prof_ticket_sede: "LIEU", prof_ticket_sala: "SALLE", prof_ticket_serial: "SÉRIE",
+  prof_ticket_venue: "Universidad Católica de Colombia",
 };
 
 export const TRANSLATIONS: Record<LangCode, T> = { ES, EN, IT, PT, FR };

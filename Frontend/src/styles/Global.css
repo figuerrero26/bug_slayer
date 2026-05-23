@@ -41,6 +41,16 @@
   letter-spacing: -0.2px;
 }
 
+/* ── Tablet (769-1023px): sidebar más angosto ────────────────────── */
+@media (max-width: 1023px) and (min-width: 769px) {
+  :root { --sb-width: 180px; }
+}
+
+/* ── Móvil (≤768px): altura topbar reducida ─────────────────────── */
+@media (max-width: 768px) {
+  :root { --hdr-height: 70px; --sb-width: 0px; }
+}
+
 /* ── Variables — modo oscuro ────────────────────────────────────────────── */
 
 [data-theme="dark"] {

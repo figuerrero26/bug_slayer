@@ -180,6 +180,16 @@
 
 [data-theme="dark"] .sb { background: #060d1a; }
 
+/* ── Tablet (769-1023px): ítems más compactos ───────────────────── */
+
+@media (max-width: 1023px) and (min-width: 769px) {
+  .sb__item  { font-size: 12.5px; padding: 9px 10px; gap: 8px; }
+  .sb__label { font-size: 12.5px; }
+  .sb__badge { font-size: 10px; min-width: 18px; height: 18px; }
+  .sb__nav   { padding: 10px 8px; }
+  .sb__footer { padding: 6px 8px 12px; }
+}
+
 /* ── Responsive: móvil ──────────────────────────────────────────── */
 
 @media (max-width: 768px) {
