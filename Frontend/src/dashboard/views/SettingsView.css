@@ -230,9 +230,20 @@
 .stv-toggle-label { font-size: 13px; color: var(--muted); }
 
 /* ── Responsive ── */
+
+/* Tablet: wrapper a ancho completo, body con menos padding */
+@media (max-width: 1023px) and (min-width: 769px) {
+  .stv-wrapper { max-width: 100%; }
+  .stv-body    { padding: 20px; }
+  .stv-theme-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Móvil ≤ 600px */
 @media (max-width: 600px) {
+  .stv-wrapper { max-width: 100%; }
   .stv-grid { grid-template-columns: 1fr; }
   .stv-theme-grid { grid-template-columns: 1fr; }
+  .stv-body { padding: 16px; }
 }
 
 /* ── Dark mode ───────────────────────────────────────────────────── */

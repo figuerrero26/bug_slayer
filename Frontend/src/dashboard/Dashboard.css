@@ -74,6 +74,15 @@
 
 .mobile-bottom-nav { display: none; }
 
+/* ── Tablet (769-1023px): sidebar angosto, padding reducido ─────── */
+
+@media (max-width: 1023px) and (min-width: 769px) {
+  .dashboard-root {
+    grid-template-columns: var(--sb-width, 180px) 1fr;
+  }
+  .content-area { padding: 18px 20px; gap: 16px; }
+}
+
 /* ── Dark mode ──────────────────────────────────────────────────── */
 
 [data-theme="dark"] .main-content { background: var(--bg); }
@@ -86,20 +95,26 @@
       "topbar"
       "content";
     grid-template-columns: 1fr;
-    grid-template-rows: 58px 1fr;
+    grid-template-rows: 70px 1fr;
   }
 
-  .content-area { padding: 14px 14px 90px; gap: 14px; }
+  /* padding-bottom incluye safe-area (home indicator iPhone/iPad) */
+  .content-area {
+    padding: 14px 14px calc(90px + env(safe-area-inset-bottom, 0px));
+    gap: 14px;
+  }
 
   .mobile-bottom-nav {
     display: flex;
     position: fixed;
     bottom: 0; left: 0; right: 0;
-    height: 70px;
+    height: calc(70px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-left: 4px;
+    padding-right: 4px;
     background: #0b1628;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     z-index: 200;
-    padding: 0 4px;
     align-items: center;
     justify-content: space-around;
     box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.40);
