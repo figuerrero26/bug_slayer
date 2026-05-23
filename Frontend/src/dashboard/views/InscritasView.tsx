@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo, useRef, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { SEARCH_URL } from "../../services/api";
 import { useLang } from "../../context/LanguageContext";
@@ -52,7 +52,7 @@ function parseLocation(loc: string | null): { sede: string; sala: string } {
 }
 
 // ── ActionsMenu ───────────────────────────────────────────────────────────────
-function ActionsMenu({
+const ActionsMenu = memo(function ActionsMenu({
   open,
   onOpen,
   onClose,
@@ -118,7 +118,7 @@ function ActionsMenu({
       )}
     </div>
   );
-}
+});
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function InscritasView({

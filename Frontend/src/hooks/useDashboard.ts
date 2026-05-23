@@ -11,7 +11,9 @@ export function useDashboard(userId: number | null, email: string) {
   useEffect(() => {
     if (!userId) { setLoading(false); return; }
 
-    fetch(`${DASHBOARD_URL}/dashboard/${userId}`)
+    const ctrl = new AbortController();
+
+    fetch(`${DASHBOARD_URL}/dashboard/${userId}`, { signal: ctrl.signal })
       .then((res) => {
         if (!res.ok) throw new Error("Error al cargar el dashboard");
         return res.json() as Promise<DashboardData>;
@@ -37,8 +39,10 @@ export function useDashboard(userId: number | null, email: string) {
         });
         setConfCount(data.conferences.length);
       })
-      .catch((err) => console.error("[useDashboard]", err))
+      .catch((err) => { if (err.name !== "AbortError") console.error("[useDashboard]", err); })
       .finally(() => setLoading(false));
+
+    return () => ctrl.abort();
   }, [userId]);
 
   const handleUserSaved = (updated: Partial<User>) =>

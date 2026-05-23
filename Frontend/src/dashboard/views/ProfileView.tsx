@@ -113,11 +113,13 @@ function TicketsTiltCard({ userId }: { userId: number }) {
   const navigate                      = useNavigate();
 
   useEffect(() => {
-    fetch(`${SEARCH_URL}/users/${userId}/conferences`)
+    const ctrl = new AbortController();
+    fetch(`${SEARCH_URL}/users/${userId}/conferences`, { signal: ctrl.signal })
       .then((r) => r.json())
       .then((d: ConferenceTicket[]) => setConferences(d))
-      .catch(() => {})
+      .catch((err) => { if (err.name !== "AbortError") console.error(err); })
       .finally(() => setLoading(false));
+    return () => ctrl.abort();
   }, [userId]);
 
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {

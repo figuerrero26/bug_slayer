@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { lazy, Suspense, useState, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -20,13 +20,13 @@ import DashboardTopbar  from "../components/layout/DashboardTopbar";
 import EditProfileModal from "../components/ui/EditProfileModal";
 import LogoutOverlay    from "../components/ui/LogoutOverlay";
 
-// ── Views ─────────────────────────────────────────────────────────────────────
-import ProfileView     from "./views/ProfileView";
-import InscritasView   from "./views/InscritasView";
-import CalendarioView  from "./views/CalendarioView";
-import PlaceholderView from "./views/PlaceholderView";
-import MessagesView    from "./views/MessagesView";
-import SettingsView    from "./views/SettingsView";
+// ── Views — cargadas bajo demanda (code splitting) ────────────────────────────
+const ProfileView     = lazy(() => import("./views/ProfileView"));
+const InscritasView   = lazy(() => import("./views/InscritasView"));
+const CalendarioView  = lazy(() => import("./views/CalendarioView"));
+const PlaceholderView = lazy(() => import("./views/PlaceholderView"));
+const MessagesView    = lazy(() => import("./views/MessagesView"));
+const SettingsView    = lazy(() => import("./views/SettingsView"));
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function Dashboard() {
@@ -111,6 +111,7 @@ export default function Dashboard() {
         {/* Content — hijo directo del grid, columna derecha */}
         <main className="main-content">
           <div className="content-area">
+            <Suspense fallback={<div className="loading-screen"><div className="loader-ring" /></div>}>
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeNav}
@@ -136,6 +137,7 @@ export default function Dashboard() {
                 )}
               </motion.div>
             </AnimatePresence>
+            </Suspense>
           </div>
         </main>
 

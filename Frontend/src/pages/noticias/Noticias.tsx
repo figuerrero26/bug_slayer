@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
+import edificioImg from "../../assets/ucatolica-edificio3.jpg";
 import "../../css/Noticias.css";
 
 interface Noticia {
@@ -109,12 +110,12 @@ const NOTICIAS: Noticia[] = [
 ];
 
 const CATEGORIAS = [
-  { key: "todas", label: "Todas", emoji: "📰" },
-  { key: "congreso", label: "Congreso", emoji: "🏛️" },
-  { key: "ponentes", label: "Ponentes", emoji: "🎤" },
-  { key: "fechas", label: "Fechas", emoji: "📅" },
-  { key: "convocatoria", label: "Convocatoria", emoji: "📢" },
-  { key: "tecnologia", label: "Tecnología", emoji: "💻" },
+  { key: "todas", label: "Todas" },
+  { key: "congreso", label: "Congreso" },
+  { key: "ponentes", label: "Ponentes" },
+  { key: "fechas", label: "Fechas" },
+  { key: "convocatoria", label: "Convocatoria" },
+  { key: "tecnologia", label: "Tecnología" },
 ];
 
 function formatFecha(iso: string): string {
@@ -122,105 +123,17 @@ function formatFecha(iso: string): string {
   return d.toLocaleDateString("es-CO", { day: "numeric", month: "long", year: "numeric" });
 }
 
-function AiNewsWidget() {
-  const [pregunta, setPregunta] = useState("");
-  const [respuesta, setRespuesta] = useState("");
-  const [cargando, setCargando] = useState(false);
 
-  const preguntas = [
-    "¿Cuáles son las fechas clave?",
-    "¿Quiénes son los ponentes?",
-    "¿Cómo publico mi artículo?",
-    "¿Hay becas disponibles?",
-  ];
 
-  async function consultar(q: string) {
-    const texto = q || pregunta.trim();
-    if (!texto) return;
-    setCargando(true);
-    setRespuesta("");
-    try {
-      const contexto = NOTICIAS.map(n => `[${n.fecha}] ${n.titulo}: ${n.resumen}`).join("\n");
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
-          system: `Eres el asistente oficial de noticias del CONIITI 2026 (Congreso Internacional de Ingeniería Industrial y de Sistemas), organizado por la Universidad Católica de Colombia. Responde en español de forma amigable y concisa. Usa esta información:\n\n${contexto}\n\nSi no tienes información, indica que pueden escribir a coniiti@ucatolica.edu.co.`,
-          messages: [{ role: "user", content: texto }],
-        }),
-      });
-      const data = await res.json();
-      const txt = data.content?.map((b: { text?: string }) => b.text || "").join("") || "Lo siento, no pude obtener respuesta.";
-      setRespuesta(txt);
-    } catch {
-      setRespuesta("Error al consultar. Intenta de nuevo.");
-    }
-    setCargando(false);
-    setPregunta("");
-  }
-
-  return (
-    <div className="ai-widget">
-      <div className="ai-widget-header">
-        <div className="ai-badge-wrap">
-          <span className="ai-badge">✨ IA</span>
-          <span className="ai-badge-sub">Asistente CONIITI</span>
-        </div>
-        <h3>¿Tienes preguntas sobre el congreso?</h3>
-        <p>Consulta sobre fechas, ponentes, publicaciones o inscripciones</p>
-      </div>
-
-      <div className="ai-quickbtns">
-        {preguntas.map(p => (
-          <button key={p} onClick={() => consultar(p)} className="ai-quickbtn" disabled={cargando}>
-            {p}
-          </button>
-        ))}
-      </div>
-
-      <div className="ai-inputrow">
-        <input
-          value={pregunta}
-          onChange={e => setPregunta(e.target.value)}
-          onKeyDown={e => e.key === "Enter" && consultar("")}
-          placeholder="Escribe tu pregunta..."
-          className="ai-input"
-          disabled={cargando}
-        />
-        <button onClick={() => consultar("")} className="ai-sendbtn" disabled={cargando || !pregunta.trim()}>
-          {cargando ? <span className="ai-spinner" /> : "→"}
-        </button>
-      </div>
-
-      {cargando && (
-        <div className="ai-loading">
-          <span className="ai-dot" /><span className="ai-dot" /><span className="ai-dot" />
-          <span>Consultando asistente...</span>
-        </div>
-      )}
-
-      {respuesta && !cargando && (
-        <div className="ai-respuesta">
-          <div className="ai-resp-avatar">🤖</div>
-          <div className="ai-resp-text">{respuesta}</div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function NoticiaCard({ noticia, destacada }: { noticia: Noticia; destacada?: boolean }) {
+function NoticiaCard({ noticia, destacada, principal }: { noticia: Noticia; destacada?: boolean; principal?: boolean }) {
   const [expandida, setExpandida] = useState(false);
 
   return (
-    <article className={`noticia-card noticia-cat--${noticia.categoria}${destacada ? " noticia-card--destacada" : ""}`}>
+    <article className={`noticia-card noticia-cat--${noticia.categoria}${destacada ? " noticia-card--destacada" : ""}${principal ? " noticia-card--principal" : ""}`}>
       <div className="noticia-card-top">
-        <span className="noticia-emoji">{noticia.emoji}</span>
         <div className="noticia-badges">
           <span className={`noticia-badge noticia-badge--${noticia.categoria}`}>{noticia.tag}</span>
-          {noticia.destacada && <span className="noticia-badge noticia-badge--hot"> Destacada</span>}
+          {noticia.destacada && <span className="noticia-badge noticia-badge--hot">Destacada</span>}
         </div>
       </div>
       <h3 className="noticia-titulo">{noticia.titulo}</h3>
@@ -228,19 +141,19 @@ function NoticiaCard({ noticia, destacada }: { noticia: Noticia; destacada?: boo
         {noticia.resumen}
       </p>
       <div className="noticia-footer">
-        <time className="noticia-fecha">📆 {formatFecha(noticia.fecha)}</time>
+        <time className="noticia-fecha">{formatFecha(noticia.fecha)}</time>
         <button className="noticia-mas" onClick={() => setExpandida(!expandida)}>
-          {expandida ? "Leer menos ↑" : "Leer más ↓"}
+          {expandida ? "Leer menos" : "Leer más"}
         </button>
       </div>
     </article>
   );
 }
 
-function TimelineItem({ noticia }: { noticia: Noticia }) {
+const TimelineItem = memo(function TimelineItem({ noticia }: { noticia: Noticia }) {
   return (
     <div className="tl-item">
-      <div className="tl-dot"><span>{noticia.emoji}</span></div>
+      <div className="tl-dot" />
       <div className="tl-content">
         <span className="tl-fecha">{formatFecha(noticia.fecha)}</span>
         <p className="tl-titulo">{noticia.titulo}</p>
@@ -248,7 +161,7 @@ function TimelineItem({ noticia }: { noticia: Noticia }) {
       </div>
     </div>
   );
-}
+});
 
 export default function Noticias() {
   const [catActiva, setCatActiva] = useState("todas");
@@ -275,11 +188,8 @@ export default function Noticias() {
 
       {/* HERO */}
       <section className="noticias-hero">
-        <div className="noticias-hero-bg">
-          <div className="noticias-orb noticias-orb-1" />
-          <div className="noticias-orb noticias-orb-2" />
-          <div className="noticias-orb noticias-orb-3" />
-        </div>
+        <img src={edificioImg} alt="" className="noticias-hero-img" aria-hidden="true" />
+        <div className="noticias-hero-overlay" />
         <div className="noticias-hero-content">
           <div className="noticias-live-pill">
             <span className="noticias-live-dot" /> CONIITI 2026 · Noticias
@@ -309,44 +219,57 @@ export default function Noticias() {
         </div>
       </section>
 
+      {/* TICKER ÚLTIMA HORA */}
+      <div className="noticias-ticker">
+        <span className="noticias-ticker-label">ÚLTIMA HORA</span>
+        <div className="noticias-ticker-track">
+          <div className="noticias-ticker-content">
+            {[...NOTICIAS, ...NOTICIAS].map((n, i) => (
+              <span key={i} className="noticias-ticker-item">
+                {n.titulo} &nbsp;·&nbsp;
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <div className="noticias-layout">
         <main className="noticias-main">
 
           {/* DESTACADAS */}
           <section className="noticias-section">
             <div className="noticias-section-header">
-              <h2> Noticias Destacadas</h2>
+              <h2>Noticias Destacadas</h2>
             </div>
             <div className="noticias-destacadas-grid">
-              {destacadas.map(n => (
-                <NoticiaCard key={n.id} noticia={n} destacada />
+              {destacadas.map((n, i) => (
+                <NoticiaCard key={n.id} noticia={n} destacada principal={i === 0} />
               ))}
             </div>
-          </section>
-
-          {/* IA WIDGET */}
-          <section className="noticias-section">
-            <AiNewsWidget />
           </section>
 
           {/* TODAS */}
           <section className="noticias-section">
             <div className="noticias-section-header">
-              <h2>📰 Todas las Noticias</h2>
+              <h2>Todas las Noticias</h2>
               <div className="noticias-vista-toggle">
                 <button
                   className={`noticias-vista-btn${vista === "grid" ? " active" : ""}`}
-                  onClick={() => setVista("grid")} title="Cuadrícula"
-                >⊞</button>
+                  onClick={() => setVista("grid")}
+                >Cuadrícula</button>
                 <button
                   className={`noticias-vista-btn${vista === "timeline" ? " active" : ""}`}
-                  onClick={() => setVista("timeline")} title="Cronología"
-                >⋮</button>
+                  onClick={() => setVista("timeline")}
+                >Cronología</button>
               </div>
             </div>
 
             <div className="noticias-search-wrap">
-              <span className="noticias-search-icon">🔍</span>
+              <span className="noticias-search-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+              </span>
               <input
                 className="noticias-search"
                 placeholder="Buscar noticias..."
@@ -365,7 +288,7 @@ export default function Noticias() {
                   className={`noticias-cat-btn${catActiva === c.key ? " active" : ""}`}
                   onClick={() => setCatActiva(c.key)}
                 >
-                  {c.emoji} {c.label}
+                  {c.label}
                 </button>
               ))}
             </div>
@@ -396,11 +319,11 @@ export default function Noticias() {
 
         <aside className="noticias-aside">
           <div className="noticias-aside-card">
-            <h3>📅 Próximas Fechas</h3>
+            <h3>Próximas Fechas</h3>
             <div className="noticias-proximas">
               {proximas.slice(0, 6).map(n => (
                 <div key={n.id} className="noticias-proxima-item">
-                  <span className="np-emoji">{n.emoji}</span>
+                  <div className="np-dot" />
                   <div>
                     <span className="np-fecha">{formatFecha(n.fecha)}</span>
                     <p className="np-titulo">{n.titulo}</p>
@@ -411,7 +334,7 @@ export default function Noticias() {
           </div>
 
           <div className="noticias-aside-card noticias-aside-card--contact">
-            <h3>📬 Prensa y Comunicados</h3>
+            <h3>Prensa y Comunicados</h3>
             <p>¿Tienes una noticia o anuncio para el congreso?</p>
             <a href="mailto:coniiti@ucatolica.edu.co" className="noticias-contact-link">
               coniiti@ucatolica.edu.co

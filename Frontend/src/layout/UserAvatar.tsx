@@ -116,11 +116,16 @@ export default function UserAvatar() {
   // y cuando otro componente dispara "new-notification"
   useEffect(() => {
     if (!session) return;
-    const fetch_ = () =>
+    let lastFetch = 0;
+    const fetch_ = () => {
+      const now = Date.now();
+      if (now - lastFetch < 30_000) return; // throttle: máximo 1 fetch cada 30 s en focus
+      lastFetch = now;
       fetch(`${NOTIFICATIONS_URL}/notifications/unread/${session.user_id}`)
         .then((r) => r.json())
         .then((d) => setUnreadCount(d.unread_count ?? 0))
         .catch(() => {});
+    };
     fetch_();
     window.addEventListener("focus", fetch_);
     window.addEventListener("new-notification", fetch_);
