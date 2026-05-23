@@ -50,33 +50,17 @@
 /* ── SLOT IZQUIERDO: Logo ───────────────────────────────────────── */
 
 .topbar-logo-slot {
-  /* width exacto = columna del sidebar, sin que el border lo comprima */
   width: var(--sb-width, 220px);
   flex-shrink: 0;
   height: 100%;
 
   display: flex;
   align-items: center;
-  justify-content: center;   /* logo centrado dentro de los 220px */
+  justify-content: center;
   padding: 0 18px;
 
-  /* Sin border-right aquí para evitar el desplazamiento de box-sizing.
-     La línea separadora se pone con ::after fuera del flujo de caja. */
   position: relative;
   z-index: 1;
-}
-
-/* Separador: absolutamente posicionado en el borde derecho real del slot.
-   No participa en el box-model → coincide exactamente con el sidebar. */
-.topbar-logo-slot::after {
-  content: '';
-  position: absolute;
-  right: 0;            /* borde derecho del slot = borde derecho del sidebar */
-  top: 16%;
-  bottom: 16%;
-  width: 1px;
-  background: rgba(255, 255, 255, 0.13);
-  border-radius: 1px;
 }
 
 .topbar-logo {
@@ -95,6 +79,19 @@
   padding: 0 24px;
   position: relative;
   z-index: 1;
+}
+
+/* Separador: left:0 del saludo = exactamente donde termina la columna
+   del sidebar, sin depender del box-model del slot de logo. */
+.topbar-greeting::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 16%;
+  bottom: 16%;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.13);
+  border-radius: 1px;
 }
 
 .topbar-welcome {
