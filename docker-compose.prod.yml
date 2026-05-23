@@ -1,12 +1,23 @@
 # =============================================================================
 # docker-compose.prod.yml — Producción | CONIITI Bug Slayer
 #
-# Hardening aplicado:
-#   · Único punto de entrada a internet: servicio 'nginx' (puertos 80 y 443)
-#   · Microservicios con expose: únicamente (no vinculados al host)
-#   · Sin volúmenes de código fuente; solo persistencia de datos (speaker_images)
-#   · Dos redes internas: red_perimetral (gateway) y red_interna (microservicios)
-#   · Secretos y configuración fuera del compose, en archivos .env.prod
+# MODELO DE SEGURIDAD PERIMETRAL
+# ┌─ Internet / UCC ───────────────────────────────────────────────────────────┐
+# │                          ▼  :80 / :443                                     │
+# │  ┌─────────────────[ red_perimetral ]──────────────────────────────────┐   │
+# │  │                       nginx                                          │   │
+# │  │  (SPA + reverse proxy)   ↕ red_interna                              │   │
+# │  │  ┌────────────────[ red_interna ]──────────────────────────────┐   │   │
+# │  │  │  auth_service   dashboard_service  search_service  notif…   │   │   │
+# │  │  │  expose:8001    expose:8002         expose:8003    exp:8004  │   │   │
+# │  │  └────────────────────────────────────────────────────────────┘   │   │
+# │  └──────────────────────────────────────────────────────────────────┘   │
+# └────────────────────────────────────────────────────────────────────────────┘
+#
+# Resultado Nmap desde exterior:
+#   80/tcp  open   http
+#   443/tcp open   https
+#   8001-8004/tcp  filtered  (no vinculados al host → invisibles)
 #
 # Comando de despliegue:
 #   docker compose -f docker-compose.prod.yml up --build -d
@@ -14,9 +25,10 @@
 
 services:
 
-  # ── Puerta de entrada única ────────────────────────────────────────────────
-  # Sirve el SPA compilado y actúa como reverse proxy hacia red_interna.
-  # Es el ÚNICO servicio con puertos vinculados al host.
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BASTIÓN — Único punto de entrada al clúster
+  # Responsabilidades: servir el SPA compilado + reverse proxy a red_interna
+  # ═══════════════════════════════════════════════════════════════════════════
   nginx:
     build:
       context: ./Frontend
@@ -24,19 +36,30 @@ services:
     image: coniiti/nginx-frontend:latest
     container_name: nginx
     ports:
-      - "80:80"
-      - "443:443"
+      - "80:80"     # HTTP  — único puerto vinculado al host
+      - "443:443"   # HTTPS — reservado para TLS/Certbot
+    networks:
+      - red_perimetral   # acepta tráfico entrante de internet
+      - red_interna      # alcanza los microservicios tras bambalinas
     depends_on:
       - auth_service
       - dashboard_service
       - search_service
       - notifications_service
-    networks:
-      - red_perimetral   # acepta tráfico de internet
-      - red_interna      # alcanza los microservicios
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
     restart: unless-stopped
 
-  # ── Microservicios (aislados en red_interna) ───────────────────────────────
+  # ═══════════════════════════════════════════════════════════════════════════
+  # MICROSERVICIOS — Aislados en red_interna
+  # Regla: ningún puerto vinculado al host. Solo expose: (virtual, interno).
+  # Todo el tráfico externo entra por Nginx → red_interna, nunca directo.
+  # ═══════════════════════════════════════════════════════════════════════════
 
   auth_service:
     build:
@@ -44,13 +67,22 @@ services:
     image: coniiti/auth-service:latest
     container_name: auth_service
     expose:
-      - "8001"
+      - "8001"          # visible solo dentro de red_interna
     env_file:
       - ./services/auth_service/.env.prod
     depends_on:
       - dashboard_service
     networks:
-      - red_interna
+      - red_interna     # ÚNICA red asignada — sin acceso perimetral
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL             # sin capacidades Linux innecesarias
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     restart: unless-stopped
 
   dashboard_service:
@@ -66,6 +98,15 @@ services:
       - search_service
     networks:
       - red_interna
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     restart: unless-stopped
 
   search_service:
@@ -78,11 +119,20 @@ services:
     env_file:
       - ./services/search_service/.env.prod
     volumes:
-      - speaker_images:/app/uploads/speakers  # único volumen: datos físicos
+      - speaker_images:/app/uploads/speakers   # único volumen: datos físicos
     depends_on:
       - notifications_service
     networks:
       - red_interna
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     restart: unless-stopped
 
   notifications_service:
@@ -96,6 +146,15 @@ services:
       - ./services/notifications_service/.env.prod
     networks:
       - red_interna
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     restart: unless-stopped
 
 # ── Persistencia ──────────────────────────────────────────────────────────────
@@ -108,7 +167,10 @@ networks:
   red_perimetral:
     driver: bridge
     name: coniiti_perimetral
+    # Conecta nginx con internet. Solo nginx pertenece a esta red.
 
   red_interna:
     driver: bridge
     name: coniiti_interna
+    # Conecta nginx con los microservicios. Los microservicios SOLO existen aquí.
+    # No se marca internal:true porque los servicios necesitan salida a la BD externa.
