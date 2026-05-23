@@ -73,8 +73,24 @@ function GreetingAnimator({
   const [phase, setPhase] = useState<"ciao" | "welcome">("ciao");
 
   useEffect(() => {
-    const id = setTimeout(() => setPhase("welcome"), 3000);
-    return () => clearTimeout(id);
+    let welcomeTimer: ReturnType<typeof setTimeout>;
+
+    const startCycle = () => {
+      setPhase("ciao");
+      clearTimeout(welcomeTimer);
+      welcomeTimer = setTimeout(() => setPhase("welcome"), 3000);
+    };
+
+    // Transición inicial: ciao → bienvenido a los 3s
+    welcomeTimer = setTimeout(() => setPhase("welcome"), 3000);
+
+    // Repetir el ciclo completo cada 31 segundos
+    const cycleTimer = setInterval(startCycle, 31000);
+
+    return () => {
+      clearTimeout(welcomeTimer);
+      clearInterval(cycleTimer);
+    };
   }, []);
 
   return (
