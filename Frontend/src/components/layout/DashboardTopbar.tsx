@@ -199,6 +199,9 @@ export default function DashboardTopbar({
           />
         </div>
 
+        {/* Divisor vertical — flex-shrink:0 para que no se deforme */}
+        <div className="topbar-divider" aria-hidden="true" />
+
         {/* ── Saludo animado Ciao → Bienvenido ── */}
         <div className="topbar-greeting">
           <GreetingAnimator
