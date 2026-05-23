@@ -435,11 +435,12 @@
   height: 100%;
   background: #facc15;
   border-radius: 10px;
+  transform-origin: left;
   animation: fillBar 3s linear forwards;
 }
 @keyframes fillBar {
-  from { width: 0; }
-  to   { width: 100%; }
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
 }
 
 /* ── Responsive ── */

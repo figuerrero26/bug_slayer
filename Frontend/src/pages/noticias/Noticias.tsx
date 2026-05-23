@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import edificioImg from "../../assets/ucatolica-edificio3.jpg";
+import { useState, useEffect, memo } from "react";
 import "../../css/Noticias.css";
 
 interface Noticia {
@@ -150,7 +149,7 @@ function NoticiaCard({ noticia, destacada, principal }: { noticia: Noticia; dest
   );
 }
 
-function TimelineItem({ noticia }: { noticia: Noticia }) {
+const TimelineItem = memo(function TimelineItem({ noticia }: { noticia: Noticia }) {
   return (
     <div className="tl-item">
       <div className="tl-dot" />
@@ -161,7 +160,7 @@ function TimelineItem({ noticia }: { noticia: Noticia }) {
       </div>
     </div>
   );
-}
+});
 
 export default function Noticias() {
   const [catActiva, setCatActiva] = useState("todas");

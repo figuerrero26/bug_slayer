@@ -6,10 +6,12 @@ export function useNotifications(userId: number | null) {
 
   useEffect(() => {
     if (!userId) return;
-    fetch(`${NOTIFICATIONS_URL}/notifications/unread/${userId}`)
+    const ctrl = new AbortController();
+    fetch(`${NOTIFICATIONS_URL}/notifications/unread/${userId}`, { signal: ctrl.signal })
       .then((r) => r.json())
       .then((d) => setUnreadCount(d.unread_count ?? 0))
       .catch(() => {});
+    return () => ctrl.abort();
   }, [userId]);
 
   return { unreadCount, setUnreadCount };
