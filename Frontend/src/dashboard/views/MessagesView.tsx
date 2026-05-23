@@ -1,13 +1,15 @@
 import { useEffect, useState, useMemo } from "react";
 import {
-  ArrowLeft, Star, MoreVertical, CornerUpLeft,
-  CheckCheck, User, Calendar, MapPin, QrCode,
+  ArrowLeft, CheckCheck,
+  AlertCircle, Bell, CheckCircle2,
+  User, Calendar, MapPin, QrCode,
 } from "lucide-react";
 import { NOTIFICATIONS_URL, SEARCH_URL } from "../../services/api";
 import { useLang } from "../../context/LanguageContext";
 import "./MessagesView.css";
 
 import type { Notification } from "../../interfaces/notification";
+import type { Conference }   from "../../interfaces/conference";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -24,6 +26,28 @@ type Tab = "all" | "unread";
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
+function TypeIcon({ type }: { type: string }) {
+  if (type === "alerta")
+    return <AlertCircle size={22} strokeWidth={1.8} className="msv-type-icon msv-type-icon--warn" />;
+  if (type === "sistema")
+    return <Bell size={22} strokeWidth={1.8} className="msv-type-icon msv-type-icon--neutral" />;
+  return <CheckCircle2 size={22} strokeWidth={1.8} className="msv-type-icon msv-type-icon--info" />;
+}
+
+function extractConference(message: string, conferences: Conference[]): Conference | null {
+  const upper = message.toUpperCase();
+  return conferences.find((c) => c.title && upper.includes(c.title.toUpperCase())) ?? null;
+}
+
+function formatSchedule(raw: string): string {
+  const d = new Date(raw);
+  if (isNaN(d.getTime())) return raw;
+  const weekday = d.toLocaleDateString("es-CO", { weekday: "long" });
+  const date    = d.toLocaleDateString("es-CO", { day: "numeric", month: "long", year: "numeric" });
+  const time    = d.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" });
+  return `${weekday.charAt(0).toUpperCase() + weekday.slice(1)}, ${date} | ${time}`;
+}
+
 function shortDate(iso: string | null): string {
   if (!iso) return "—";
   const date = new Date(iso);
@@ -39,15 +63,6 @@ function fullDateTime(iso: string | null): string {
     day: "2-digit", month: "short", year: "numeric",
     hour: "2-digit", minute: "2-digit",
   });
-}
-
-const AVATAR_PALETTE = [
-  "#1e6fbd", "#0d9488", "#7c3aed", "#dc2626",
-  "#ea580c", "#16a34a", "#db2777", "#0891b2",
-];
-
-function avatarColor(title: string): string {
-  return AVATAR_PALETTE[title.charCodeAt(0) % AVATAR_PALETTE.length];
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -68,6 +83,7 @@ export default function MessagesView({ userId, onUnreadChange, searchQuery = "" 
   const [selected, setSelected]       = useState<Notification | null>(null);
   const [conference, setConference]   = useState<ConferenceDetails | null>(null);
   const [loadingConf, setLoadingConf] = useState(false);
+  const [conferences, setConferences] = useState<Conference[]>([]);
 
   useEffect(() => {
     setLoading(true);
@@ -83,6 +99,13 @@ export default function MessagesView({ userId, onUnreadChange, searchQuery = "" 
       })
       .catch(() => setError(t.msv_error))
       .finally(() => setLoading(false));
+  }, [userId]);
+
+  useEffect(() => {
+    fetch(`${SEARCH_URL}/users/${userId}/conferences`)
+      .then((r) => r.ok ? r.json() as Promise<Conference[]> : Promise.reject())
+      .then(setConferences)
+      .catch(() => {});
   }, [userId]);
 
   useEffect(() => {
@@ -153,8 +176,7 @@ export default function MessagesView({ userId, onUnreadChange, searchQuery = "" 
 
   // ── View B: Message detail ─────────────────────────────────────────────────
   if (selected) {
-    const color   = avatarColor(selected.title);
-    const initial = selected.title.charAt(0).toUpperCase();
+    const matched = extractConference(selected.message, conferences);
 
     return (
       <div className="msv-wrapper">
@@ -165,35 +187,23 @@ export default function MessagesView({ userId, onUnreadChange, searchQuery = "" 
             <ArrowLeft size={17} strokeWidth={2} />
             <span>{t.msv_back_inbox}</span>
           </button>
-          <button className="msv-icon-btn">
-            <MoreVertical size={16} strokeWidth={2} />
-          </button>
         </div>
 
         {/* Subject */}
         <div className="msv-subject-row">
           <h2 className="msv-subject">{selected.title}</h2>
-          <span className="msv-inbox-chip">{t.msv_label_inbox}</span>
         </div>
 
         {/* Sender metadata */}
         <div className="msv-sender-row">
-          <div className="msv-avatar" style={{ background: color }}>
-            {initial}
+          <div className="msv-type-icon-wrap">
+            <TypeIcon type={selected.type} />
           </div>
           <div className="msv-sender-info">
-            <div className="msv-sender-top">
-              <span className="msv-sender-name">{selected.title}</span>
-              <span className="msv-sender-email">
-                &lt;notificaciones@coniiti.ucc.edu.co&gt;
-              </span>
-            </div>
-            <span className="msv-sender-tome">{t.msv_to_me} ▾</span>
+            <span className="msv-sender-name">{selected.title}</span>
           </div>
           <div className="msv-sender-controls">
             <span className="msv-full-date">{fullDateTime(selected.created_at)}</span>
-            <button className="msv-icon-btn"><Star size={15} strokeWidth={1.8} /></button>
-            <button className="msv-icon-btn"><CornerUpLeft size={15} strokeWidth={1.8} /></button>
           </div>
         </div>
 
@@ -202,7 +212,48 @@ export default function MessagesView({ userId, onUnreadChange, searchQuery = "" 
           <p className="msv-body-text">{selected.message}</p>
         </div>
 
-        {/* Conference ticket */}
+        {/* Conference card — text extraction */}
+        {matched && (
+          <div className="msv-conf-card">
+            <p className="msv-conf-card-title">{matched.title}</p>
+            <div className="msv-conf-card-grid">
+
+              {/* Columna izquierda: ponente + ubicación */}
+              <div className="msv-conf-card-col">
+                {matched.speaker_name && (
+                  <div className="msv-conf-card-row">
+                    <User size={16} strokeWidth={1.8} className="msv-conf-card-icon" />
+                    <span>{matched.speaker_name}</span>
+                  </div>
+                )}
+                {matched.location_text && (
+                  <div className="msv-conf-card-row">
+                    <MapPin size={16} strokeWidth={1.8} className="msv-conf-card-icon" />
+                    <span>{matched.location_text}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Columna derecha: fecha + categoría */}
+              <div className="msv-conf-card-col">
+                {matched.schedule && (
+                  <div className="msv-conf-card-row">
+                    <Calendar size={16} strokeWidth={1.8} className="msv-conf-card-icon" />
+                    <span>{formatSchedule(matched.schedule)}</span>
+                  </div>
+                )}
+                {matched.category && (
+                  <div className="msv-conf-card-row">
+                    <span className="msv-conf-card-cat">{matched.category}</span>
+                  </div>
+                )}
+              </div>
+
+            </div>
+          </div>
+        )}
+
+        {/* Conference ticket — conference_id path (async) */}
         {selected.conference_id && (
           loadingConf ? (
             <div className="msv-skeleton-wrap">
@@ -254,10 +305,6 @@ export default function MessagesView({ userId, onUnreadChange, searchQuery = "" 
 
         {/* Actions */}
         <div className="msv-mail-actions">
-          <button className="msv-action-btn" onClick={goBack}>
-            <CornerUpLeft size={13} strokeWidth={2} />
-            {t.msv_reply_close}
-          </button>
           <button
             className="msv-action-btn"
             onClick={() => { markUnread(selected.id); goBack(); }}
@@ -324,7 +371,6 @@ export default function MessagesView({ userId, onUnreadChange, searchQuery = "" 
               onClick={() => openNotif(n)}
             >
               <div className="msv-row-lead">
-                <Star size={14} strokeWidth={1.8} className="msv-star" />
                 <span className={`msv-read-dot${n.is_read ? " msv-read-dot--read" : ""}`} />
               </div>
               <span className="msv-row-sender">{n.title}</span>

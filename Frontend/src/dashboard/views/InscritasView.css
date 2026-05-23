@@ -417,8 +417,8 @@
 }
 
 .iv-cat-card-icon--accent {
-  background: #f0ebff;
-  color: #6d4aff;
+  background: #e8f0fe;
+  color: var(--blue, #1e6fbd);
 }
 
 .iv-cat-card-label {

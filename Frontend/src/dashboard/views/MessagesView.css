@@ -47,12 +47,12 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: none;
-  border: 1px solid var(--border);
+  background: var(--blue-dim);
+  border: 1px solid rgba(30, 111, 189, 0.28);
   border-radius: var(--radius-sm);
-  color: var(--muted);
+  color: var(--blue);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   font-family: 'DM Sans', sans-serif;
   padding: 6px 13px;
   cursor: pointer;
@@ -62,12 +62,18 @@
 }
 
 .msv-btn-mark-all:hover:not(:disabled) {
+  background: var(--blue);
   border-color: var(--blue);
-  color: var(--blue);
-  background: var(--blue-dim);
+  color: #ffffff;
 }
 
-.msv-btn-mark-all:disabled { opacity: 0.35; cursor: default; }
+.msv-btn-mark-all:disabled {
+  opacity: 0.35;
+  cursor: default;
+  background: none;
+  border-color: var(--border);
+  color: var(--muted);
+}
 
 /* ── Tabs ── */
 .msv-tabs {
@@ -163,17 +169,14 @@
 
 .msv-row:hover { background: var(--surface2); }
 
-/* ── Row lead (star + dot) ── */
+/* ── Row lead (unread dot only) ── */
 .msv-row-lead {
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
   flex-shrink: 0;
-  width: 36px;
+  width: 24px;
 }
-
-.msv-star { color: var(--border); transition: color 0.14s; }
-.msv-row:hover .msv-star { color: var(--gold); }
 
 .msv-read-dot {
   width: 8px;
@@ -302,72 +305,45 @@
   line-height: 1.3;
 }
 
-.msv-inbox-chip {
-  display: inline-flex;
-  align-items: center;
-  background: var(--surface2);
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 9px;
-  border-radius: 999px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
+/* .msv-inbox-chip removed — chip "Recibidos" eliminado */
 
 /* ── Sender row ── */
 .msv-sender-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
   padding: 12px 0 16px;
   border-bottom: 1px solid var(--border);
 }
 
-.msv-avatar {
-  width: 38px;
-  height: 38px;
+/* ── Type icon container (reemplaza avatar) ── */
+.msv-type-icon-wrap {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 700;
-  font-family: 'DM Sans', sans-serif;
+  background: var(--surface2);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
+.msv-type-icon--info    { color: var(--blue); }
+.msv-type-icon--warn    { color: var(--gold); }
+.msv-type-icon--neutral { color: var(--muted); }
+
 .msv-sender-info {
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
-}
-
-.msv-sender-top {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .msv-sender-name {
   font-size: 13.5px;
   font-weight: 700;
   color: var(--navy);
-}
-
-.msv-sender-email {
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.msv-sender-tome {
-  font-size: 12px;
-  color: var(--muted);
-  cursor: default;
 }
 
 .msv-sender-controls {
@@ -539,6 +515,7 @@
 /* ── Mail action buttons ── */
 .msv-mail-actions {
   display: flex;
+  justify-content: flex-end;
   gap: 8px;
   padding: 18px 0 4px;
   flex-wrap: wrap;
@@ -667,4 +644,71 @@
   }
   .msv-ticket-stub::before { left: -9px; }
   .msv-ticket-stub::after  { right: -9px; left: auto; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   CONFERENCE CARD — extracción por texto
+   ═══════════════════════════════════════════════════════ */
+
+.msv-conf-card {
+  margin-top: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--blue);
+  border-radius: var(--radius-sm);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.msv-conf-card-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1e293b;
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1.45;
+  margin: 0;
+}
+
+[data-theme="dark"] .msv-conf-card-title {
+  color: var(--navy);
+}
+
+/* Grid de dos columnas: izquierda (ponente + ubicación) | derecha (fecha + categoría) */
+.msv-conf-card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 24px;
+}
+
+.msv-conf-card-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.msv-conf-card-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.msv-conf-card-icon {
+  color: var(--blue);
+  flex-shrink: 0;
+  opacity: 0.65;
+}
+
+.msv-conf-card-cat {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+/* Responsive: una columna en móvil */
+@media (max-width: 768px) {
+  .msv-conf-card-grid { grid-template-columns: 1fr; }
 }
