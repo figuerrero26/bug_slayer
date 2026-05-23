@@ -544,44 +544,6 @@ export default function InscritasView({
 
       </div>{/* fin iv-layout */}
 
-      {/*
-        ══════════════════════════════════════════════════════════════
-        OPCIÓN B — Fila de resumen compacta al final (COMENTADA)
-        Para activar: descomenta este bloque y elimina iv-layout arriba.
-        ══════════════════════════════════════════════════════════════
-
-      <div className="iv-kpi-footer">
-        <div className="iv-kpi-mini">
-          <CalendarDays size={20} strokeWidth={1.75} className="iv-kpi-mini-icon iv-kpi-mini-icon--blue" />
-          <div className="iv-kpi-mini-info">
-            <span className="iv-kpi-mini-value">{kpis.total}</span>
-            <span className="iv-kpi-mini-label">{t.iv_kpi_total}</span>
-          </div>
-        </div>
-        <div className="iv-kpi-mini">
-          <CircleCheck size={20} strokeWidth={1.75} className="iv-kpi-mini-icon iv-kpi-mini-icon--green" />
-          <div className="iv-kpi-mini-info">
-            <span className="iv-kpi-mini-value">{kpis.confirmada}</span>
-            <span className="iv-kpi-mini-label">{t.iv_kpi_confirmed}</span>
-          </div>
-        </div>
-        <div className="iv-kpi-mini">
-          <Clock size={20} strokeWidth={1.75} className="iv-kpi-mini-icon iv-kpi-mini-icon--yellow" />
-          <div className="iv-kpi-mini-info">
-            <span className="iv-kpi-mini-value">{kpis.enCurso}</span>
-            <span className="iv-kpi-mini-label">{t.iv_kpi_ongoing}</span>
-          </div>
-        </div>
-        <div className="iv-kpi-mini">
-          <Flag size={20} strokeWidth={1.75} className="iv-kpi-mini-icon iv-kpi-mini-icon--red" />
-          <div className="iv-kpi-mini-info">
-            <span className="iv-kpi-mini-value">{kpis.finalizada}</span>
-            <span className="iv-kpi-mini-label">{t.iv_kpi_finished}</span>
-          </div>
-        </div>
-      </div>
-
-      */}
 
     </div>
   );

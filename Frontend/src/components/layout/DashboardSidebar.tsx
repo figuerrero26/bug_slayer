@@ -32,7 +32,7 @@ interface NavDef { id: string; icon: ReactNode; badge: boolean; }
 
 const NAV_DEFS: NavDef[] = [
   { id: "profile",     icon: <Home        size={18} strokeWidth={2} />, badge: false },
-  { id: "conferences", icon: <CalendarDays size={18} strokeWidth={2} />, badge: true  },
+  { id: "conferences", icon: <CalendarDays size={18} strokeWidth={2} />, badge: false },
   { id: "completed",   icon: <CheckSquare  size={18} strokeWidth={2} />, badge: false },
   { id: "events",      icon: <Compass      size={18} strokeWidth={2} />, badge: false },
   { id: "favorites",   icon: <Heart        size={18} strokeWidth={2} />, badge: false },

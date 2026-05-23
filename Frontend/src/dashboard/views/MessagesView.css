@@ -1,27 +1,37 @@
 /* ═══════════════════════════════════════════════════════
-   MESSAGES VIEW — prefijo msv-
-   Hereda variables del sistema: Dashboard.css
+   NOTIFICATION CENTER — Gmail style — prefijo msv-
+   Variables: Global.css (--navy, --blue, --gold, --border,
+              --surface, --surface2, --muted, --text,
+              --radius, --radius-sm)
    ═══════════════════════════════════════════════════════ */
 
-/* ── Layout ── */
+/* ── Wrapper ── */
 .msv-wrapper {
+  width: 100%;
+  max-width: 820px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  max-width: 780px;
-  animation: msv-fade 0.28s ease;
+  gap: 0;
+  animation: msv-fade 0.24s ease;
 }
 
 @keyframes msv-fade {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(5px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Cabecera ── */
+/* ═══════════════════════════════════════════════════════
+   VIEW A — INBOX
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Header ── */
 .msv-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
+  margin-bottom: 18px;
 }
 
 .msv-heading {
@@ -30,206 +40,556 @@
   font-weight: 700;
   color: var(--navy);
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
-.msv-unread-pill {
-  background: var(--blue-dim);
-  color: var(--blue);
-  border: 1px solid rgba(30, 111, 189, 0.2);
-  font-size: 11.5px;
-  font-weight: 600;
-  padding: 3px 10px;
-  border-radius: 999px;
-}
-
-/* ── Lista con scroll elegante ── */
-.msv-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-height: calc(100vh - 220px);
-  overflow-y: auto;
-  padding-right: 6px;
-  padding-bottom: 4px;
-}
-
-.msv-list::-webkit-scrollbar        { width: 4px; }
-.msv-list::-webkit-scrollbar-track  { background: transparent; }
-.msv-list::-webkit-scrollbar-thumb  { background: var(--border); border-radius: 999px; }
-.msv-list::-webkit-scrollbar-thumb:hover { background: var(--muted); }
-
-/* ── Card base ── */
-.msv-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: 4px solid var(--blue);
-  border-radius: var(--radius-sm);
-  padding: 14px 16px 12px;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  animation: msv-slide 0.22s ease both;
-}
-
-@keyframes msv-slide {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Retraso escalonado por posición */
-.msv-card:nth-child(1)  { animation-delay: 0.00s; }
-.msv-card:nth-child(2)  { animation-delay: 0.04s; }
-.msv-card:nth-child(3)  { animation-delay: 0.08s; }
-.msv-card:nth-child(4)  { animation-delay: 0.12s; }
-.msv-card:nth-child(5)  { animation-delay: 0.16s; }
-
-/* Sin leer — fondo tintado */
-.msv-card:not(.msv-card--read) {
-  background: linear-gradient(135deg, #f0f5ff 0%, var(--surface) 100%);
-}
-
-.msv-card:not(.msv-card--read):hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(26, 37, 69, 0.09);
-}
-
-/* Leído — sin highlight */
-.msv-card--read {
-  cursor: default;
-  border-left-color: var(--border);
-  opacity: 0.78;
-}
-
-.msv-card--read:hover {
-  transform: none;
-  box-shadow: none;
-}
-
-/* Variantes por tipo */
-.msv-card--info:not(.msv-card--read)    { border-left-color: var(--blue); }
-.msv-card--alerta:not(.msv-card--read)  { border-left-color: var(--gold); }
-.msv-card--sistema:not(.msv-card--read) { border-left-color: var(--muted); }
-
-/* ── Fila superior ── */
-.msv-card-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-
-.msv-card-left {
-  display: flex;
+.msv-btn-mark-all {
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  flex: 1;
-  min-width: 0;
-}
-
-.msv-card-right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-/* ── Punto azul de no leído ── */
-.msv-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--blue);
-  flex-shrink: 0;
-}
-
-/* ── Título ── */
-.msv-title {
-  font-size: 13.5px;
-  font-weight: 600;
-  color: var(--navy);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-family: 'DM Sans', sans-serif;
-}
-
-.msv-card--read .msv-title {
-  font-weight: 500;
-  color: var(--muted);
-}
-
-/* ── Texto del mensaje ── */
-.msv-message {
-  font-size: 13px;
-  color: var(--text);
-  line-height: 1.58;
-  margin: 0 0 10px;
-}
-
-.msv-card--read .msv-message {
-  color: var(--muted);
-}
-
-/* ── Badge de tipo ── */
-.msv-badge {
-  font-size: 10.5px;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 999px;
-  white-space: nowrap;
-  letter-spacing: 0.03em;
-}
-
-.msv-badge--info    { background: var(--blue-dim);  color: var(--blue);  }
-.msv-badge--alerta  { background: var(--gold-dim);  color: var(--gold);  }
-.msv-badge--sistema { background: var(--surface2);  color: var(--muted); }
-
-/* ── Fecha ── */
-.msv-date {
-  font-size: 11px;
-  color: var(--muted);
-  white-space: nowrap;
-}
-
-/* ── Botón marcar como leído ── */
-.msv-btn-read {
-  display: inline-block;
+  gap: 6px;
   background: none;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   color: var(--muted);
-  font-size: 11.5px;
+  font-size: 12px;
+  font-weight: 600;
   font-family: 'DM Sans', sans-serif;
-  padding: 4px 12px;
+  padding: 6px 13px;
   cursor: pointer;
-  transition: all 0.18s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.16s ease;
 }
 
-.msv-btn-read:hover {
+.msv-btn-mark-all:hover:not(:disabled) {
   border-color: var(--blue);
   color: var(--blue);
   background: var(--blue-dim);
 }
 
-/* ── Estados vacíos / carga ── */
+.msv-btn-mark-all:disabled { opacity: 0.35; cursor: default; }
+
+/* ── Tabs ── */
+.msv-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--surface2);
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.msv-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  padding: 7px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.msv-tab:hover:not(.msv-tab--active) {
+  color: var(--navy);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.msv-tab--active {
+  background: var(--surface);
+  color: var(--navy);
+  font-weight: 700;
+  box-shadow: 0 1px 5px rgba(26, 37, 69, 0.10);
+}
+
+.msv-tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--blue);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ── Inbox container ── */
+.msv-inbox {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  max-height: calc(100vh - 280px);
+  overflow-y: auto;
+}
+
+.msv-inbox::-webkit-scrollbar        { width: 4px; }
+.msv-inbox::-webkit-scrollbar-track  { background: transparent; }
+.msv-inbox::-webkit-scrollbar-thumb  { background: var(--border); border-radius: 999px; }
+
+/* ── Inbox row (Gmail-style) ── */
+.msv-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.14s ease;
+  min-width: 0;
+}
+
+.msv-row:last-child { border-bottom: none; }
+
+.msv-row--unread {
+  background: var(--surface);
+  border-left: 3px solid var(--blue);
+}
+
+.msv-row--read {
+  background: var(--bg);
+  border-left: 3px solid transparent;
+}
+
+.msv-row:hover { background: var(--surface2); }
+
+/* ── Row lead (star + dot) ── */
+.msv-row-lead {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  width: 36px;
+}
+
+.msv-star { color: var(--border); transition: color 0.14s; }
+.msv-row:hover .msv-star { color: var(--gold); }
+
+.msv-read-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--blue);
+  flex-shrink: 0;
+  transition: opacity 0.16s;
+}
+
+.msv-read-dot--read { opacity: 0; }
+
+/* ── Sender (fixed width) ── */
+.msv-row-sender {
+  width: 172px;
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 12px;
+}
+
+.msv-row--unread .msv-row-sender {
+  font-weight: 700;
+  color: var(--navy);
+}
+
+/* ── Excerpt (flexible) ── */
+.msv-row-excerpt {
+  flex: 1;
+  font-size: 13px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.msv-row--unread .msv-row-excerpt {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* ── Date (right-aligned) ── */
+.msv-row-date {
+  font-size: 11.5px;
+  color: var(--muted);
+  flex-shrink: 0;
+  padding-left: 16px;
+  white-space: nowrap;
+}
+
+.msv-row--unread .msv-row-date {
+  font-weight: 600;
+  color: var(--navy);
+}
+
+/* ═══════════════════════════════════════════════════════
+   VIEW B — MESSAGE DETAIL
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Toolbar ── */
+.msv-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.msv-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  padding: 5px 10px 5px 6px;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+}
+
+.msv-back-btn:hover {
+  background: var(--surface2);
+  color: var(--navy);
+}
+
+.msv-icon-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.14s;
+}
+
+.msv-icon-btn:hover { background: var(--surface2); color: var(--navy); }
+
+/* ── Subject row ── */
+.msv-subject-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 0 14px;
+}
+
+.msv-subject {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--navy);
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.msv-inbox-chip {
+  display: inline-flex;
+  align-items: center;
+  background: var(--surface2);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Sender row ── */
+.msv-sender-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.msv-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.msv-sender-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.msv-sender-top {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.msv-sender-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.msv-sender-email {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.msv-sender-tome {
+  font-size: 12px;
+  color: var(--muted);
+  cursor: default;
+}
+
+.msv-sender-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.msv-full-date {
+  font-size: 11.5px;
+  color: var(--muted);
+  white-space: nowrap;
+  margin-right: 4px;
+}
+
+/* ── Mail body ── */
+.msv-mail-body {
+  padding: 22px 0 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.msv-body-text {
+  font-size: 14px;
+  line-height: 1.72;
+  color: var(--text);
+  white-space: pre-wrap;
+}
+
+/* ── Skeleton loader ── */
+.msv-skeleton-wrap {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.msv-skeleton {
+  background: var(--surface2);
+  border-radius: 6px;
+  animation: msv-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes msv-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.45; }
+}
+
+.msv-skeleton--heading { height: 22px; width: 65%; }
+.msv-skeleton--line    { height: 14px; width: 100%; }
+.msv-skeleton--short   { width: 45%; }
+
+/* ── Conference ticket ── */
+.msv-ticket {
+  display: flex;
+  margin: 22px 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: 0 6px 28px rgba(26, 37, 69, 0.18);
+}
+
+.msv-ticket-main {
+  flex: 1;
+  background: linear-gradient(135deg, #1a2545 0%, #0d1526 100%);
+  color: #ffffff;
+  padding: 22px 24px 22px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.msv-ticket-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+}
+
+.msv-ticket-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.35;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.msv-ticket-details {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.msv-ticket-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.msv-ti { color: rgba(255, 255, 255, 0.45); flex-shrink: 0; }
+
+.msv-ticket-cat {
+  display: inline-block;
+  background: rgba(30, 111, 189, 0.35);
+  color: #7ab8f5;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+}
+
+/* ── Ticket stub (gold) ── */
+.msv-ticket-stub {
+  width: 110px;
+  flex-shrink: 0;
+  background: linear-gradient(160deg, #e8941a 0%, #d97706 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 18px 14px;
+  position: relative;
+  border-left: 2px dashed rgba(255, 255, 255, 0.35);
+}
+
+/* Perforation half-circles */
+.msv-ticket-stub::before,
+.msv-ticket-stub::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--bg);
+  left: -9px;
+  z-index: 1;
+}
+.msv-ticket-stub::before { top: -9px; }
+.msv-ticket-stub::after  { bottom: -9px; }
+
+.msv-qr {
+  color: rgba(255, 255, 255, 0.90);
+}
+
+.msv-ticket-id {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: 0.05em;
+}
+
+.msv-ticket-access {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+  text-align: center;
+}
+
+/* ── Mail action buttons ── */
+.msv-mail-actions {
+  display: flex;
+  gap: 8px;
+  padding: 18px 0 4px;
+  flex-wrap: wrap;
+}
+
+.msv-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.msv-action-btn:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+  background: var(--blue-dim);
+}
+
+/* ═══════════════════════════════════════════════════════
+   SHARED — empty / loading states
+   ═══════════════════════════════════════════════════════ */
+
 .msv-center {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 50vh;
-  gap: 14px;
+  gap: 12px;
   text-align: center;
 }
 
-.msv-empty-icon  { font-size: 3rem; line-height: 1; }
+.msv-center--padded { padding-top: 32px; min-height: 200px; }
 
 .msv-empty-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--navy);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
   margin: 0;
   font-family: 'DM Sans', sans-serif;
+  max-width: 280px;
+  line-height: 1.5;
 }
 
 .msv-hint {
@@ -249,52 +609,62 @@
   animation: msv-spin 0.8s linear infinite;
 }
 
-@keyframes msv-spin {
-  to { transform: rotate(360deg); }
+@keyframes msv-spin { to { transform: rotate(360deg); } }
+
+/* ═══════════════════════════════════════════════════════
+   DARK MODE
+   ═══════════════════════════════════════════════════════ */
+
+[data-theme="dark"] .msv-tabs {
+  background: rgba(255, 255, 255, 0.04);
 }
 
-/* ── Dark mode ───────────────────────────────────────────────────── */
-[data-theme="dark"] .msv-card                      { background: var(--surface); border-color: var(--border); }
-[data-theme="dark"] .msv-card:not(.msv-card--read) { background: linear-gradient(135deg, #1a2e50, var(--surface)); }
+[data-theme="dark"] .msv-tab--active {
+  background: rgba(255, 255, 255, 0.09);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
+}
 
-/* ── Responsive móvil (≤ 768px) ─────────────────────────────────── */
+[data-theme="dark"] .msv-row--unread {
+  background: rgba(30, 111, 189, 0.07);
+}
+
+[data-theme="dark"] .msv-row--read {
+  background: transparent;
+}
+
+[data-theme="dark"] .msv-ticket-stub::before,
+[data-theme="dark"] .msv-ticket-stub::after {
+  background: #0d1526;
+}
+
+/* ═══════════════════════════════════════════════════════
+   RESPONSIVE (≤ 768px)
+   ═══════════════════════════════════════════════════════ */
+
 @media (max-width: 768px) {
-  .msv-wrapper {
-    max-width: 100%;
-    gap: 12px;
-  }
+  .msv-row { padding: 10px 12px; gap: 0; }
+  .msv-row-sender { width: 120px; font-size: 12.5px; }
+  .msv-row-date   { font-size: 11px; padding-left: 8px; }
+  .msv-subject    { font-size: 16px; }
 
-  .msv-list {
-    max-height: calc(100dvh - 180px);
-    padding-right: 0;
-  }
+  .msv-inbox      { max-height: calc(100dvh - 240px); }
 
-  .msv-card {
-    padding: 12px 14px 10px;
-  }
+  .msv-sender-row { flex-wrap: wrap; }
+  .msv-sender-controls { width: 100%; padding-top: 6px; }
 
-  /* Título y meta en columna: título arriba, badge+fecha debajo */
-  .msv-card-top {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-  }
-
-  .msv-card-right {
-    gap: 6px;
-  }
-
-  /* Permite que el título ocupe toda la línea */
-  .msv-card-left {
+  .msv-ticket { flex-direction: column; }
+  .msv-ticket-stub {
     width: 100%;
+    flex-direction: row;
+    padding: 14px 20px;
+    border-left: none;
+    border-top: 2px dashed rgba(255, 255, 255, 0.35);
   }
-
-  .msv-title {
-    white-space: normal;
-    font-size: 13px;
+  .msv-ticket-stub::before,
+  .msv-ticket-stub::after {
+    left: auto;
+    top: -9px;
   }
-
-  .msv-date {
-    font-size: 10.5px;
-  }
+  .msv-ticket-stub::before { left: -9px; }
+  .msv-ticket-stub::after  { right: -9px; left: auto; }
 }

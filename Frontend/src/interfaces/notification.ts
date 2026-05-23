@@ -6,4 +6,5 @@ export interface Notification {
   is_read: boolean;
   type: "info" | "alerta" | "sistema";
   created_at: string | null;
+  conference_id?: number;
 }
