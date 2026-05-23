@@ -1,9 +1,10 @@
 import type { ReactNode } from "react";
 import {
   FaUser, FaMicrophone, FaCheck, FaCalendar,
-  FaHeart, FaCalendarAlt, FaEnvelope, FaCog, FaSignOutAlt,
+  FaHeart, FaCalendarAlt, FaEnvelope, FaSignOutAlt, FaChevronRight,
 } from "react-icons/fa";
 import { useLang } from "../../context/LanguageContext";
+import type { User } from "../../interfaces/user";
 import "./DashboardSidebar.css";
 
 // ── Decoración SVG del sidebar ────────────────────────────────────────────────
@@ -55,10 +56,11 @@ interface Props {
   unreadCount:  number;
   isLoggingOut: boolean;
   onLogout:     () => void;
+  user:         User | null;
 }
 
 export default function DashboardSidebar({
-  activeNav, setActiveNav, confCount, unreadCount, isLoggingOut, onLogout,
+  activeNav, setActiveNav, confCount, unreadCount, isLoggingOut, onLogout, user,
 }: Props) {
   const { t } = useLang();
 
@@ -103,15 +105,27 @@ export default function DashboardSidebar({
         })}
       </nav>
 
-      {/* BLOQUE 2 — Footer (Ajustes + Logout) */}
+      {/* BLOQUE 2 — Footer (Perfil → Ajustes + Logout) */}
       <footer className="sb__footer">
+
+        {/* Tarjeta de perfil — reemplaza el botón de Ajustes */}
         <button
-          className={`sb__item${activeNav === "settings" ? " sb__item--active" : ""}`}
+          className={`sb__profile${activeNav === "settings" ? " sb__profile--active" : ""}`}
           onClick={() => setActiveNav("settings")}
           aria-current={activeNav === "settings" ? "page" : undefined}
         >
-          <span className="sb__icon" aria-hidden="true"><FaCog /></span>
-          <span className="sb__label">{t.dash_settings}</span>
+          <div className="sb__avatar" aria-hidden="true">
+            <span className="sb__avatar-initial">
+              {user?.name?.charAt(0).toUpperCase() ?? "?"}
+            </span>
+          </div>
+          <div className="sb__profile-info">
+            <span className="sb__profile-name">
+              {user?.name?.split(" ").slice(0, 2).join(" ") ?? ""}
+            </span>
+            <span className="sb__profile-sub">{t.dash_account_settings}</span>
+          </div>
+          <FaChevronRight className="sb__profile-chevron" aria-hidden="true" />
         </button>
 
         <button

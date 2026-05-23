@@ -106,6 +106,7 @@ export default function Dashboard() {
           unreadCount={unreadCount}
           isLoggingOut={isLoggingOut}
           onLogout={handleLogout}
+          user={user}
         />
 
         {/* Content — hijo directo del grid, columna derecha */}
