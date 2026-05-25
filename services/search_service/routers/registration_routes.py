@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
@@ -95,6 +95,7 @@ def cancel_registration(
     registration_id: int,
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
+    email: str | None = Query(default=None, description="Correo del usuario para notificación"),
 ):
     """Cancela una inscripción (soft-delete: status = 'cancelado')."""
     reg = db.query(ConferenceRegistration).filter(
@@ -109,7 +110,7 @@ def cancel_registration(
     db.commit()
 
     if conf:
-        background_tasks.add_task(notify_cancellation, reg.user_id, conf.title)
+        background_tasks.add_task(notify_cancellation, reg.user_id, conf.title, email)
 
     return {"message": "Inscripción cancelada"}
 

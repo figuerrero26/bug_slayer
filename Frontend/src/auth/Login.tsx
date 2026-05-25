@@ -174,6 +174,12 @@ export default function Login() {
             autoComplete="current-password"
           />
 
+          <p className="extra" style={{ textAlign: "right", marginTop: "-8px", fontSize: "13px" }}>
+            <Link to="/recuperar-contrasena">
+              <span>¿Olvidaste tu contraseña?</span>
+            </Link>
+          </p>
+
           <button
             type="submit"
             disabled={loading}

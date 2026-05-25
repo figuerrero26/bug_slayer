@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 
 import { AUTH_URL } from "../services/api";
 
@@ -234,6 +235,10 @@ export default function Register() {
 
       {/* PANEL DERECHO */}
       <div className="reg-right">
+
+        <Link to="/login" className="reg-back">
+          <ArrowLeft size={14} /> Volver al inicio de sesión
+        </Link>
 
         <div className="reg-form-wrapper">
 

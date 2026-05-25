@@ -16,8 +16,9 @@ const Ponentes      = lazy(() => import("./pages/ponentes/Ponentes.tsx"));
 const Coniiti2015   = lazy(() => import("./pages/ferias/Coniiti2015.tsx"));
 const Dashboard     = lazy(() => import("./dashboard/Dashboard.tsx"));
 const Admin         = lazy(() => import("./admin/Admin.tsx"));
-const Login         = lazy(() => import("./auth/Login.tsx"));
-const Register      = lazy(() => import("./auth/Register.tsx"));
+const Login          = lazy(() => import("./auth/Login.tsx"));
+const Register       = lazy(() => import("./auth/Register.tsx"));
+const PasswordReset  = lazy(() => import("./auth/PasswordReset.tsx"));
 
 function Layout() {
 
@@ -26,6 +27,7 @@ function Layout() {
   const hideBar =
     location.pathname === "/login" ||
     location.pathname === "/crear-cuenta" ||
+    location.pathname === "/recuperar-contrasena" ||
     location.pathname === "/dashboard" ||
     location.pathname.startsWith("/admin");
 
@@ -47,6 +49,7 @@ function Layout() {
           {/* Auth */}
           <Route path="/login" element={<Login />} />
           <Route path="/crear-cuenta" element={<Register />} />
+          <Route path="/recuperar-contrasena" element={<PasswordReset />} />
 
           {/* Dashboard */}
           <Route path="/dashboard" element={<Dashboard />} />

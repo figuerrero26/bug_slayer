@@ -37,7 +37,7 @@ def notify_registration(
         print(f"[notification_client] Error al notificar inscripción — user {user_id}: {exc}")
 
 
-def notify_cancellation(user_id: int, conference_title: str) -> None:
+def notify_cancellation(user_id: int, conference_title: str, email: str | None = None) -> None:
     """
     Notifica al usuario que canceló su inscripción.
     Se ejecuta en un thread pool (BackgroundTasks), por eso es síncrona.
@@ -51,6 +51,7 @@ def notify_cancellation(user_id: int, conference_title: str) -> None:
                     "title":   "Inscripción cancelada",
                     "message": f"Cancelaste tu inscripción en: {conference_title}",
                     "type":    "alerta",
+                    "email":   email,
                 },
             )
     except Exception as exc:

@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database import engine, Base
 from routers.auth_routes import router as auth_router
+from routers.password_reset_routes import router as password_reset_router
 
 # Crea las tablas en db_auth si no existen
 Base.metadata.create_all(bind=engine)
@@ -21,6 +22,7 @@ app.add_middleware(
 )
 
 app.include_router(auth_router)
+app.include_router(password_reset_router)
 
 
 @app.get("/health")
