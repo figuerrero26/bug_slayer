@@ -543,6 +543,276 @@
   .adm-toast      { white-space: normal; max-width: calc(100% - 32px); text-align: center; }
 }
 
+/* ══════════════════════════════════════════════════════════════
+   TABS — Conferencias / Ponentes
+   ══════════════════════════════════════════════════════════════ */
+
+.adm-tabs {
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0 32px;
+  display: flex;
+  gap: 4px;
+}
+
+.adm-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 14px 18px 12px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #64748b;
+  background: none;
+  border: none;
+  border-bottom: 2.5px solid transparent;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.adm-tab-btn:hover { color: #0b4da2; }
+
+.adm-tab-btn.active {
+  color: #0b4da2;
+  border-bottom-color: #0b4da2;
+  font-weight: 600;
+}
+
+.adm-tab-count {
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 20px;
+  min-width: 22px;
+  text-align: center;
+}
+
+.adm-tab-btn.active .adm-tab-count {
+  background: rgba(11,77,162,0.1);
+  color: #0b4da2;
+}
+
+/* ── Reset button variant ──────────────────────────────────────────────────── */
+
+.adm-btn-reset {
+  font-size: 0.78rem;
+  color: #92400e;
+  border-color: rgba(146,64,14,0.3);
+}
+.adm-btn-reset:hover { background: rgba(146,64,14,0.05); }
+
+/* ══════════════════════════════════════════════════════════════
+   SPEAKER TABLE CELLS
+   ══════════════════════════════════════════════════════════════ */
+
+.td-avatar-gradient {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #fff;
+  flex-shrink: 0;
+  letter-spacing: 0.5px;
+}
+
+.td-inst {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.82rem;
+  max-width: 220px;
+}
+
+.td-country {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+/* Profession badges in table */
+.td-prof {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.td-prof--profesor     { background: #eff6ff; color: #1d4ed8; }
+.td-prof--investigador { background: #f5f3ff; color: #7c3aed; }
+.td-prof--ingeniero    { background: #fff7ed; color: #c2410c; }
+.td-prof--empresario   { background: #f0fdf4; color: #15803d; }
+.td-prof--directivo    { background: #fef2f2; color: #b91c1c; }
+
+/* Experience cell */
+.td-exp-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 110px;
+}
+
+.td-exp-bar {
+  width: 100%;
+  height: 4px;
+  background: #f1f5f9;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.td-exp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0b4da2, #2b7fff);
+  border-radius: 999px;
+}
+
+.exp-level-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 20px;
+  white-space: nowrap;
+  align-self: flex-start;
+}
+.exp-level-badge--emergente      { background: #f1f5f9; color: #64748b; }
+.exp-level-badge--en-desarrollo  { background: #ecfeff; color: #0891b2; }
+.exp-level-badge--experimentado  { background: #eef2ff; color: #4338ca; }
+.exp-level-badge--experto        { background: #fffbeb; color: #92400e; }
+
+/* Keynote / Regular badges */
+.td-keynote {
+  background: rgba(0,85,204,0.08);
+  color: #0055cc;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.td-regular {
+  background: #f8fafc;
+  color: #94a3b8;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 20px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SPEAKER FORM — preview, gradient picker, checkbox
+   ══════════════════════════════════════════════════════════════ */
+
+.adm-modal--wide {
+  max-width: 720px;
+}
+
+/* Avatar preview at top of form */
+.sp-preview {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.sp-preview-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+  letter-spacing: 1px;
+  transition: background 0.3s;
+}
+
+.sp-preview-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.sp-preview-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.sp-preview-inst {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+/* Gradient picker */
+.gradient-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.gradient-swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2.5px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+  flex-shrink: 0;
+}
+
+.gradient-swatch:hover {
+  transform: scale(1.15);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+.gradient-swatch.active {
+  border-color: #0b4da2;
+  box-shadow: 0 0 0 3px rgba(11,77,162,0.25), 0 3px 12px rgba(0,0,0,0.2);
+  transform: scale(1.12);
+}
+
+/* Checkbox label */
+.sp-check-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.875rem;
+  color: #334155;
+  cursor: pointer;
+  user-select: none;
+}
+
+.sp-check-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #0b4da2;
+  cursor: pointer;
+}
+
+/* ── Responsive tabs ───────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .adm-tabs      { padding: 0 16px; gap: 0; }
+  .adm-tab-btn   { padding: 12px 14px 10px; font-size: 0.82rem; }
+  .adm-modal--wide { max-width: 100%; }
+}
+
 /* ── Header actions ─────────────────────────────────────────── */
 .adm-header-actions {
   display: flex;
