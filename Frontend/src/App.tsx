@@ -35,7 +35,7 @@ function Layout() {
     <>
       {!hideBar && <Barra />}
 
-      <Suspense fallback={null}>
+      <Suspense fallback={<div style={{ minHeight: "80vh" }} />}>
         <Routes>
 
           <Route path="/" element={<Home />} />

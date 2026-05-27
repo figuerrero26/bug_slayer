@@ -572,9 +572,47 @@ a {
   margin: 0;
 }
 
+.hero-name {
+  display: inline;
+}
+
+.hero-cursor {
+  display: inline-block;
+  width: 3px;
+  height: 0.78em;
+  background: #FFD100;
+  margin-left: 5px;
+  vertical-align: middle;
+  border-radius: 2px;
+  animation: cursorBlink 0.6s step-end infinite;
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
 .hero-year {
+  display: inline-block;
   font-weight: 300;
   color: rgba(255, 255, 255, 0.85);
+  margin-left: 12px;
+  animation: yearSlide 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes yearSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-52px);
+    letter-spacing: 18px;
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+    letter-spacing: normal;
+    filter: blur(0);
+  }
 }
 
 /* Tagline */
@@ -737,40 +775,210 @@ a {
    SECCIÓN DE TARJETAS
    ═══════════════════════════════════════════════ */
 .cards-section {
-    padding: 80px 20px 100px;
-    background: #f4f6fb;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 48px;
+  padding: 90px 20px 110px;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 0%,   rgba(0,80,180,0.35) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 85% 100%,  rgba(0,48,135,0.40) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 60% 50%,   rgba(255,209,0,0.04) 0%, transparent 60%),
+    linear-gradient(160deg, #010e2e 0%, #001e5c 40%, #00277a 65%, #010e2e 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 52px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cards-deco-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.snake-path-1,
+.snake-path-2,
+.snake-path-3 {
+  will-change: stroke-dashoffset;
+}
+
+.cards-section > *:not(.cards-deco-lines) {
+  position: relative;
+  z-index: 1;
 }
 
 .cards-header {
-    text-align: center;
+  text-align: center;
 }
 
 .cards-title {
-    font-family: 'Inter', sans-serif;
-    font-size: clamp(22px, 3vw, 30px);
-    font-weight: 700;
-    color: #0a1628;
-    margin: 0 0 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 10px;
 }
 
 .cards-subtitle {
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    color: #6b7a99;
-    margin: 0;
-    font-weight: 400;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: rgba(255,255,255,0.65);
+  margin: 0;
+  font-weight: 400;
+  max-width: 540px;
 }
 
-/* CONTENEDOR GRID */
+/* ── PRICING GRID ── */
+.pricing-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  max-width: 1180px;
+  width: 100%;
+}
+
+.pricing-card {
+  position: relative;
+  width: 262px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 16px;
+  padding: 28px 24px 26px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  backdrop-filter: blur(6px);
+  transition: transform 0s, box-shadow 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+}
+
+.pricing-card:hover,
+.pricing-grid .pricing-card:hover {
+  transform: translateY(-10px);
+  background: rgba(255,255,255,0.16);
+  box-shadow: 0 24px 48px rgba(0,0,20,0.4);
+  border-color: rgba(255,209,0,0.5);
+}
+
+.pricing-card--featured {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.28);
+}
+
+.pricing-card--add-on {
+  background: rgba(0,0,0,0.15);
+  border-color: rgba(255,255,255,0.10);
+}
+
+/* Categoría / etiqueta superior */
+.pricing-category {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #FFD100;
+  margin: 0 0 10px;
+}
+
+.pricing-category--add-on {
+  color: rgba(255,255,255,0.45);
+}
+
+.pricing-title {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.45;
+  margin: 0 0 20px;
+}
+
+.pricing-price {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  margin-bottom: 20px;
+}
+
+.pricing-currency {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1;
+  align-self: flex-start;
+  margin-top: 6px;
+}
+
+.pricing-amount {
+  font-size: 42px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.pricing-unit {
+  font-size: 11px;
+  color: rgba(255,255,255,0.40);
+  font-weight: 500;
+  margin-left: 4px;
+  align-self: flex-end;
+  margin-bottom: 4px;
+}
+
+.pricing-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.12);
+  margin-bottom: 18px;
+}
+
+.pricing-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.pricing-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: rgba(255,255,255,0.80);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+/* Barrido de luz al hacer hover */
+.pricing-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.05) 40%,
+    transparent
+  );
+  z-index: 20;
+  pointer-events: none;
+  transition: left 0.6s ease;
+}
+
+.pricing-card:hover .pricing-shine {
+  left: 100%;
+}
+
+/* CONTENEDOR GRID (legado — mantenido para otras páginas) */
 .grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 30px; /* Espacio entre tarjetas */
+    gap: 30px;
     max-width: 1300px;
     width: 100%;
 }
@@ -1332,7 +1540,6 @@ a{
   background: #ffffff;
   padding: 80px 20px 90px;
   text-align: center;
-  border-bottom: 1px solid rgba(0, 85, 204, 0.07);
 }
 
 .countdown-eyebrow {
@@ -1685,4 +1892,138 @@ a{
   .highlight-num   { font-size: 16px; }
   .highlight-label { font-size: 6px; }
   .highlight-sep   { height: 18px; }
+}
+
+/* ═══════════════════════════════════════
+   SECCIÓN PATROCINADORES
+═══════════════════════════════════════ */
+.sponsors-section {
+  position: relative;
+  padding: 110px 24px;
+  background-size: cover;
+  background-position: center 20%;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* Gradiente: izquierda y derecha oscuras, centro más transparente para ver la foto */
+.sponsors-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(3, 18, 78, 0.72) 0%,
+    rgba(0, 30, 100, 0.60) 50%,
+    rgba(3, 18, 78, 0.82) 100%
+  );
+}
+
+.sponsors-content {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.sponsors-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #FFD100;
+  margin: 0;
+}
+
+.sponsors-heading {
+  font-size: clamp(20px, 3vw, 34px);
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+  line-height: 1.25;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.5);
+}
+
+.sponsors-divider {
+  width: 52px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #FFD100 0%, #1a5fd4 100%);
+}
+
+.sponsors-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 28px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* Card blanco para que el logo IEEE se vea con sus colores originales */
+.sponsor-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 32px 52px;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
+  text-decoration: none;
+  border: 2px solid transparent;
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+.sponsor-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45), 0 0 0 2px #FFD100;
+  border-color: #FFD100;
+}
+
+/* Sin ningún filtro: el logo se muestra con sus colores reales */
+.sponsor-logo {
+  height: 56px;
+  width: auto;
+  object-fit: contain;
+}
+
+.sponsor-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #003087;
+}
+
+.sponsors-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 32px;
+  border: 1.5px solid rgba(255, 255, 255, 0.40);
+  border-radius: 40px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-decoration: none;
+  margin-top: 4px;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
+}
+
+.sponsors-cta:hover {
+  background: rgba(255, 209, 0, 0.15);
+  border-color: #FFD100;
+  color: #FFD100;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+  .sponsors-section { padding: 80px 20px; }
+  .sponsor-card     { padding: 26px 36px; }
+  .sponsor-logo     { height: 44px; }
 }

@@ -1,13 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useLang } from "../../context/LanguageContext";
 import VideoConiiti2 from "../../assets/videoconiiti.mp4";
+import ieeeGroup    from "../../assets/ieee_group.jpeg";
+import ieeeLogo     from "../../assets/logo_ieee_colombia.png";
 import "../../css/Home.css";
+
+function CheckIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" style={{ flexShrink: 0, marginTop: 1 }}>
+      <circle cx="9" cy="9" r="8" fill="rgba(255,209,0,0.15)" />
+      <path d="M5.5 9l2.5 2.5 4.5-4.5" stroke="#FFD100" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
 
 function Home() {
   const { t } = useLang();
 
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [typedText, setTypedText]   = useState("");
+  const [showYear,  setShowYear]    = useState(false);
+
+  const snakeRef1 = useRef<SVGPathElement>(null);
+  const snakeRef2 = useRef<SVGPathElement>(null);
+  const snakeRef3 = useRef<SVGPathElement>(null);
 
   useEffect(() => {
     /* ── Slider del menú ── */
@@ -62,6 +79,47 @@ function Home() {
     };
   }, []);
 
+  useEffect(() => {
+    const configs = [
+      { ref: snakeRef1, seg: 640, dur: 9,  delay: 0 },
+      { ref: snakeRef2, seg: 520, dur: 13, delay: 3 },
+      { ref: snakeRef3, seg: 400, dur: 17, delay: 7 },
+    ];
+    configs.forEach(({ ref, seg, dur, delay }, i) => {
+      const el = ref.current;
+      if (!el) return;
+      const L  = Math.ceil(el.getTotalLength());
+      const from = L + 20;
+      const to   = -(L + seg + 20);
+      const name = `snakeTrav_${i}`;
+      const existing = document.getElementById(`sk-kf-${i}`);
+      if (existing) existing.remove();
+      const s = document.createElement("style");
+      s.id = `sk-kf-${i}`;
+      s.textContent = `@keyframes ${name}{from{stroke-dashoffset:${from}}to{stroke-dashoffset:${to}}}`;
+      document.head.appendChild(s);
+      el.style.strokeDasharray = `${seg} ${L * 2 + seg}`;
+      el.style.animation = `${name} ${dur}s linear ${delay}s infinite`;
+    });
+  }, []);
+
+  useEffect(() => {
+    const word = "CONIITI";
+    let i = 0;
+    let interval: ReturnType<typeof setInterval>;
+    const delay = setTimeout(() => {
+      interval = setInterval(() => {
+        i++;
+        setTypedText(word.slice(0, i));
+        if (i === word.length) {
+          clearInterval(interval);
+          setTimeout(() => setShowYear(true), 420);
+        }
+      }, 105);
+    }, 550);
+    return () => { clearTimeout(delay); clearInterval(interval); };
+  }, []);
+
   const pad = (n: number) => String(n).padStart(2, "0");
 
   return (
@@ -76,7 +134,13 @@ function Home() {
         <div className="hero-content">
           <span className="hero-edition">{t.hero_edition}</span>
 
-          <h1 className="hero-title">CONIITI <span className="hero-year">2026</span></h1>
+          <h1 className="hero-title">
+            <span className="hero-name">
+              {typedText}
+              {!showYear && <span className="hero-cursor" aria-hidden="true" />}
+            </span>
+            {showYear && <span className="hero-year">2026</span>}
+          </h1>
 
           <p className="hero-tagline">{t.hero_tagline}</p>
 
@@ -204,33 +268,119 @@ function Home() {
         </div>
       </section>
 
-      {/* ── TARJETAS ── */}
+      {/* ── TARIFAS ── */}
       <section className="cards-section">
+        <svg className="cards-deco-lines" viewBox="0 0 1440 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path ref={snakeRef1} className="snake-path-1" d="M 0,560 C 160,590 320,360 480,440 C 640,520 800,220 960,290 C 1120,360 1290,90 1440,50" fill="none" stroke="rgba(255,255,255,0.20)" strokeWidth="2.5"/>
+          <path ref={snakeRef2} className="snake-path-2" d="M 0,360 C 160,390 320,160 480,240 C 640,320 800,20 960,90 C 1120,160 1290,-110 1440,-150" fill="none" stroke="rgba(255,255,255,0.13)" strokeWidth="2"/>
+          <path ref={snakeRef3} className="snake-path-3" d="M 0,160 C 160,190 320,-40 480,40 C 640,120 800,-180 960,-110 C 1120,-40 1290,-310 1440,-350" fill="none" stroke="rgba(255,255,255,0.09)" strokeWidth="2"/>
+        </svg>
         <div className="cards-header reveal">
-          <h2 className="cards-title">{t.home_discover}</h2>
-          <p className="cards-subtitle">{t.home_discover_sub}</p>
+          <h2 className="cards-title">Tarifas de Inscripción</h2>
+          <p className="cards-subtitle">Selecciona el plan que mejor se adapte a tu participación en CONIITI 2026</p>
         </div>
-        <div className="grid">
-          <div className="card reveal delay-1">
-            <h4>{t.card1_title}</h4>
-            <p>{t.card1_p}</p>
-            <div className="shine" />
+        <div className="pricing-grid">
+
+          {/* Plan 1 */}
+          <div className="pricing-card reveal delay-1">
+            <div className="pricing-shine" />
+            <p className="pricing-category">Miembro</p>
+            <h4 className="pricing-title">Miembros UCatólica e IEEE</h4>
+            <div className="pricing-price">
+              <span className="pricing-currency">$</span>
+              <span className="pricing-amount">940.000</span>
+              <span className="pricing-unit">COP</span>
+            </div>
+            <div className="pricing-divider" />
+            <ul className="pricing-features">
+              <li><CheckIcon />Inscripción como Ponente</li>
+              <li><CheckIcon />Constancia para todos los autores</li>
+              <li><CheckIcon />Publicación de memorias</li>
+            </ul>
           </div>
-          <div className="card reveal delay-2">
-            <h4>{t.card2_title}</h4>
-            <p>{t.card2_p}</p>
-            <div className="shine" />
+
+          {/* Plan 2 */}
+          <div className="pricing-card pricing-card--featured reveal delay-2">
+            <div className="pricing-shine" />
+            <p className="pricing-category">No miembro</p>
+            <h4 className="pricing-title">Sí no eres miembro UCatólica ó IEEE</h4>
+            <div className="pricing-price">
+              <span className="pricing-currency">$</span>
+              <span className="pricing-amount">980.000</span>
+              <span className="pricing-unit">COP</span>
+            </div>
+            <div className="pricing-divider" />
+            <ul className="pricing-features">
+              <li><CheckIcon />Inscripción como Ponente</li>
+              <li><CheckIcon />Constancia para todos los autores</li>
+              <li><CheckIcon />Publicación de memorias</li>
+            </ul>
           </div>
-          <div className="card reveal delay-3">
-            <h4>{t.card3_title}</h4>
-            <p>{t.card3_p}</p>
-            <div className="shine" />
+
+          {/* Plan 3 */}
+          <div className="pricing-card pricing-card--add-on reveal delay-3">
+            <div className="pricing-shine" />
+            <p className="pricing-category pricing-category--add-on">Asistente · Opcional</p>
+            <h4 className="pricing-title">Constancia por participación en Conferencias</h4>
+            <div className="pricing-price">
+              <span className="pricing-currency">$</span>
+              <span className="pricing-amount">120.000</span>
+              <span className="pricing-unit">COP</span>
+            </div>
+            <div className="pricing-divider" />
+            <ul className="pricing-features">
+              <li><CheckIcon />Certificado de Asistencia</li>
+            </ul>
           </div>
-          <div className="card reveal delay-4">
-            <h4>{t.card4_title}</h4>
-            <p>{t.card4_p}</p>
-            <div className="shine" />
+
+          {/* Plan 4 */}
+          <div className="pricing-card pricing-card--add-on reveal delay-4">
+            <div className="pricing-shine" />
+            <p className="pricing-category pricing-category--add-on">Asistente · Opcional</p>
+            <h4 className="pricing-title">Constancia por participación en Workshops</h4>
+            <div className="pricing-price">
+              <span className="pricing-currency">$</span>
+              <span className="pricing-amount">90.000</span>
+              <span className="pricing-unit">COP</span>
+            </div>
+            <div className="pricing-divider" />
+            <ul className="pricing-features">
+              <li><CheckIcon />Certificado de Asistencia</li>
+            </ul>
           </div>
+
+        </div>
+      </section>
+
+      {/* ── PATROCINADORES ── */}
+      <section className="sponsors-section" style={{ backgroundImage: `url(${ieeeGroup})` }}>
+        <div className="sponsors-overlay" />
+        <div className="sponsors-content reveal">
+          <p className="sponsors-eyebrow">Alianza estratégica</p>
+          <h2 className="sponsors-heading">Con el apoyo y copatrocinio de</h2>
+          <div className="sponsors-divider" aria-hidden="true" />
+          <div className="sponsors-grid">
+            <a
+              href="https://ieee.org.co/seccion/acerca-de-nosotros/"
+              target="_blank"
+              rel="noreferrer"
+              className="sponsor-card"
+            >
+              <img src={ieeeLogo} alt="IEEE Colombia Section" className="sponsor-logo" />
+              <span className="sponsor-label">IEEE Colombia Section</span>
+            </a>
+          </div>
+          <a
+            href="https://ieee.org.co/seccion/acerca-de-nosotros/"
+            target="_blank"
+            rel="noreferrer"
+            className="sponsors-cta"
+          >
+            Conoce más sobre IEEE Colombia
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </a>
         </div>
       </section>
     </>
