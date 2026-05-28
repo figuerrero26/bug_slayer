@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useLang } from "../../context/LanguageContext";
-import VideoConiiti2 from "../../assets/videoconiiti.mp4";
+import { getSession } from "../../hooks/useSession";
+import RogelioWidget from "../../dashboard/rogelio/RogelioWidget";
+import VideoConiiti2 from "../../assets/videofondoconiiti.mp4";
 import ieeeGroup    from "../../assets/ieee_group.jpeg";
 import ieeeLogo     from "../../assets/logo_ieee_colombia.png";
 import "../../css/Home.css";
@@ -17,6 +19,8 @@ function CheckIcon() {
 
 function Home() {
   const { t } = useLang();
+  const session  = getSession();
+  const userId   = session?.user_id ?? null;
 
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [typedText, setTypedText]   = useState("");
@@ -383,6 +387,8 @@ function Home() {
           </a>
         </div>
       </section>
+
+      <RogelioWidget userId={userId} />
     </>
   );
 }

@@ -33,6 +33,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/notifications/, ''),
       },
+      '/api/assistant': {
+        target: process.env.ASSISTANT_SERVICE_URL ?? 'http://localhost:8006',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/assistant/, ''),
+      },
     },
   },
   optimizeDeps: {

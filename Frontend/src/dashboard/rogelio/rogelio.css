@@ -1,0 +1,323 @@
+/* ════════════════════════════════════════════════════════════
+   Rogelio — Asistente flotante CONIITI 2026
+   ════════════════════════════════════════════════════════════ */
+
+/* ── Burbuja flotante (FAB) ──────────────────────────────── */
+
+.rogelio-fab {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: var(--navy);
+  border: 2.5px solid var(--gold);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(26, 37, 69, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  overflow: hidden;
+}
+
+.rogelio-fab:hover {
+  box-shadow: 0 8px 32px rgba(26, 37, 69, 0.45);
+  border-color: var(--gold);
+}
+
+.rogelio-fab--open {
+  background: var(--navy-light);
+}
+
+.rogelio-fab-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rogelio-fab-letter {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--gold);
+  line-height: 1;
+}
+
+/* En móvil: sube por encima del nav inferior */
+@media (max-width: 768px) {
+  .rogelio-fab {
+    bottom: 80px;
+    right: 16px;
+  }
+}
+
+/* ── Panel del chat ──────────────────────────────────────── */
+
+.rogelio-panel {
+  position: fixed;
+  bottom: 100px;
+  right: 28px;
+  width: 360px;
+  height: 520px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  z-index: 1099;
+  overflow: hidden;
+  font-family: 'DM Sans', sans-serif;
+}
+
+@media (max-width: 768px) {
+  .rogelio-panel {
+    bottom: 150px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    height: 420px;
+  }
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+
+.rogelio-header {
+  background: var(--navy);
+  color: #fff;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.rogelio-avatar-sm {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--navy);
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rogelio-header-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.rogelio-name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+.rogelio-status {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.2;
+}
+
+.rogelio-header-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.rogelio-icon-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+
+.rogelio-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+/* ── Área de mensajes ────────────────────────────────────── */
+
+.rogelio-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scroll-behavior: smooth;
+}
+
+.rogelio-messages::-webkit-scrollbar {
+  width: 4px;
+}
+.rogelio-messages::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+/* ── Burbuja de mensaje ──────────────────────────────────── */
+
+.rogelio-msg {
+  display: flex;
+  align-items: flex-end;
+  gap: 7px;
+  max-width: 100%;
+}
+
+.rogelio-msg--user {
+  flex-direction: row-reverse;
+}
+
+.rogelio-msg-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--navy);
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rogelio-msg-bubble {
+  max-width: 76%;
+  padding: 9px 13px;
+  border-radius: 16px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.rogelio-msg--assistant .rogelio-msg-bubble {
+  background: var(--surface2);
+  color: var(--text);
+  border-bottom-left-radius: 4px;
+}
+
+.rogelio-msg--user .rogelio-msg-bubble {
+  background: var(--navy);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+  margin-left: auto;
+}
+
+/* ── Indicador de escritura ──────────────────────────────── */
+
+.rogelio-typing {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 12px 16px;
+}
+
+.rogelio-typing span {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--muted);
+  animation: rogelio-bounce 1.2s infinite;
+}
+
+.rogelio-typing span:nth-child(2) { animation-delay: 0.15s; }
+.rogelio-typing span:nth-child(3) { animation-delay: 0.30s; }
+
+@keyframes rogelio-bounce {
+  0%, 80%, 100% { transform: translateY(0);    opacity: 0.45; }
+  40%           { transform: translateY(-5px); opacity: 1;    }
+}
+
+/* ── Área de input ───────────────────────────────────────── */
+
+.rogelio-input-area {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  flex-shrink: 0;
+}
+
+.rogelio-input {
+  flex: 1;
+  resize: none;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 9px 13px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  color: var(--text);
+  background: var(--bg);
+  outline: none;
+  line-height: 1.45;
+  max-height: 96px;
+  overflow-y: auto;
+  transition: border-color 0.15s;
+}
+
+.rogelio-input:focus {
+  border-color: var(--blue);
+}
+
+.rogelio-input::placeholder {
+  color: var(--muted);
+}
+
+.rogelio-send-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--navy);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s, opacity 0.15s, transform 0.1s;
+}
+
+.rogelio-send-btn:hover:not(:disabled) {
+  background: var(--blue);
+  transform: scale(1.06);
+}
+
+.rogelio-send-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Dark mode ───────────────────────────────────────────── */
+
+[data-theme="dark"] .rogelio-panel {
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="dark"] .rogelio-msg--user .rogelio-msg-bubble {
+  background: var(--navy-light);
+}
