@@ -114,6 +114,16 @@ function Home() {
 
   useEffect(() => {
     const word = "CONIITI";
+    const isMobile = window.innerWidth < 768;
+
+    if (isMobile) {
+      // En móvil: muestra el título completo de inmediato, sin animación
+      setTypedText(word);
+      setShowYear(true);
+      return;
+    }
+
+    // En desktop: efecto typewriter normal
     let i = 0;
     let interval: ReturnType<typeof setInterval>;
     const delay = setTimeout(() => {
