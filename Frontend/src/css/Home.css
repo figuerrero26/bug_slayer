@@ -509,13 +509,16 @@ a {
   overflow: hidden;
   margin-top: -1px;
   padding-top: 1px;
+  background: #030d2e;
 }
 
 .hero-video {
-  display: block;
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 40%;
 }
 
 .hero-overlay {
@@ -526,15 +529,16 @@ a {
 
 /* ══ HERO — limpio, centrado, estilo Apple/TED ════════════════ */
 
-/* Overlay: oscuro en la parte baja (texto), abierto arriba (video) */
+/* Overlay: oscuro abajo (texto), tapa completamente el borde superior */
 .hero-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to top,
     rgba(3, 18, 78, 0.92) 0%,
-    rgba(3, 18, 78, 0.55) 40%,
-    rgba(0, 10, 50, 0.20) 100%
+    rgba(3, 18, 78, 0.55) 38%,
+    rgba(3, 18, 78, 0.20) 70%,
+    rgba(3, 18, 78, 0.88) 100%
   );
 }
 
@@ -741,6 +745,7 @@ a {
   font-weight: 800;
   color: #ffffff;
   line-height: 1;
+  white-space: nowrap;
 }
 
 .highlight-label {
@@ -1822,23 +1827,67 @@ a{
   }
 
   /* ── Hero ── */
-  .hero          { height: 520px; }
-  .hero-content  { padding: 0 18px 80px; gap: 12px; }
-  .hero-edition  { font-size: 10px; letter-spacing: 2px; }
-  .hero-title    { font-size: 32px; letter-spacing: -0.5px; white-space: nowrap; }
-  .hero-name     { display: inline; }
-  .hero-year     { margin-left: 10px; }
-  .hero-tagline  { font-size: 13px; max-width: 100%; }
-  .hero-cta      { font-size: 13px; padding: 11px 24px; }
+  .hero         { height: 540px; }
+  .hero-video   { transform: scale(1.30); object-position: center 60%; }
 
-  .hero-bottom-bar {
-    gap: 8px;
-    flex-wrap: wrap;
+  .hero-content {
+    padding: 0 22px 52px;
+    gap: 16px;
     justify-content: center;
   }
-  .hero-info-item { font-size: 11px; gap: 4px; }
-  .hero-bar-dot   { display: none; }
-  .hero-italy-inline { gap: 4px; }
+
+  .hero-edition {
+    font-size: 11px;
+    letter-spacing: 3px;
+  }
+
+  .hero-title {
+    font-size: 38px;
+    letter-spacing: -0.5px;
+    white-space: nowrap;
+    margin: 0;
+    line-height: 1.05;
+  }
+
+  .hero-name { display: inline; white-space: nowrap; }
+  .hero-year { margin-left: 10px; white-space: nowrap; }
+
+  .hero-tagline {
+    font-size: 15px;
+    line-height: 1.6;
+    max-width: 300px;
+    margin: 0;
+  }
+
+  .hero-cta {
+    font-size: 15px;
+    padding: 14px 32px;
+    margin-top: 4px;
+  }
+
+  .hero-bottom-bar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 4px 10px;
+    margin-top: 4px;
+  }
+
+  .hero-bar-dot   { display: inline-block; }
+
+  .hero-info-item { font-size: 13px; gap: 5px; white-space: nowrap; }
+
+  .hero-italy-inline {
+    flex-basis: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.70);
+  }
 
   /* Serpientes decorativas — ocultar en móvil para evitar lag */
   .cards-deco-lines { display: none; }
@@ -1867,8 +1916,8 @@ a{
     scrollbar-width: none;
   }
   .highlights-strip::-webkit-scrollbar { display: none; }
-  .highlight-item   { padding: 0 10px; min-width: 0; }
-  .highlight-num    { font-size: 18px; }
+  .highlight-item   { padding: 0 10px; min-width: max-content; flex-shrink: 0; }
+  .highlight-num    { font-size: 18px; white-space: nowrap; min-width: max-content; }
   .highlight-label  { font-size: 7px; letter-spacing: 1px; white-space: nowrap; }
   .highlight-sep    { height: 22px; flex-shrink: 0; }
   .highlight-flag-it { width: 28px; height: 20px; }
@@ -1911,8 +1960,38 @@ a{
 
   .hamburger { padding: 6px; }
 
-  .hero          { height: 480px; }
-  .hero-title    { font-size: 24px; }
+  .hero         { height: 500px; }
+  .hero-video   { transform: scale(1.35); object-position: center 60%; }
+
+  .hero-content {
+    padding: 0 18px 44px;
+    gap: 13px;
+    justify-content: center;
+  }
+
+  .hero-edition { font-size: 10px; letter-spacing: 2.5px; }
+
+  .hero-title   { font-size: 32px; white-space: nowrap; line-height: 1.05; }
+
+  .hero-tagline { font-size: 14px; max-width: 280px; line-height: 1.55; }
+
+  .hero-cta     { font-size: 14px; padding: 13px 28px; }
+
+  .hero-bottom-bar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3px 8px;
+  }
+
+  .hero-info-item   { font-size: 12px; white-space: nowrap; }
+
+  .hero-italy-inline {
+    flex-basis: 100%;
+    justify-content: center;
+    gap: 5px;
+    font-size: 12px;
+  }
   .hero-tagline  { font-size: 12px; }
   .hero-cta      { font-size: 12px; padding: 10px 20px; }
   .pricing-card  { width: 92vw; }
@@ -1923,10 +2002,10 @@ a{
   .countdown-sep        { font-size: 16px; padding-top: 20px; }
   .countdown-unit-label { font-size: 7px; letter-spacing: 1px; }
 
-  .highlight-item  { padding: 0 7px; }
-  .highlight-num   { font-size: 16px; }
-  .highlight-label { font-size: 6px; }
-  .highlight-sep   { height: 18px; }
+  .highlight-item  { padding: 0 7px; min-width: max-content; flex-shrink: 0; }
+  .highlight-num   { font-size: 16px; white-space: nowrap; }
+  .highlight-label { font-size: 6px; white-space: nowrap; }
+  .highlight-sep   { height: 18px; flex-shrink: 0; }
 }
 
 /* ═══════════════════════════════════════

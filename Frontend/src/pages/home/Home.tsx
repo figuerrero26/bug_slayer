@@ -62,6 +62,11 @@ function Home() {
     );
     document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
 
+    /* ── Highlights strip: anima al cargar sin esperar scroll ── */
+    const revealTimer = setTimeout(() => {
+      document.querySelectorAll(".highlight-item.reveal").forEach(el => el.classList.add("active"));
+    }, 400);
+
     /* ── Cuenta regresiva ── */
     const target = new Date("SEP 23, 2026 00:00:00").getTime();
     const tick = () => {
@@ -78,7 +83,7 @@ function Home() {
 
     return () => {
       window.removeEventListener("resize", onResize);
-      observer.disconnect();
+      clearTimeout(revealTimer);
       clearInterval(timer);
     };
   }, []);
