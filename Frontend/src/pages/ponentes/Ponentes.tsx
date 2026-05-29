@@ -8,6 +8,7 @@ import {
   AREAS_LIST,
   PROFESSIONS_LIST,
 } from "../../interfaces/ponente";
+import ponentesHero from "../../assets/ponententesimagen.png";
 import "../../css/Ponentes.css";
 
 const AREAS_FILTER  = ["Todos", ...AREAS_LIST];
@@ -106,7 +107,10 @@ export default function Ponentes() {
     <div className="ponentes-page">
 
       {/* ── Hero ─────────────────────────────────────────────────── */}
-      <section className="ponentes-hero">
+      <section
+        className="ponentes-hero"
+        style={{ ["--hero-img" as string]: `url(${ponentesHero})` }}
+      >
         <div className="ponentes-hero-ribbons" aria-hidden="true">
           <svg viewBox="0 0 1440 220" preserveAspectRatio="none">
             <path className="p-ribbon p-ribbon-1" d="M -60 180 C 300 120, 700 200, 1100 150 C 1300 120, 1420 180, 1520 155" />
@@ -115,7 +119,7 @@ export default function Ponentes() {
           </svg>
         </div>
         <div className="ponentes-hero-content">
-          <span className="ponentes-hero-badge">{t.ponentes_badge ?? "CONIITI 2026 · País invitado 🇮🇹"}</span>
+          <span className="ponentes-hero-badge">{t.ponentes_badge ?? "CONIITI 2026 · País invitado Italia"}</span>
           <h1>{t.ponentes_title ?? "Conferencistas"}</h1>
           <p>{t.ponentes_subtitle ?? "95 expertos internacionales · más de 20 países · ingeniería del futuro"}</p>
         </div>
@@ -162,8 +166,11 @@ export default function Ponentes() {
                 tabIndex={0}
                 onKeyDown={e => e.key === "Enter" && setSelected(sp)}
               >
-                <div className="keynote-avatar" style={{ background: sp.gradient }}>
-                  <span>{sp.initials}</span>
+                <div className="keynote-avatar">
+                  <svg viewBox="0 0 32 32" fill="none" width="34" height="34" aria-hidden="true">
+                    <circle cx="16" cy="12" r="6" fill="currentColor" opacity="0.65"/>
+                    <path d="M3 30c0-7.18 5.82-13 13-13s13 5.82 13 13" fill="currentColor" opacity="0.65"/>
+                  </svg>
                 </div>
                 <div className="keynote-info">
                   <div className="keynote-badges">
@@ -205,7 +212,11 @@ export default function Ponentes() {
               aria-label="Buscar ponentes"
             />
             {search && (
-              <button className="filter-search-clear" onClick={() => setSearch("")} aria-label="Limpiar búsqueda">✕</button>
+              <button className="filter-search-clear" onClick={() => setSearch("")} aria-label="Limpiar búsqueda">
+                <svg viewBox="0 0 14 14" fill="none" width="12" height="12" aria-hidden="true">
+                  <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+                </svg>
+              </button>
             )}
           </div>
 
@@ -313,36 +324,43 @@ export default function Ponentes() {
               onKeyDown={e => e.key === "Enter" && setSelected(sp)}
               aria-label={`Ver perfil de ${sp.name}`}
             >
-              <div className="speaker-card-glow" style={{ background: sp.gradient }} />
-              <div className="speaker-avatar" style={{ background: sp.gradient }}>
-                <span>{sp.initials}</span>
-              </div>
-              <div className="speaker-flag" aria-hidden="true">{sp.country}</div>
-              <h3 className="speaker-name">{sp.name}</h3>
-              <p className="speaker-institution">{sp.institution}</p>
-              <p className="speaker-country-name">{sp.countryName}</p>
-              <div className="speaker-tags">
-                <span className="area-tag">{sp.area}</span>
-                <span className={`profession-tag profession-tag--${sp.profession.toLowerCase()}`}>{sp.profession}</span>
-              </div>
-              <p className="speaker-topic">"{sp.topic}"</p>
-
-              <div className="speaker-exp-row">
-                <div className="speaker-exp-bar">
-                  <div
-                    className="exp-bar-fill"
-                    style={{ width: `${Math.min(100, Math.round((sp.experience / 35) * 100))}%` }}
-                  />
+              <div className="speaker-card-header">
+                <svg className="speaker-header-curves" viewBox="0 0 200 70" preserveAspectRatio="none" fill="none" aria-hidden="true">
+                  <path className="hc hc-1" d="M-10 52 C45 28,95 60,155 40 C190 26,210 46,240 40"/>
+                  <path className="hc hc-2" d="M-10 22 C40 6,90 34,150 18 C188 6,212 24,240 16"/>
+                </svg>
+                <div className="speaker-avatar">
+                  <svg viewBox="0 0 32 32" fill="none" width="28" height="28" aria-hidden="true">
+                    <circle cx="16" cy="12" r="6" fill="currentColor" opacity="0.55"/>
+                    <path d="M3 30c0-7.18 5.82-13 13-13s13 5.82 13 13" fill="currentColor" opacity="0.55"/>
+                  </svg>
                 </div>
-                <div className="speaker-exp-footer">
-                  <span className={`exp-badge exp-badge--${getExpClass(sp.experience)}`}>
-                    {getExpLabel(sp.experience)}
-                  </span>
-                  <span className="exp-years">{sp.experience} años</span>
-                </div>
+                <span className="speaker-flag" aria-hidden="true">{sp.country}</span>
               </div>
 
-              <div className="speaker-card-hint" aria-hidden="true">Ver perfil completo</div>
+              <div className="speaker-card-body">
+                <h3 className="speaker-name">{sp.name}</h3>
+                <p className="speaker-institution">{sp.institution} · {sp.countryName}</p>
+                <div className="speaker-tags">
+                  <span className="area-tag">{sp.area}</span>
+                  <span className="profession-tag">{sp.profession}</span>
+                </div>
+                <div className="speaker-exp-row">
+                  <div className="speaker-exp-bar">
+                    <div
+                      className="exp-bar-fill"
+                      style={{ width: `${Math.min(100, Math.round((sp.experience / 35) * 100))}%` }}
+                    />
+                  </div>
+                  <div className="speaker-exp-footer">
+                    <span className={`exp-badge exp-badge--${getExpClass(sp.experience)}`}>
+                      {getExpLabel(sp.experience)}
+                    </span>
+                    <span className="exp-years">{sp.experience} años</span>
+                  </div>
+                </div>
+                <div className="speaker-card-hint" aria-hidden="true">Ver perfil →</div>
+              </div>
             </article>
           ))}
         </div>
@@ -369,18 +387,25 @@ export default function Ponentes() {
           aria-label={`Perfil de ${selected.name}`}
         >
           <div className="speaker-modal" onClick={e => e.stopPropagation()}>
-            <button className="speaker-modal-close" onClick={() => setSelected(null)} aria-label="Cerrar">✕</button>
+            <button className="speaker-modal-close" onClick={() => setSelected(null)} aria-label="Cerrar">
+              <svg viewBox="0 0 14 14" fill="none" width="14" height="14" aria-hidden="true">
+                <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+              </svg>
+            </button>
 
             <div className="speaker-modal-header" style={{ background: selected.gradient }}>
               <div className="speaker-modal-avatar">
-                <span>{selected.initials}</span>
+                <svg viewBox="0 0 32 32" fill="none" width="38" height="38" aria-hidden="true">
+                  <circle cx="16" cy="12" r="6" fill="currentColor" opacity="0.8"/>
+                  <path d="M3 30c0-7.18 5.82-13 13-13s13 5.82 13 13" fill="currentColor" opacity="0.8"/>
+                </svg>
               </div>
               <span className="speaker-modal-flag" aria-hidden="true">{selected.country}</span>
             </div>
 
             <div className="speaker-modal-body">
               {selected.keynote && (
-                <span className="keynote-badge-pill">🎤 Keynote Speaker</span>
+                <span className="keynote-badge-pill">Keynote Speaker</span>
               )}
               <h2 className="speaker-modal-name">{selected.name}</h2>
               <p className="speaker-modal-institution">{selected.institution} · {selected.countryName}</p>

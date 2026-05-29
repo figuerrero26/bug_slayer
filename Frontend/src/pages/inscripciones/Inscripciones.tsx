@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { SEARCH_URL } from "../../services/api";
 import { useLang } from "../../context/LanguageContext";
+import conferenciasBg from "../../assets/conferencias.jpg";
 import "../../css/Inscripciones.css";
 
 // ── Tipos ─────────────────────────────────────────────────────────────────────
@@ -206,17 +207,23 @@ export default function Inscripciones() {
       {toast && <div className="insc-toast">{toast}</div>}
 
       {/* Hero */}
-      <section className="insc-hero">
+      <section className="insc-hero" style={{ ["--conf-img" as string]: `url(${conferenciasBg})` }}>
         <h1 className="insc-hero-title">{t.insc_title}</h1>
         <p className="insc-hero-sub">{t.insc_sub}</p>
 
         <div className="insc-search-bar">
-          <span className="insc-search-icon">🔍</span>
+          <span className="insc-search-icon">
+            <svg viewBox="0 0 20 20" fill="none" width="16" height="16" aria-hidden="true">
+              <circle cx="9" cy="9" r="6" stroke="#94a3b8" strokeWidth="1.8"/>
+              <path d="M14.5 14.5L18 18" stroke="#94a3b8" strokeWidth="1.8" strokeLinecap="round"/>
+            </svg>
+          </span>
           <input
             className="insc-search-input"
             placeholder={t.insc_search_ph}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            aria-label="Buscar conferencias"
           />
         </div>
       </section>
@@ -273,16 +280,22 @@ export default function Inscripciones() {
               return (
                 <article key={conf.id} className={`insc-card ${isMine ? "card-registered" : ""}`}>
 
-                  {/* Badge categoría */}
-                  {conf.category && (
-                    <span className="insc-badge-cat">{conf.category}</span>
-                  )}
+                  {/* Cabecera navy con líneas animadas */}
+                  <div className="insc-card-header">
+                    <svg className="insc-header-curves" viewBox="0 0 300 46" preserveAspectRatio="none" fill="none" aria-hidden="true">
+                      <path className="hc hc-1" d="M-20 34 C70 10,150 44,230 24 C275 12,300 30,340 26"/>
+                      <path className="hc hc-2" d="M-20 18 C60 4,140 32,220 14 C270 2,300 16,340 12"/>
+                    </svg>
+                    {conf.category && (
+                      <span className="insc-badge-cat">{conf.category}</span>
+                    )}
+                    {isMine && (
+                      <span className="insc-badge-mine">{t.insc_registered_badge}</span>
+                    )}
+                  </div>
 
-                  {/* Badge inscrito */}
-                  {isMine && (
-                    <span className="insc-badge-mine">{t.insc_registered_badge}</span>
-                  )}
-
+                  {/* Cuerpo */}
+                  <div className="insc-card-body">
                   <h2 className="insc-card-title">{conf.title}</h2>
 
                   {conf.description && (
@@ -301,7 +314,10 @@ export default function Inscripciones() {
                             decoding="async"
                           />
                         : <div className="insc-speaker-initials">
-                            {conf.speaker_name[0].toUpperCase()}
+                            <svg viewBox="0 0 32 32" fill="none" width="22" height="22" aria-hidden="true">
+                              <circle cx="16" cy="12" r="6" fill="currentColor" opacity="0.55"/>
+                              <path d="M3 30c0-7.18 5.82-13 13-13s13 5.82 13 13" fill="currentColor" opacity="0.55"/>
+                            </svg>
                           </div>
                       }
                       <span className="insc-speaker-name">{conf.speaker_name}</span>
@@ -311,24 +327,32 @@ export default function Inscripciones() {
                   <ul className="insc-card-meta">
                     {conf.speaker_name && (
                       <li>
-                        <span className="meta-icon">👤</span>
+                        <span className="meta-icon" aria-hidden="true">
+                          <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><circle cx="8" cy="5" r="3" stroke="currentColor" strokeWidth="1.5"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                        </span>
                         {conf.speaker_name}
                       </li>
                     )}
                     {conf.schedule && (
                       <li>
-                        <span className="meta-icon">📅</span>
+                        <span className="meta-icon" aria-hidden="true">
+                          <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" strokeWidth="1.5"/><path d="M2 7h12" stroke="currentColor" strokeWidth="1.5"/><path d="M5 2v2M11 2v2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                        </span>
                         {formatDate(conf.schedule)}
                       </li>
                     )}
                     {conf.location_text && (
                       <li>
-                        <span className="meta-icon">📍</span>
+                        <span className="meta-icon" aria-hidden="true">
+                          <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M8 1.5C5.515 1.5 3.5 3.515 3.5 6c0 3.5 4.5 8.5 4.5 8.5s4.5-5 4.5-8.5C12.5 3.515 10.485 1.5 8 1.5z" stroke="currentColor" strokeWidth="1.5"/><circle cx="8" cy="6" r="1.5" stroke="currentColor" strokeWidth="1.5"/></svg>
+                        </span>
                         {conf.location_text}
                       </li>
                     )}
                     <li>
-                      <span className="meta-icon">🪑</span>
+                      <span className="meta-icon" aria-hidden="true">
+                        <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><rect x="3" y="2" width="10" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><path d="M5 9v4M11 9v4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/><path d="M5 11h6" stroke="currentColor" strokeWidth="1.5"/></svg>
+                      </span>
                       {full
                         ? t.insc_spots_none
                         : `${spots} ${spots !== 1 ? t.insc_spots_pl : t.insc_spots}`}
@@ -354,6 +378,7 @@ export default function Inscripciones() {
                       </button>
                     )}
                   </div>
+                  </div>{/* /insc-card-body */}
 
                 </article>
               );

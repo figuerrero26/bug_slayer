@@ -41,3 +41,7 @@ coverage/
 CLAUDE.md
 
 **/venv/
+
+# Agentes y herramientas locales
+.agents/
+skills-lock.json
