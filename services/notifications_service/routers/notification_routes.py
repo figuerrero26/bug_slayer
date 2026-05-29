@@ -6,42 +6,16 @@ from database import get_db
 from models.notification_model import Notification
 from schemas.notification_schema import NotificationCreate, NotificationResponse, UnreadCountResponse
 from utils.email import send_email
+from utils.templates.email_templates import (
+    html_confirmada,
+    html_cancelada,
+    html_generica,
+)
 
 router = APIRouter(prefix="/notifications", tags=["notifications"])
 
 TITLE_INSCRIPCION_CONFIRMADA = "Inscripción confirmada"
 TITLE_INSCRIPCION_CANCELADA  = "Inscripción cancelada"
-
-
-def _html_confirmada(message: str) -> str:
-    return f"""<!DOCTYPE html>
-<html lang="es">
-<body style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;background:#f5f5f5;">
-  <div style="background:#fff;border-radius:8px;padding:30px;border-top:4px solid #2e7d32;">
-    <h2 style="color:#2e7d32;margin-top:0;">&#x2705; Inscripci&#xf3;n Confirmada</h2>
-    <p style="color:#333;font-size:16px;">{message}</p>
-    <p style="color:#666;font-size:14px;">Tu cupo ha sido reservado exitosamente en <strong>CONIITI 2026</strong>.</p>
-    <hr style="border:none;border-top:1px solid #eee;margin:20px 0;">
-    <p style="color:#999;font-size:12px;">Este es un correo autom&#xe1;tico, por favor no respondas a este mensaje.</p>
-  </div>
-</body>
-</html>"""
-
-
-def _html_cancelada(message: str) -> str:
-    return f"""<!DOCTYPE html>
-<html lang="es">
-<body style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;background:#f5f5f5;">
-  <div style="background:#fff;border-radius:8px;padding:30px;border-top:4px solid #c62828;">
-    <h2 style="color:#c62828;margin-top:0;">&#x274c; Inscripci&#xf3;n Cancelada</h2>
-    <p style="color:#333;font-size:16px;">{message}</p>
-    <p style="color:#666;font-size:14px;">Tu cupo ha sido liberado en <strong>CONIITI 2026</strong>. Puedes volver a inscribirte cuando desees.</p>
-    <hr style="border:none;border-top:1px solid #eee;margin:20px 0;">
-    <p style="color:#999;font-size:12px;">Este es un correo autom&#xe1;tico, por favor no respondas a este mensaje.</p>
-  </div>
-</body>
-</html>"""
-
 
 def _dispatch_email(title: str, message: str, email: str | None) -> None:
     """Selecciona la plantilla correcta según el título y despacha el correo."""
@@ -52,14 +26,14 @@ def _dispatch_email(title: str, message: str, email: str | None) -> None:
     if title == TITLE_INSCRIPCION_CONFIRMADA:
         send_email(
             subject="Inscripción confirmada en CONIITI 2026",
-            body_html=_html_confirmada(message),
+            body_html=html_confirmada(message),
             to=email,
             body_plain=message,
         )
     elif title == TITLE_INSCRIPCION_CANCELADA:
         send_email(
             subject="Inscripción cancelada en CONIITI 2026",
-            body_html=_html_cancelada(message),
+            body_html=html_cancelada(message),
             to=email,
             body_plain=message,
         )
@@ -67,7 +41,7 @@ def _dispatch_email(title: str, message: str, email: str | None) -> None:
         # Notificación genérica (bienvenida, sistema, etc.)
         send_email(
             subject=title,
-            body_html=f"<p style='font-family:Arial,sans-serif;font-size:16px;'>{message}</p>",
+            body_html=html_generica(message),
             to=email,
             body_plain=message,
         )
