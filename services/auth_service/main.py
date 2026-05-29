@@ -5,6 +5,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from database import engine, Base
 from routers.auth_routes import router as auth_router
 from routers.password_reset_routes import router as password_reset_router
+from utils.rate_limit import limiter
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
+from slowapi import _rate_limit_exceeded_handler
 
 # Crea las tablas en db_auth si no existen
 Base.metadata.create_all(bind=engine)
@@ -14,6 +18,11 @@ app = FastAPI(
     description="Gestión de identidad, registro y validación de credenciales.",
     version="1.0.0",
 )
+
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+app.add_middleware(SlowAPIMiddleware)
 
 _raw = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173,http://localhost")
 _origins = [o.strip() for o in _raw.split(",") if o.strip()]

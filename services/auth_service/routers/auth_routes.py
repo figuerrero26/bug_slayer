@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 import httpx
 import os
@@ -7,6 +7,8 @@ from database import get_db
 from models.user_model import User
 from schemas.user_schema import UserRegister, UserLogin, TokenResponse, PasswordChange
 from utils.security import hash_password, verify_password, create_token
+from utils.rate_limit import limiter
+
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -15,7 +17,12 @@ NOTIFICATIONS_URL  = os.getenv("NOTIFICATIONS_SERVICE_URL",  "http://localhost:8
 
 
 @router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
-async def register(payload: UserRegister, db: Session = Depends(get_db)):
+@limiter.limit("3/minute")
+async def register(
+    request: Request,
+    payload: UserRegister,
+    db: Session = Depends(get_db)
+):
     """
     Registro doble:
     1. Guarda email + password_hash en db_auth.
@@ -101,7 +108,8 @@ def change_password(payload: PasswordChange, db: Session = Depends(get_db)):
 
 
 @router.post("/login", response_model=TokenResponse)
-def login(payload: UserLogin, db: Session = Depends(get_db)):
+@limiter.limit("5/minute")
+def login(request: Request, payload: UserLogin, db: Session = Depends(get_db)):
     """Valida credenciales y devuelve un JWT con el user_id (llave lógica universal)."""
     user = db.query(User).filter(User.email == payload.email).first()
 

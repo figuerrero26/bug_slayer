@@ -34,3 +34,9 @@ yarn-error.log*
 
 # Testing
 coverage/
+
+# Virtual environments
+venv/
+.venv/
+**/venv/
+**/.venv/

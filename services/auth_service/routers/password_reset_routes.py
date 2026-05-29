@@ -3,7 +3,7 @@ import os
 import httpx
 from datetime import datetime, timedelta
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 
 from database import get_db
@@ -16,6 +16,7 @@ from schemas.user_schema import (
     PasswordResetVerify,
 )
 from utils.security import create_reset_token, decode_reset_token, hash_password
+from utils.rate_limit import limiter
 
 router = APIRouter(prefix="/auth", tags=["password-reset"])
 
@@ -26,7 +27,12 @@ OTP_EXPIRE_MINUTES = 5
 # ── Endpoint 1: Solicitud ─────────────────────────────────────────────────────
 
 @router.post("/password-reset/request", response_model=MessageResponse)
-async def password_reset_request(payload: PasswordResetRequest, db: Session = Depends(get_db)):
+@limiter.limit("3/minute")
+async def password_reset_request(
+    request: Request,
+    payload: PasswordResetRequest,
+    db: Session = Depends(get_db)
+):
     """
     Genera un OTP de 6 dígitos, lo guarda en la BD con expiración de 5 min
     y dispara el correo vía notifications_service (fire-and-forget).
@@ -67,7 +73,12 @@ async def password_reset_request(payload: PasswordResetRequest, db: Session = De
 # ── Endpoint 2: Verificación del código ──────────────────────────────────────
 
 @router.post("/password-reset/verify", response_model=PasswordResetTokenResponse)
-def password_reset_verify(payload: PasswordResetVerify, db: Session = Depends(get_db)):
+@limiter.limit("5/minute")
+def password_reset_verify(
+    request: Request,
+    payload: PasswordResetVerify,
+    db: Session = Depends(get_db)
+):
     """
     Valida el OTP. Si es correcto y no expiró, emite un JWT de corta duración
     (15 min, purpose=password_reset) y borra el OTP para que no sea reutilizable.
@@ -100,7 +111,12 @@ def password_reset_verify(payload: PasswordResetVerify, db: Session = Depends(ge
 # ── Endpoint 3: Establecer nueva contraseña ───────────────────────────────────
 
 @router.post("/password-reset/confirm", response_model=MessageResponse)
-def password_reset_confirm(payload: PasswordResetConfirm, db: Session = Depends(get_db)):
+@limiter.limit("5/minute")
+def password_reset_confirm(
+    request: Request,
+    payload: PasswordResetConfirm,
+    db: Session = Depends(get_db)
+):
     """
     Valida el token de reset, hashea la nueva contraseña y limpia los campos OTP.
     El token solo puede usarse una vez (el OTP ya fue borrado en /verify).
