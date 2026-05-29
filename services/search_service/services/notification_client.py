@@ -1,8 +1,11 @@
 import httpx
+import logging
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
+
+logger = logging.getLogger(__name__)
 
 NOTIFICATIONS_URL = os.getenv("NOTIFICATIONS_SERVICE_URL", "http://localhost:8004")
 
@@ -20,8 +23,7 @@ def notify_registration(
     """
     try:
         with httpx.Client(timeout=20.0) as client:
-            print("[notification_client] email destino:", email)
-            print("[notification_client] url:", f"{NOTIFICATIONS_URL}/notifications/")
+            logger.debug("email destino: %s | url: %s/notifications/", email, NOTIFICATIONS_URL)
             client.post(
                 # trailing slash evita redirect 307
                 f"{NOTIFICATIONS_URL}/notifications/",
@@ -34,7 +36,7 @@ def notify_registration(
                 },
             )
     except Exception as exc:
-        print(f"[notification_client] Error al notificar inscripción — user {user_id}: {exc}")
+        logger.error("Error al notificar inscripción — user %s: %s", user_id, exc)
 
 
 def notify_cancellation(user_id: int, conference_title: str, email: str | None = None) -> None:
@@ -55,4 +57,4 @@ def notify_cancellation(user_id: int, conference_title: str, email: str | None =
                 },
             )
     except Exception as exc:
-        print(f"[notification_client] Error al notificar cancelación — user {user_id}: {exc}")
+        logger.error("Error al notificar cancelación — user %s: %s", user_id, exc)

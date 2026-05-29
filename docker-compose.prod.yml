@@ -34,6 +34,7 @@ services:
       - dashboard_service
       - search_service
       - notifications_service
+      - assistant_service
     security_opt:
       - no-new-privileges:true
     logging:
@@ -132,6 +133,28 @@ services:
       - "8004"
     env_file:
       - ./services/notifications_service/.env.prod
+    networks:
+      - red_interna
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: unless-stopped
+
+  assistant_service:
+    build:
+      context: ./services/assistant_service
+    image: coniiti/assistant-service:latest
+    container_name: assistant_service
+    expose:
+      - "8006"
+    env_file:
+      - ./services/assistant_service/.env.prod
     networks:
       - red_interna
     security_opt:

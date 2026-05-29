@@ -2,18 +2,29 @@ import { useState, useCallback, useRef } from "react";
 import { ASSISTANT_URL } from "../services/api";
 import type { ChatMessage, AskResponse } from "../interfaces/chat";
 
+const SESSION_KEY = "rogelio_session_id";
+
+function getSessionId(): string {
+  let id = localStorage.getItem(SESSION_KEY);
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem(SESSION_KEY, id);
+  }
+  return id;
+}
+
 const WELCOME: ChatMessage = {
   id: "welcome",
   role: "assistant",
   content:
-    "¡Hola! Soy **Rogelio**, tu asistente de CONIITI 2026. " +
-    "Puedo ayudarte con conferencias, inscripciones, horarios y más. ¿En qué te puedo ayudar?",
+    "¡Hola! Soy **Rogelio**, tu asistente oficial de **CONIITI 2026**. " +
+    "Puedo ayudarte con conferencias, inscripciones, horarios, sede y más. ¿En qué te puedo ayudar?",
   createdAt: new Date(),
 };
 
 export function useRogelio(userId: number | null) {
-  const [messages, setMessages]         = useState<ChatMessage[]>([WELCOME]);
-  const [isTyping, setIsTyping]         = useState(false);
+  const [messages, setMessages]             = useState<ChatMessage[]>([WELCOME]);
+  const [isTyping, setIsTyping]             = useState(false);
   const [conversationId, setConversationId] = useState<number | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
@@ -38,7 +49,8 @@ export function useRogelio(userId: number | null) {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            user_id: userId ?? 0,
+            session_id: getSessionId(),
+            user_id: userId ?? null,
             conversation_id: conversationId,
             message: text.trim(),
           }),
@@ -75,6 +87,8 @@ export function useRogelio(userId: number | null) {
   );
 
   const resetChat = useCallback(() => {
+    // Nueva sesión al reiniciar el chat
+    localStorage.removeItem(SESSION_KEY);
     setMessages([WELCOME]);
     setConversationId(null);
     setIsTyping(false);

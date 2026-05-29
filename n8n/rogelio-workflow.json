@@ -1,0 +1,86 @@
+{
+  "name": "Rogelio — CONIITI 2026 Chat Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "rogelio",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "f1a2b3c4-d5e6-7890-abcd-ef1234567801",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "rogelio-coniiti-2026"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ══════════════════════════════════════════════════════════════════\n// Rogelio — CONIITI 2026 | Lógica principal del asistente\n// Variables de entorno requeridas en n8n:\n//   OPENAI_API_KEY  → tu API key de OpenAI\n//   OPENAI_MODEL    → (opcional) modelo, default: gpt-4o-mini\n//   N8N_WEBHOOK_TOKEN → (opcional) token de validación del backend\n// ══════════════════════════════════════════════════════════════════\n\n// ── 1. Validar token del backend (si está configurado) ─────────────\nconst requestHeaders = $input.first().json.headers ?? {};\nconst bodyRaw = $input.first().json.body ?? $input.first().json;\nconst expectedToken = $env.N8N_WEBHOOK_TOKEN ?? '';\nconst receivedToken = requestHeaders['x-coniiti-webhook-token'] ?? '';\n\nif (expectedToken && receivedToken !== expectedToken) {\n  return [{ json: { reply: 'No autorizado.' } }];\n}\n\n// ── 2. Parsear el payload ──────────────────────────────────────────\nconst body = typeof bodyRaw === 'string' ? JSON.parse(bodyRaw) : bodyRaw;\n\nconst systemPrompt = body?.system_context?.system_prompt\n  ?? 'Eres Rogelio, el asistente oficial del Congreso CONIITI 2026 de la Universidad Católica de Colombia. Responde SIEMPRE en español, con tono amable y profesional. Sé conciso: 2-4 frases máximo. Si no sabes algo con certeza, dilo y redirige al panel.';\n\nconst rawHistory = Array.isArray(body?.history) ? body.history : [];\nconst history = rawHistory\n  .slice(-10)\n  .map(m => ({ role: String(m.role), content: String(m.content ?? '') }))\n  .filter(m => m.role === 'user' || m.role === 'assistant');\n\nconst userMessage = String(body?.message ?? '').trim();\n\nif (!userMessage) {\n  return [{ json: { reply: 'No recibí tu pregunta. Por favor, escribe de nuevo.' } }];\n}\n\n// ── 3. Construir array de mensajes para la IA ──────────────────────\nconst messages = [\n  { role: 'system', content: systemPrompt },\n  ...history,\n  { role: 'user', content: userMessage }\n];\n\n// ── 4. Llamar a OpenAI ─────────────────────────────────────────────\nconst apiKey = $env.OPENAI_API_KEY ?? '';\nif (!apiKey) {\n  return [{ json: { reply: 'El servicio de IA no está configurado. Contacta al equipo técnico de CONIITI.' } }];\n}\n\nconst model = $env.OPENAI_MODEL ?? 'gpt-4o-mini';\n\nlet reply;\ntry {\n  const response = await this.helpers.httpRequest({\n    method: 'POST',\n    url: 'https://api.openai.com/v1/chat/completions',\n    headers: {\n      'Authorization': `Bearer ${apiKey}`,\n      'Content-Type': 'application/json',\n    },\n    body: {\n      model,\n      messages,\n      temperature: 0.65,\n      max_tokens: 600,\n      presence_penalty: 0.1,\n    },\n    json: true,\n  });\n\n  reply = response?.choices?.[0]?.message?.content?.trim();\n  if (!reply) throw new Error('Respuesta vacía de la IA');\n\n} catch (err) {\n  console.error('[Rogelio] Error al llamar a OpenAI:', err.message);\n  reply = 'Disculpa, tuve un problema técnico momentáneo. Por favor intenta en unos segundos.';\n}\n\nreturn [{ json: { reply } }];"
+      },
+      "id": "a2b3c4d5-e6f7-8901-bcde-f12345678902",
+      "name": "Rogelio AI",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ reply: $json.reply }) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "b3c4d5e6-f7a8-9012-cdef-123456789003",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [760, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Rogelio AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rogelio AI": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "id": "rogelio-coniiti-2026",
+  "meta": {
+    "templateCreatedBy": "CONIITI 2026 — Bug Slayer",
+    "instanceId": "coniiti-2026"
+  }
+}

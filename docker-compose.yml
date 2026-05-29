@@ -69,6 +69,20 @@ services:
       - coniiti_network
     restart: unless-stopped
 
+  assistant_service:
+    build: ./services/assistant_service
+    container_name: assistant_service
+    ports:
+      - "8006:8006"
+    environment:
+      DATABASE_URL: mysql+pymysql://coniiti:coniiti@host.docker.internal:3306/db_assistant
+      ALLOWED_ORIGINS: http://localhost:5173,http://localhost
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - coniiti_network
+    restart: unless-stopped
+
   frontend:
     build: ./Frontend
     container_name: frontend
@@ -78,6 +92,7 @@ services:
       - auth_service
       - search_service
       - dashboard_service
+      - assistant_service
     networks:
       - coniiti_network
     restart: unless-stopped

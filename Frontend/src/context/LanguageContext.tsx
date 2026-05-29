@@ -15,7 +15,7 @@ type T = Record<string, string>;
 const ES: T = {
   /* Navbar */
   home: "Home", nosotros: "Nosotros", ferias: "Nuestras ferias",
-  inscripciones: "Inscripciones", noticias: "Noticias", ponentes: "Ponentes", login: "Ingresar",
+  inscripciones: "Conferencias", noticias: "Noticias", ponentes: "Ponentes", login: "Ingresar",
   register: "Crear cuenta",
   buscar: "Buscar...",
   /* Hero */
@@ -30,7 +30,7 @@ const ES: T = {
   /* Tarjetas Home */
   card1_title: "Home", card1_p: "Explora nuestra información principal.",
   card2_title: "Nuestras Ferias", card2_p: "Eventos académicos y empresariales.",
-  card3_title: "Inscripciones", card3_p: "Conoce los pasos para aplicar.",
+  card3_title: "Conferencias", card3_p: "Explora y regístrate en las charlas del evento.",
   card4_title: "Noticias", card4_p: "Mantente informado.",
   /* Nosotros */
   nos_what: "¿Qué es CONIITI?",
@@ -245,7 +245,7 @@ const EN: T = {
   ph_dev_msg: "This functionality will be available soon.",
 
   home: "Home", nosotros: "About Us", ferias: "Our Fairs",
-  inscripciones: "Registrations", noticias: "News", ponentes: "Speakers", login: "Login",
+  inscripciones: "Conferences", noticias: "News", ponentes: "Speakers", login: "Login",
   register: "Sign Up",
   buscar: "Search...",
   hero_title: "Coniiti 2026", hero_country: "Guest Country: Italy",
@@ -305,7 +305,7 @@ const EN: T = {
 
 const IT: T = {
   home: "Home", nosotros: "Chi Siamo", ferias: "Le Nostre Fiere",
-  inscripciones: "Iscrizioni", noticias: "Notizie", ponentes: "Relatori", login: "Accedi",
+  inscripciones: "Conferenze", noticias: "Notizie", ponentes: "Relatori", login: "Accedi",
   register: "Registrati",
   buscar: "Cerca...",
   hero_title: "Coniiti 2026", hero_country: "Paese ospite: Italia",
@@ -445,7 +445,7 @@ const IT: T = {
 
 const PT: T = {
   home: "Início", nosotros: "Sobre Nós", ferias: "Nossas Feiras",
-  inscripciones: "Inscrições", noticias: "Notícias", ponentes: "Palestrantes", login: "Entrar",
+  inscripciones: "Conferências", noticias: "Notícias", ponentes: "Palestrantes", login: "Entrar",
   register: "Cadastrar",
   buscar: "Buscar...",
   hero_title: "Coniiti 2026", hero_country: "País convidado: Itália",
@@ -585,7 +585,7 @@ const PT: T = {
 
 const FR: T = {
   home: "Accueil", nosotros: "À propos", ferias: "Nos Foires",
-  inscripciones: "Inscriptions", noticias: "Actualités", ponentes: "Intervenants", login: "Connexion",
+  inscripciones: "Conférences", noticias: "Actualités", ponentes: "Intervenants", login: "Connexion",
   register: "S'inscrire",
   buscar: "Rechercher...",
   hero_title: "Coniiti 2026", hero_country: "Pays invité : Italie",
