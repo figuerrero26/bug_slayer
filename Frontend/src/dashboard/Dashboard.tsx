@@ -24,7 +24,8 @@ import LogoutOverlay    from "../components/ui/LogoutOverlay";
 const ProfileView     = lazy(() => import("./views/ProfileView"));
 const InscritasView   = lazy(() => import("./views/InscritasView"));
 const CalendarioView  = lazy(() => import("./views/CalendarioView"));
-const PlaceholderView = lazy(() => import("./views/PlaceholderView"));
+const PlaceholderView        = lazy(() => import("./views/PlaceholderView"));
+const CompletedConferences   = lazy(() => import("./views/CompletedConferences"));
 const MessagesView    = lazy(() => import("./views/MessagesView"));
 const SettingsView    = lazy(() => import("./views/SettingsView"));
 
@@ -127,8 +128,11 @@ export default function Dashboard() {
                 )}
                 {activeNav === "conferences" && <InscritasView userId={userId} />}
                 {activeNav === "calendar"    && <CalendarioView />}
-                {(activeNav === "favorites" || activeNav === "events" || activeNav === "completed") && (
+                {(activeNav === "favorites" || activeNav === "events") && (
                   <PlaceholderView section={activeNav} />
+                )}
+                {activeNav === "completed" && (
+                  <CompletedConferences userId={userId} />
                 )}
                 {activeNav === "messages" && (
                   <MessagesView userId={userId} onUnreadChange={setUnreadCount} />

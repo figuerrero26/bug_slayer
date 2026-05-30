@@ -95,10 +95,10 @@ async def global_exception_handler(request: Request, exc: Exception):
     )
 
 
+app.include_router(attendance_router)   # static paths first — before /{conference_id}
 app.include_router(conference_router)
 app.include_router(registration_router)
 app.include_router(qr_router)
-app.include_router(attendance_router)
 
 # Servir imágenes subidas como archivos estáticos
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,383 @@
+/* CompletedConferences — prefijo ccv- */
+
+/* ── Animations ────────────────────────────────────────────────────────────── */
+
+@keyframes ccv-fade {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ccv-spin { to { transform: rotate(360deg); } }
+
+/* ── Center states: loading / error / empty ────────────────────────────────── */
+
+.ccv-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 5rem 2rem;
+  text-align: center;
+  color: var(--muted, #6b7fa3);
+  animation: ccv-fade 0.3s ease;
+}
+
+.ccv-center--error { color: #dc2626; }
+
+.ccv-center-icon { font-size: 2.8rem; line-height: 1; }
+
+.ccv-center-msg {
+  font-size: 0.9rem;
+  margin: 0;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.ccv-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border, #d0dcea);
+  border-top-color: var(--blue, #1e6fbd);
+  border-radius: 50%;
+  animation: ccv-spin 0.8s linear infinite;
+}
+
+/* ── Empty art ─────────────────────────────────────────────────────────────── */
+
+.ccv-empty-art { line-height: 0; }
+
+.ccv-empty-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--navy, #1a2545);
+  margin: 4px 0 0;
+  max-width: 360px;
+  line-height: 1.4;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.ccv-empty-sub {
+  font-size: 0.87rem;
+  color: var(--muted, #6b7fa3);
+  max-width: 310px;
+  line-height: 1.55;
+  margin: 0;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ── Page wrapper ──────────────────────────────────────────────────────────── */
+
+.ccv-page {
+  animation: ccv-fade 0.3s ease;
+}
+
+/* ── Card ──────────────────────────────────────────────────────────────────── */
+
+.ccv-card {
+  background: var(--surface, #ffffff);
+  border-radius: var(--radius, 16px);
+  box-shadow:
+    0 1px 4px rgba(26, 37, 69, 0.07),
+    0 0 0 1px rgba(208, 220, 234, 0.55);
+  overflow: hidden;
+}
+
+/* ── Card header ───────────────────────────────────────────────────────────── */
+
+.ccv-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 18px;
+  border-bottom: 1px solid var(--border, #d0dcea);
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ccv-heading {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--navy, #1a2545);
+  margin: 0;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* ── Search ────────────────────────────────────────────────────────────────── */
+
+.ccv-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 240px;
+}
+
+.ccv-search-icon {
+  position: absolute;
+  left: 10px;
+  color: var(--muted, #6b7fa3);
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.ccv-search-input {
+  width: 100%;
+  padding: 8px 12px 8px 32px;
+  font-size: 0.85rem;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text, #1a2545);
+  background: var(--bg, #eef2f7);
+  border: 1.5px solid transparent;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.18s, background 0.18s;
+}
+
+.ccv-search-input::placeholder { color: var(--muted, #6b7fa3); }
+
+.ccv-search-input:focus {
+  background: var(--surface, #ffffff);
+  border-color: var(--blue, #1e6fbd);
+}
+
+/* ── Table wrapper ─────────────────────────────────────────────────────────── */
+
+.ccv-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Table ─────────────────────────────────────────────────────────────────── */
+
+.ccv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+}
+
+.ccv-table thead tr {
+  background: var(--bg, #eef2f7);
+}
+
+.ccv-table thead th {
+  padding: 12px 20px;
+  text-align: left;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.055em;
+  color: var(--muted, #6b7fa3);
+  white-space: nowrap;
+  border-bottom: 1px solid var(--border, #d0dcea);
+}
+
+.ccv-table tbody tr {
+  border-bottom: 1px solid var(--border, #d0dcea);
+  transition: background 0.13s;
+}
+
+.ccv-table tbody tr:last-child { border-bottom: none; }
+
+.ccv-table tbody tr:hover { background: rgba(238, 242, 247, 0.6); }
+
+.ccv-table tbody td {
+  padding: 14px 20px;
+  color: var(--text, #1a2545);
+  vertical-align: middle;
+}
+
+/* ── Cell variants ─────────────────────────────────────────────────────────── */
+
+.ccv-td-title {
+  font-weight: 600;
+  min-width: 200px;
+  max-width: 280px;
+  line-height: 1.4;
+  color: var(--navy, #1a2545);
+}
+
+.ccv-td-speaker {
+  min-width: 130px;
+  font-weight: 500;
+  color: var(--muted, #6b7fa3);
+}
+
+.ccv-td-location {
+  min-width: 120px;
+  font-size: 0.85rem;
+  color: var(--muted, #6b7fa3);
+}
+
+.ccv-td-date {
+  white-space: nowrap;
+  min-width: 150px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--navy, #1a2545);
+}
+
+.ccv-td-action {
+  white-space: nowrap;
+  min-width: 170px;
+}
+
+.ccv-muted {
+  color: var(--muted, #6b7fa3);
+  opacity: 0.55;
+}
+
+/* ── Certificate button ────────────────────────────────────────────────────── */
+
+.ccv-cert-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 13px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  background: #e0f2fe;
+  color: #0369a1;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.ccv-cert-btn:hover {
+  background: #bae6fd;
+  color: #0284c7;
+  transform: translateY(-1px);
+}
+
+.ccv-cert-btn:active { transform: translateY(0); }
+
+/* ── No results (inside tbody) ─────────────────────────────────────────────── */
+
+.ccv-no-results {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--muted, #6b7fa3);
+  font-size: 0.9rem;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ── Pagination ────────────────────────────────────────────────────────────── */
+
+.ccv-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-top: 1px solid var(--border, #d0dcea);
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ccv-pag-info {
+  font-size: 0.82rem;
+  color: var(--muted, #6b7fa3);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.ccv-pag-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ccv-pag-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--navy, #1a2545);
+  background: transparent;
+  border: 1.5px solid var(--border, #d0dcea);
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.ccv-pag-btn:hover:not(:disabled):not(.ccv-pag-btn--active) {
+  background: var(--bg, #eef2f7);
+  border-color: var(--blue, #1e6fbd);
+}
+
+.ccv-pag-btn--active {
+  background: var(--blue, #1e6fbd);
+  border-color: var(--blue, #1e6fbd);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.ccv-pag-btn--arrow {
+  font-size: 1.05rem;
+  color: var(--muted, #6b7fa3);
+}
+
+.ccv-pag-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.ccv-pag-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 32px;
+  font-size: 0.82rem;
+  color: var(--muted, #6b7fa3);
+  font-family: 'DM Sans', sans-serif;
+  user-select: none;
+}
+
+/* ── Dark mode ─────────────────────────────────────────────────────────────── */
+
+[data-theme="dark"] .ccv-cert-btn {
+  background: rgba(3, 105, 161, 0.2);
+  color: #38bdf8;
+}
+
+[data-theme="dark"] .ccv-cert-btn:hover {
+  background: rgba(3, 105, 161, 0.35);
+  color: #7dd3fc;
+}
+
+[data-theme="dark"] .ccv-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .ccv-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px 18px 14px;
+  }
+
+  .ccv-search-wrap {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .ccv-table thead th,
+  .ccv-table tbody td {
+    padding: 10px 14px;
+  }
+
+  .ccv-pagination {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px 16px;
+  }
+}
