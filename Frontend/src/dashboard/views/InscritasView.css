@@ -94,15 +94,32 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 14px 0;
+  padding: 12px 10px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
 }
+
+.iv-stat-item:hover { background: rgba(30, 111, 189, 0.06); }
+.iv-stat-item:active { transform: scale(0.98); }
 
 .iv-stat-item + .iv-stat-item {
   border-top: 1px solid rgba(30, 111, 189, 0.09);
+  border-radius: 0 0 10px 10px;
 }
+.iv-stat-item:first-child { border-radius: 10px 10px 0 0; }
 
-.iv-stat-item:first-child { padding-top: 0; }
-.iv-stat-item:last-child  { padding-bottom: 0; }
+/* Active states — one color per KPI */
+.iv-stat-item--active                              { background: rgba(30, 111, 189, 0.10); }
+.iv-stat-item--active-blue                         { background: rgba(30, 111, 189, 0.10); }
+.iv-stat-item--active-green                        { background: rgba(39, 174,  96, 0.10); }
+.iv-stat-item--active-yellow                       { background: rgba(232, 148, 26, 0.10); }
+.iv-stat-item--active-red                          { background: rgba(220,  38,  38, 0.10); }
+.iv-stat-item--active .iv-stat-value               { font-weight: 900; }
 
 .iv-stat-icon { flex-shrink: 0; }
 
@@ -475,6 +492,10 @@
   padding: 4px 13px;
   border-radius: 999px;
 }
+
+.iv-drill-label--confirmada { background: #e6f4ea; color: #1a7a3c; }
+.iv-drill-label--en-curso   { background: #fef9e7; color: #92600a; }
+.iv-drill-label--finalizada { background: #fde8e8; color: #c0392b; }
 
 /* ── Actions column ───────────────────────────────────────────────────────── */
 

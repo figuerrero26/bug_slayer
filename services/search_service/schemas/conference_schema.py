@@ -1,5 +1,5 @@
 from pydantic import BaseModel, field_validator
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 
 
@@ -14,6 +14,7 @@ class ConferenceCreate(BaseModel):
     schedule:          Optional[datetime] = None
     location_text:     Optional[str]      = None
     capacity:          int                = 100
+    duration_minutes:  int                = 60
 
     @field_validator("title")
     @classmethod
@@ -40,6 +41,7 @@ class ConferenceUpdate(BaseModel):
     schedule:          Optional[datetime] = None
     location_text:     Optional[str]      = None
     capacity:          Optional[int]      = None
+    duration_minutes:  Optional[int]      = None
 
     @field_validator("title")
     @classmethod
@@ -68,6 +70,7 @@ class ConferenceResponse(BaseModel):
     schedule:         Optional[datetime]
     location_text:    Optional[str]
     capacity:         int
+    duration_minutes: int
     is_active:        bool
     registered_count: int = 0
 
@@ -112,5 +115,43 @@ class UserConferenceOut(BaseModel):
     registration_id:     int
     registration_status: str
     qr_payload:          str = ""
+
+    model_config = {"from_attributes": True}
+
+
+# ── Validación de asistencia por QR ──────────────────────────────────────────
+
+class AttendanceValidateRequest(BaseModel):
+    qr_payload: str
+
+
+class AttendanceValidateResponse(BaseModel):
+    success:           bool
+    message:           str
+    registration_id:   Optional[int] = None
+    user_id:           Optional[int] = None
+    conference_title:  Optional[str] = None
+    already_validated: bool          = False
+
+
+# ── Vistas de conferencias con asistencia confirmada ─────────────────────────
+
+class CompletedConferenceOut(BaseModel):
+    id_inscripcion:   int
+    title:            str
+    speaker_name:     Optional[str]
+    schedule:         Optional[datetime]
+    location_text:    Optional[str]
+    fecha_validacion: Optional[datetime]
+
+    model_config = {"from_attributes": True}
+
+
+class CurrentConferenceOut(BaseModel):
+    id_inscripcion: int
+    title:          str
+    speaker_name:   Optional[str]
+    schedule:       Optional[datetime]
+    location_text:  Optional[str]
 
     model_config = {"from_attributes": True}

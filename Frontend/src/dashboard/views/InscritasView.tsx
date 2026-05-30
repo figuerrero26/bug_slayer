@@ -137,6 +137,7 @@ export default function InscritasView({
   const [error, setError]               = useState("");
   const [localSearch, setLocalSearch]   = useState(searchQuery);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedStatus, setSelectedStatus]     = useState<Status | "TODAS" | null>(null);
   const [openMenuId, setOpenMenuId]     = useState<number | null>(null);
   const [cancellingId, setCancellingId] = useState<number | null>(null);
   const [toast, setToast]               = useState<{ msg: string; ok: boolean } | null>(null);
@@ -215,6 +216,11 @@ export default function InscritasView({
         selectedCategory !== "TODAS" &&
         c.category !== selectedCategory
       ) return false;
+      if (
+        selectedStatus !== null &&
+        selectedStatus !== "TODAS" &&
+        getStatus(c.schedule) !== selectedStatus
+      ) return false;
       return (
         !q ||
         c.title.toLowerCase().includes(q) ||
@@ -226,7 +232,7 @@ export default function InscritasView({
     return [...filtered].sort(
       (a, b) => STATUS_PRIORITY[getStatus(a.schedule)] - STATUS_PRIORITY[getStatus(b.schedule)]
     );
-  }, [conferences, localSearch, selectedCategory]);
+  }, [conferences, localSearch, selectedCategory, selectedStatus]);
 
   // ── Loading / Error ────────────────────────────────────────────────────────
   if (loading) return (
@@ -273,8 +279,8 @@ export default function InscritasView({
     </div>
   );
 
-  const isGlobalSearch = localSearch.length > 0 && selectedCategory === null;
-  const showGrid       = !isGlobalSearch && selectedCategory === null;
+  const isGlobalSearch = localSearch.length > 0 && selectedCategory === null && selectedStatus === null;
+  const showGrid       = !isGlobalSearch && selectedCategory === null && selectedStatus === null;
 
   // ── Main view ──────────────────────────────────────────────────────────────
   return (
@@ -346,7 +352,7 @@ export default function InscritasView({
 
               <button
                 className="iv-cat-card iv-cat-card--all"
-                onClick={() => { setSelectedCategory("TODAS"); setLocalSearch(""); }}
+                onClick={() => { setSelectedCategory("TODAS"); setSelectedStatus(null); setLocalSearch(""); }}
               >
                 <div className="iv-cat-card-icon">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -369,7 +375,7 @@ export default function InscritasView({
                   <button
                     key={cat}
                     className="iv-cat-card"
-                    onClick={() => setSelectedCategory(cat)}
+                    onClick={() => { setSelectedCategory(cat); setSelectedStatus(null); }}
                   >
                     <div className="iv-cat-card-icon iv-cat-card-icon--accent">
                       <svg width="19" height="19" viewBox="0 0 24 24" fill="none"
@@ -390,11 +396,11 @@ export default function InscritasView({
 
           ) : (
             <>
-              {selectedCategory !== null && (
+              {(selectedCategory !== null || selectedStatus !== null) && (
                 <div className="iv-drill-header">
                   <button
                     className="iv-back-btn"
-                    onClick={() => { setSelectedCategory(null); setOpenMenuId(null); }}
+                    onClick={() => { setSelectedCategory(null); setSelectedStatus(null); setOpenMenuId(null); }}
                   >
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -403,8 +409,13 @@ export default function InscritasView({
                     </svg>
                     {t.iv_back_cats}
                   </button>
-                  {selectedCategory !== "TODAS" && (
+                  {selectedCategory !== null && selectedCategory !== "TODAS" && (
                     <span className="iv-drill-label">{selectedCategory}</span>
+                  )}
+                  {selectedStatus !== null && selectedStatus !== "TODAS" && (
+                    <span className={`iv-drill-label iv-drill-label--${selectedStatus}`}>
+                      {statusLabel[selectedStatus]}
+                    </span>
                   )}
                 </div>
               )}
@@ -508,37 +519,49 @@ export default function InscritasView({
         {/* ── Columna lateral derecha: widget de estadísticas (1fr) ── */}
         <aside className="iv-stats-widget">
 
-          <div className="iv-stat-item">
+          <button
+            className={`iv-stat-item${selectedStatus === "TODAS" ? " iv-stat-item--active iv-stat-item--active-blue" : ""}`}
+            onClick={() => { setSelectedStatus("TODAS"); setSelectedCategory("TODAS"); }}
+          >
             <CalendarDays size={22} strokeWidth={1.75} className="iv-stat-icon iv-stat-icon--blue" />
             <div className="iv-stat-info">
               <span className="iv-stat-value">{kpis.total}</span>
               <span className="iv-stat-label">{t.iv_kpi_total}</span>
             </div>
-          </div>
+          </button>
 
-          <div className="iv-stat-item">
+          <button
+            className={`iv-stat-item${selectedStatus === "confirmada" ? " iv-stat-item--active iv-stat-item--active-green" : ""}`}
+            onClick={() => { setSelectedStatus("confirmada"); setSelectedCategory("TODAS"); }}
+          >
             <CircleCheck size={22} strokeWidth={1.75} className="iv-stat-icon iv-stat-icon--green" />
             <div className="iv-stat-info">
               <span className="iv-stat-value">{kpis.confirmada}</span>
               <span className="iv-stat-label">{t.iv_kpi_confirmed}</span>
             </div>
-          </div>
+          </button>
 
-          <div className="iv-stat-item">
+          <button
+            className={`iv-stat-item${selectedStatus === "en-curso" ? " iv-stat-item--active iv-stat-item--active-yellow" : ""}`}
+            onClick={() => { setSelectedStatus("en-curso"); setSelectedCategory("TODAS"); }}
+          >
             <Clock size={22} strokeWidth={1.75} className="iv-stat-icon iv-stat-icon--yellow" />
             <div className="iv-stat-info">
               <span className="iv-stat-value">{kpis.enCurso}</span>
               <span className="iv-stat-label">{t.iv_kpi_ongoing}</span>
             </div>
-          </div>
+          </button>
 
-          <div className="iv-stat-item">
+          <button
+            className={`iv-stat-item${selectedStatus === "finalizada" ? " iv-stat-item--active iv-stat-item--active-red" : ""}`}
+            onClick={() => { setSelectedStatus("finalizada"); setSelectedCategory("TODAS"); }}
+          >
             <Flag size={22} strokeWidth={1.75} className="iv-stat-icon iv-stat-icon--red" />
             <div className="iv-stat-info">
               <span className="iv-stat-value">{kpis.finalizada}</span>
               <span className="iv-stat-label">{t.iv_kpi_finished}</span>
             </div>
-          </div>
+          </button>
 
         </aside>
 

@@ -15,6 +15,7 @@ class Conference(Base):
     schedule          = Column(DateTime)
     location_text     = Column(String(300))
     capacity          = Column(Integer, nullable=False, default=100)
+    duration_minutes  = Column(Integer, nullable=False, default=60)
     is_active         = Column(Boolean, default=True, nullable=False)
 
     __table_args__ = (
@@ -25,13 +26,16 @@ class Conference(Base):
 class ConferenceRegistration(Base):
     __tablename__ = "conference_registrations"
 
-    id            = Column(Integer, primary_key=True, autoincrement=True)
-    conference_id = Column(Integer, nullable=False, index=True)
-    user_id       = Column(Integer, nullable=False, index=True)
-    status        = Column(String(20), default="activo", nullable=False)
-    registered_at = Column(DateTime, server_default=func.now())
+    id               = Column(Integer, primary_key=True, autoincrement=True)
+    conference_id    = Column(Integer, nullable=False, index=True)
+    user_id          = Column(Integer, nullable=False, index=True)
+    status           = Column(String(20), default="activo", nullable=False)
+    registered_at    = Column(DateTime, server_default=func.now())
+    asistio          = Column(Boolean, default=False, nullable=False)
+    fecha_validacion = Column(DateTime, nullable=True)
 
     __table_args__ = (
         UniqueConstraint("user_id", "conference_id", name="uq_user_conference"),
         Index("ix_registrations_conf_status", "conference_id", "status"),
+        Index("ix_reg_user_asistio", "user_id", "asistio"),
     )
