@@ -495,6 +495,13 @@
 }
 
 /* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .insc-hero { padding: 64px 20px 52px; }
+  .insc-search-bar { max-width: 100%; }
+  .insc-filters { padding: 16px; gap: 6px; }
+  .insc-filter-btn { padding: 5px 14px; font-size: 0.83rem; }
+}
+
 @media (max-width: 600px) {
   .insc-hero { padding: 48px 16px 40px; text-align: center; }
   .insc-hero-title { border-left: none; padding-left: 0; border-bottom: 2px solid rgba(255,209,0,0.5); padding-bottom: 12px; max-width: 100%; }
@@ -503,6 +510,11 @@
   .insc-main { padding: 20px 16px 40px; }
   .insc-grid { grid-template-columns: 1fr; }
   .insc-auth-banner { flex-direction: column; text-align: center; }
+}
+
+@media (max-width: 380px) {
+  .insc-hero { padding: 40px 14px 32px; }
+  .insc-filters { padding: 12px 10px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

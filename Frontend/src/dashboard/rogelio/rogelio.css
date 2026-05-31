@@ -11,39 +11,47 @@
   width: 58px;
   height: 58px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--navy) 0%, #2a3d8c 100%);
-  border: 2.5px solid var(--gold);
+  background: linear-gradient(145deg, #03124e 0%, #0055cc 55%, #2b7fff 100%);
+  border: 2.5px solid rgba(255, 209, 0, 0.85);
   color: #fff;
   cursor: pointer;
-  box-shadow: 0 6px 24px rgba(26, 37, 69, 0.38), 0 0 0 0 rgba(197, 163, 65, 0);
+  box-shadow:
+    0 6px 20px rgba(3, 18, 78, 0.45),
+    0 0 0 4px rgba(255, 209, 0, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1100;
   transition: box-shadow 0.25s ease, border-color 0.2s ease;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .rogelio-fab:hover {
-  box-shadow: 0 10px 36px rgba(26, 37, 69, 0.5), 0 0 0 4px rgba(197, 163, 65, 0.18);
+  box-shadow:
+    0 10px 32px rgba(3, 18, 78, 0.55),
+    0 0 0 6px rgba(255, 209, 0, 0.18);
+  border-color: #FFD100;
 }
 
 .rogelio-fab--open {
-  background: linear-gradient(135deg, #2a3d8c 0%, var(--navy) 100%);
+  background: linear-gradient(145deg, #0a1f6b 0%, #0055cc 60%, #2b7fff 100%);
 }
 
 .rogelio-fab-content {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
-.rogelio-fab-letter {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 22px;
-  color: var(--gold);
-  line-height: 1;
+.rogelio-fab-img {
+  width: 92%;
+  height: 92%;
+  object-fit: contain;
+  display: block;
+  padding: 0;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
 
 /* Badge de mensaje no leído */
@@ -79,16 +87,17 @@
 
 .rogelio-panel {
   position: fixed;
-  bottom: 100px;
+  bottom: 104px;
   right: 28px;
   width: 380px;
   height: 540px;
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
+  border-top: 3px solid var(--blue);
   border-radius: 20px;
   box-shadow:
-    0 16px 56px rgba(0, 0, 0, 0.16),
-    0 4px 16px rgba(0, 0, 0, 0.08);
+    0 8px 40px rgba(0, 48, 135, 0.15),
+    0 2px 10px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
   z-index: 1099;
@@ -124,16 +133,22 @@
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--gold) 0%, #e8c44a 100%);
-  color: var(--navy);
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 17px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(197, 163, 65, 0.35);
+  box-shadow: 0 2px 8px rgba(3, 18, 78, 0.3);
+  overflow: hidden;
+  background: linear-gradient(145deg, #03124e 0%, #0055cc 55%, #2b7fff 100%);
+  border: 1.5px solid rgba(255, 209, 0, 0.6);
+}
+
+.rogelio-avatar-img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.25));
 }
 
 .rogelio-header-info {
@@ -232,16 +247,15 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--gold) 0%, #e8c44a 100%);
-  color: var(--navy);
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 1px 4px rgba(197, 163, 65, 0.3);
+  box-shadow: 0 1px 4px rgba(3, 18, 78, 0.25);
+  overflow: hidden;
+  background: linear-gradient(145deg, #03124e 0%, #0055cc 55%, #2b7fff 100%);
+  border: 1.5px solid rgba(255, 209, 0, 0.55);
+  flex-shrink: 0;
 }
 
 .rogelio-msg-bubble {
@@ -482,10 +496,18 @@
 
 /* ── Dark mode ───────────────────────────────────────────── */
 
-[data-theme="dark"] .rogelio-panel {
+[data-theme="dark"] .rogelio-fab {
   box-shadow:
-    0 16px 56px rgba(0, 0, 0, 0.5),
-    0 4px 16px rgba(0, 0, 0, 0.3);
+    0 6px 20px rgba(0, 0, 0, 0.6),
+    0 0 0 4px rgba(255, 209, 0, 0.1);
+}
+
+[data-theme="dark"] .rogelio-panel {
+  border-color: var(--border);
+  border-top-color: var(--blue);
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.5),
+    0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 [data-theme="dark"] .rogelio-msg--user .rogelio-msg-bubble {

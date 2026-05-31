@@ -77,8 +77,28 @@ css
 
 /* Responsive */
 @media (max-width: 600px) {
+  .nos-section {
+    padding: 40px 16px;
+  }
+  .nos-container {
+    gap: 32px;
+  }
   .nos-grid {
     grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .nos-redes a {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 380px) {
+  .nos-grid {
+    grid-template-columns: 1fr;
+  }
+  .nos-section {
+    padding: 32px 14px;
   }
 }
 .nos-link {
