@@ -40,9 +40,14 @@ services:
     ports:
       - "8003:8003"
     environment:
-      DATABASE_URL: mysql+pymysql://coniiti:coniiti@host.docker.internal:3306/db_search
+      DATABASE_URL:              mysql+pymysql://coniiti:coniiti@host.docker.internal:3306/db_search
       NOTIFICATIONS_SERVICE_URL: http://notifications_service:8004
-      QR_SECRET: coniiti-2026-ucatolica-ingsistemas-bugslayer
+      DASHBOARD_SERVICE_URL:     http://dashboard_service:8002
+      QR_SECRET:                 coniiti-2026-ucatolica-ingsistemas-bugslayer
+      JWT_SECRET:                cambia-esta-clave-en-produccion
+      JWT_ALGORITHM:             HS256
+      CERT_SECRET:               coniiti-cert-ucatolica-ingsistemas-2026
+      CERT_PUBLIC_URL:           http://localhost:5173
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:

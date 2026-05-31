@@ -15,6 +15,7 @@ from routers.conference_routes import router as conference_router
 from routers.registration_routes import router as registration_router
 from routers.qr_validation import router as qr_router
 from routers.attendance_routes import router as attendance_router
+from routers.certificate_routes import router as certificate_router
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s — %(message)s")
 logger = logging.getLogger(__name__)
@@ -95,7 +96,8 @@ async def global_exception_handler(request: Request, exc: Exception):
     )
 
 
-app.include_router(attendance_router)   # static paths first — before /{conference_id}
+app.include_router(attendance_router)    # static paths first — before /{conference_id}
+app.include_router(certificate_router)
 app.include_router(conference_router)
 app.include_router(registration_router)
 app.include_router(qr_router)

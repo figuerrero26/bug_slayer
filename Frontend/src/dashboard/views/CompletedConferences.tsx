@@ -46,6 +46,8 @@ export default function CompletedConferences({ userId }: { userId: number }) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [sortOrder, setSortOrder]               = useState<"newest" | "oldest">("newest");
   const [filterOpen, setFilterOpen]             = useState(false);
+  const [downloading, setDownloading]           = useState<Set<number>>(new Set());
+  const [certError, setCertError]               = useState("");
   const filterRef = useRef<HTMLDivElement>(null);
 
   // ── Fetch ─────────────────────────────────────────────────────────────────────
@@ -61,6 +63,43 @@ export default function CompletedConferences({ userId }: { userId: number }) {
       .finally(() => setLoading(false));
     return () => ctrl.abort();
   }, [userId]);
+
+  // ── Descarga de certificado ───────────────────────────────────────────────────
+  const handleDownload = async (item: CompletedConference) => {
+    const raw   = sessionStorage.getItem("session");
+    const token = raw ? (JSON.parse(raw) as { token?: string }).token : null;
+    if (!token) { setCertError("Sesión expirada. Vuelve a iniciar sesión."); return; }
+
+    setDownloading(prev => new Set(prev).add(item.id_inscripcion));
+    setCertError("");
+    try {
+      const res = await fetch(
+        `${SEARCH_URL}/certificados/descargar/${item.id_inscripcion}`,
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error((body as { detail?: string }).detail ?? "Error al generar el certificado");
+      }
+      const blob = await res.blob();
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement("a");
+      a.href     = url;
+      a.download = `certificado_${item.title.replace(/\s+/g, "_").slice(0, 40)}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setCertError(err instanceof Error ? err.message : "No se pudo descargar el certificado");
+    } finally {
+      setDownloading(prev => {
+        const next = new Set(prev);
+        next.delete(item.id_inscripcion);
+        return next;
+      });
+    }
+  };
 
   // ── Close category dropdown on outside click ──────────────────────────────────
   useEffect(() => {
@@ -152,6 +191,14 @@ export default function CompletedConferences({ userId }: { userId: number }) {
   return (
     <div className="ccv-page">
       <div className="ccv-card">
+
+        {/* ── Error de certificado ── */}
+        {certError && (
+          <div className="ccv-cert-error" role="alert">
+            <span>⚠ {certError}</span>
+            <button className="ccv-cert-error-close" onClick={() => setCertError("")}>✕</button>
+          </div>
+        )}
 
         {/* ── Header ── */}
         <div className="ccv-card-header">
@@ -256,15 +303,17 @@ export default function CompletedConferences({ userId }: { userId: number }) {
                     <td className="ccv-td-action">
                       <button
                         className="ccv-cert-btn"
-                        onClick={() =>
-                          console.log(
-                            "Generando certificado para la conferencia ID:",
-                            item.id_inscripcion
-                          )
-                        }
+                        disabled={downloading.has(item.id_inscripcion)}
+                        onClick={() => handleDownload(item)}
                       >
-                        <Award size={13} strokeWidth={2} />
-                        {t.ccv_cert_btn}
+                        {downloading.has(item.id_inscripcion)
+                          ? <span className="ccv-btn-spinner" aria-hidden="true" />
+                          : <Award size={13} strokeWidth={2} />
+                        }
+                        {downloading.has(item.id_inscripcion)
+                          ? (t.ccv_cert_downloading ?? "Generando...")
+                          : t.ccv_cert_btn
+                        }
                       </button>
                     </td>
                   </tr>
@@ -280,14 +329,12 @@ export default function CompletedConferences({ userId }: { userId: number }) {
           </table>
         </div>
 
-        {/* ── Pagination ── */}
-        <div className="ccv-pagination">
-          <span className="ccv-pag-info">
-            {t.ccv_showing}
-            {filtered.length > 0 && (
-              <>&nbsp;{start + 1}–{Math.min(start + PAGE_SIZE, filtered.length)}&nbsp;de&nbsp;{filtered.length}</>
-            )}
-          </span>
+
+      </div>
+
+      {/* ── Paginación externa — solo visible cuando hay más de una página ── */}
+      {totalPages > 1 && (
+        <div className="ccv-pagination-ext">
           <div className="ccv-pag-controls">
             <button
               className="ccv-pag-btn ccv-pag-btn--arrow"
@@ -316,8 +363,8 @@ export default function CompletedConferences({ userId }: { userId: number }) {
             >›</button>
           </div>
         </div>
+      )}
 
-      </div>
     </div>
   );
 }
