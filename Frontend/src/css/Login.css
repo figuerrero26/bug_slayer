@@ -145,6 +145,11 @@
   opacity: 0;
 }
 
+/* Sin ícono visible → padding normal sin hueco */
+.login-form .input-group:has(input:not(:placeholder-shown)) input {
+  padding-left: 16px;
+}
+
 .login-form .input-group input {
   width: 100%;
   padding: 13px 14px 13px 40px;
@@ -169,6 +174,13 @@
 .login-form .input-group input:focus {
   outline: none;
   border-color: rgba(255, 255, 255, 0.18);
+}
+
+.login-form .input-group input:-webkit-autofill,
+.login-form .input-group input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #1e293b inset;
+  -webkit-text-fill-color: #ffffff;
+  caret-color: #ffffff;
 }
 
 /* Botón mostrar/ocultar contraseña */
