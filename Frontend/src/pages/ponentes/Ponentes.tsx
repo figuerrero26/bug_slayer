@@ -120,7 +120,7 @@ export default function Ponentes() {
         </div>
         <div className="ponentes-hero-content">
           <span className="ponentes-hero-badge">{t.ponentes_badge ?? "CONIITI 2026 · País invitado Italia"}</span>
-          <h1>{t.ponentes_title ?? "Conferencistas"}</h1>
+          <h1>{t.ponentes_title ?? "Ponentes 2026"}</h1>
           <p>{t.ponentes_subtitle ?? "95 expertos internacionales · más de 20 países · ingeniería del futuro"}</p>
         </div>
       </section>

@@ -260,41 +260,46 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
+  z-index: 0;
 }
 
 .hc {
   fill: none;
   stroke-linecap: round;
+  stroke-dasharray: 700;
 }
 .hc-1 {
   stroke: #FFD100;
-  stroke-width: 1.6;
-  animation: hcFlow1 10s ease-in-out infinite;
+  stroke-width: 1.8;
+  animation: hcTraverse1 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 .hc-2 {
   stroke: #ffffff;
-  stroke-width: 1;
-  animation: hcFlow2 14s ease-in-out infinite;
+  stroke-width: 1.2;
+  animation: hcTraverse2 5s cubic-bezier(0.4, 0, 0.2, 1) 2s infinite;
 }
 
-@keyframes hcFlow1 {
-  0%   { opacity: 0.08; transform: translateX(0) translateY(0); }
-  40%  { opacity: 0.28; transform: translateX(-14px) translateY(-4px); }
-  70%  { opacity: 0.18; transform: translateX(8px) translateY(2px); }
-  100% { opacity: 0.08; transform: translateX(0) translateY(0); }
+@keyframes hcTraverse1 {
+  0%   { stroke-dashoffset: -700; opacity: 0;    }
+  8%   { opacity: 0.7;                            }
+  50%  { stroke-dashoffset: 0;    opacity: 0.7;  }
+  92%  { opacity: 0.6;                            }
+  100% { stroke-dashoffset:  700; opacity: 0;    }
 }
 
-@keyframes hcFlow2 {
-  0%   { opacity: 0.05; transform: translateX(0) translateY(0); }
-  50%  { opacity: 0.14; transform: translateX(12px) translateY(3px); }
-  100% { opacity: 0.05; transform: translateX(0) translateY(0); }
+@keyframes hcTraverse2 {
+  0%   { stroke-dashoffset: -700; opacity: 0;    }
+  8%   { opacity: 0.45;                           }
+  50%  { stroke-dashoffset: 0;    opacity: 0.45; }
+  92%  { opacity: 0.35;                           }
+  100% { stroke-dashoffset:  700; opacity: 0;    }
 }
 
 /* Badges en cabecera */
 .insc-badge-cat {
   position: relative;
   z-index: 1;
-  background: rgba(255,209,0,0.14);
+  background: #03124e;
   color: #FFD100;
   font-family: 'Inter', sans-serif;
   font-size: 0.65rem;

@@ -1,6 +1,6 @@
 /* InscritasView — prefijo iv- */
 
-/* ── Animación base ────────────────────────────────────────────────────────── */
+/* ── Animaciones ───────────────────────────────────────────────────────────── */
 
 @keyframes iv-fade {
   from { opacity: 0; transform: translateY(8px); }
@@ -8,6 +8,20 @@
 }
 
 @keyframes iv-spin { to { transform: rotate(360deg); } }
+
+/* Línea que entra, cruza la tarjeta y desaparece */
+@keyframes iv-card-line {
+  0%   { transform: translateX(-180px) skewX(-18deg); opacity: 0; }
+  8%   { opacity: 1; }
+  42%  { transform: translateX(720px)  skewX(-18deg); opacity: 0; }
+  100% { transform: translateX(720px)  skewX(-18deg); opacity: 0; }
+}
+
+/* Entrada escalonada para ítems del widget */
+@keyframes iv-stat-enter {
+  from { opacity: 0; transform: translateX(10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
 
 /* ── Estados vacíos / carga / error ───────────────────────────────────────── */
 
@@ -117,15 +131,21 @@
 .iv-stat-item--active                              { background: rgba(30, 111, 189, 0.10); }
 .iv-stat-item--active-blue                         { background: rgba(30, 111, 189, 0.10); }
 .iv-stat-item--active-green                        { background: rgba(39, 174,  96, 0.10); }
-.iv-stat-item--active-yellow                       { background: rgba(232, 148, 26, 0.10); }
+.iv-stat-item--active-yellow                       { background: rgba(59, 130, 246, 0.10); }
 .iv-stat-item--active-red                          { background: rgba(220,  38,  38, 0.10); }
 .iv-stat-item--active .iv-stat-value               { font-weight: 900; }
+
+/* Entrada escalonada al montar el widget */
+.iv-stats-widget .iv-stat-item:nth-child(1) { animation: iv-stat-enter 0.35s ease 0.05s both; }
+.iv-stats-widget .iv-stat-item:nth-child(2) { animation: iv-stat-enter 0.35s ease 0.13s both; }
+.iv-stats-widget .iv-stat-item:nth-child(3) { animation: iv-stat-enter 0.35s ease 0.21s both; }
+.iv-stats-widget .iv-stat-item:nth-child(4) { animation: iv-stat-enter 0.35s ease 0.29s both; }
 
 .iv-stat-icon { flex-shrink: 0; }
 
 .iv-stat-icon--blue   { color: #1e6fbd; }
 .iv-stat-icon--green  { color: #27ae60; }
-.iv-stat-icon--yellow { color: #e8941a; }
+.iv-stat-icon--yellow { color: #3b82f6; }
 .iv-stat-icon--red    { color: #dc2626; }
 
 .iv-stat-info {
@@ -295,7 +315,7 @@
 }
 
 .iv-badge--confirmada { background: #e6f4ea; color: #1a7a3c; }
-.iv-badge--en-curso   { background: #fef9e7; color: #92600a; }
+.iv-badge--en-curso   { background: #dbeafe; color: #1d4ed8; }
 .iv-badge--finalizada { background: #fde8e8; color: #c0392b; }
 
 /* ── Sin resultados ───────────────────────────────────────────────────────── */
@@ -391,8 +411,10 @@
 }
 
 .iv-cat-card {
-  background: #fff;
-  border: 1px solid #f0f2f5;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, #f7f9ff 0%, #eef2fc 100%);
+  border: 1px solid #e6ecf8;
   border-radius: 14px;
   padding: 20px 18px;
   display: flex;
@@ -405,15 +427,49 @@
   transition: border-color 0.18s, box-shadow 0.18s, transform 0.12s;
 }
 
+/* Línea 1 — más ancha, entra cada 7s */
+.iv-cat-card::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  left: 0;
+  width: 48px;
+  height: 160%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.55), transparent);
+  animation: iv-card-line 7s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Línea 2 — más delgada, entra con 3.5s de desfase */
+.iv-cat-card::after {
+  content: '';
+  position: absolute;
+  top: -30%;
+  left: 0;
+  width: 22px;
+  height: 160%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.30), transparent);
+  animation: iv-card-line 7s ease-in-out infinite 3.5s;
+  pointer-events: none;
+}
+
+/* El contenido siempre por encima de las líneas */
+.iv-cat-card-icon,
+.iv-cat-card-label,
+.iv-cat-card-count {
+  position: relative;
+  z-index: 1;
+}
+
 .iv-cat-card:hover {
-  border-color: #c5d3e8;
+  border-color: #b8cce8;
   box-shadow: 0 4px 14px rgba(26, 37, 69, 0.1);
   transform: translateY(-2px);
 }
 
 .iv-cat-card--all {
-  background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 100%);
-  border-color: #c5d3e8;
+  background: linear-gradient(135deg, #e8f0fe 0%, #dce8fc 100%);
+  border-color: #b8cce8;
 }
 
 .iv-cat-card--all:hover {
@@ -635,6 +691,18 @@
 }
 [data-theme="dark"] .iv-cat-card--all {
   background: linear-gradient(135deg, #1a2545 0%, #1e2d50 100%);
+}
+/* Líneas más sutiles en modo oscuro */
+[data-theme="dark"] .iv-cat-card::before {
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.10), transparent);
+}
+[data-theme="dark"] .iv-cat-card::after {
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.06), transparent);
+}
+/* Badge en-curso en dark */
+[data-theme="dark"] .iv-badge--en-curso {
+  background: rgba(59, 130, 246, 0.15);
+  color: #93c5fd;
 }
 [data-theme="dark"] .iv-cat-card-label { color: #e2e8f0; }
 [data-theme="dark"] .iv-actions-btn:hover    { background: var(--surface2, #111d30); }

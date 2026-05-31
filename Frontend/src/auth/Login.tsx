@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 
 import "../css/Login.css";
 
@@ -14,28 +14,18 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({
-    email: "",
-    password: ""
-  });
-
+  const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-
-    setForm((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
-
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     setError("");
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-
     e.preventDefault();
-
     setError("");
 
     if (!form.email.trim() || !form.password) {
@@ -46,20 +36,15 @@ export default function Login() {
     setLoading(true);
 
     try {
-
       const response = await fetch(`${AUTH_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email:    form.email,
-          password: form.password,
-        }),
+        body: JSON.stringify({ email: form.email, password: form.password }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-
         sessionStorage.setItem(
           "session",
           JSON.stringify({
@@ -68,30 +53,18 @@ export default function Login() {
             email:   data.email,
           })
         );
-
         navigate("/dashboard");
-
       } else {
-
         setError(data.detail || "Correo o contraseña incorrectos");
-
       }
-
-    } catch (err) {
-
-      console.error(err);
+    } catch {
       setError("Error conectando con el servidor");
-
     } finally {
-
       setLoading(false);
-
     }
-
   };
 
   return (
-
     <motion.div
       className="login-container"
       initial={{ opacity: 0, x: 80 }}
@@ -102,88 +75,89 @@ export default function Login() {
 
       {/* PANEL IZQUIERDO */}
       <div className="login-left">
-
-        <img
-          src={ImagenFondo}
-          alt="Evento CONIITI"
-          className="login-image"
-        />
-
-        <img
-          src={logoUCatolica}
-          alt="Logo Universidad"
-          className="logo-login"
-        />
-
+        <img src={ImagenFondo} alt="Evento CONIITI" className="login-image" />
+        <img src={logoUCatolica} alt="Logo Universidad" className="logo-login" />
         <div className="overlay" />
-
         <div className="login-text">
           <h1>
             XII Congreso Internacional de Innovación y Tendencias en Ingeniería (CONIITI 2026)
           </h1>
-
-          <p>
-            Tejiendo redes para el futuro profesional
-          </p>
+          <p>Tejiendo redes para el futuro profesional</p>
         </div>
-
       </div>
 
       {/* PANEL DERECHO */}
       <div className="login-right">
 
         <Link to="/" className="login-back">
-          <FaArrowLeft /> Volver al inicio
+          <FaArrowLeft aria-hidden="true" /> Volver al inicio
         </Link>
 
-        <form
-          className="login-form"
-          onSubmit={handleSubmit}
-          noValidate
-        >
+        <form className="login-form" onSubmit={handleSubmit} noValidate>
 
           <h2>Iniciar Sesión</h2>
 
           {error && (
-            <p
-              style={{
-                color: "#fca5a5",
-                fontSize: "0.88rem",
-                margin: 0
-              }}
-            >
-              ⚠ {error}
+            <p className="login-error" role="alert" aria-live="assertive">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" style={{ flexShrink: 0, marginTop: 1 }}>
+                <path d="M8 1.5L14.5 13H1.5L8 1.5Z" stroke="#fca5a5" strokeWidth="1.5" strokeLinejoin="round"/>
+                <path d="M8 6v3.5M8 11v.5" stroke="#fca5a5" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+              {error}
             </p>
           )}
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Correo electrónico"
-            value={form.email}
-            onChange={handleChange}
-            autoComplete="email"
-          />
+          <div className="login-field">
+            <label htmlFor="login-email" className="login-label">
+              Correo electrónico
+            </label>
+            <div className="input-group">
+              <FaEnvelope className="input-icon" aria-hidden="true" />
+              <input
+                id="login-email"
+                type="email"
+                name="email"
+                placeholder="tuconiiti@correo.com"
+                value={form.email}
+                onChange={handleChange}
+                autoComplete="email"
+              />
+            </div>
+          </div>
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Contraseña"
-            value={form.password}
-            onChange={handleChange}
-            autoComplete="current-password"
-          />
+          <div className="login-field">
+            <label htmlFor="login-password" className="login-label">
+              Contraseña
+            </label>
+            <div className="input-group input-group--has-eye">
+              <FaLock className="input-icon" aria-hidden="true" />
+              <input
+                id="login-password"
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="••••••••"
+                value={form.password}
+                onChange={handleChange}
+                autoComplete="current-password"
+              />
+              <button
+                type="button"
+                className="input-eye-btn"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
+          </div>
 
-          <p className="extra" style={{ textAlign: "right", marginTop: "-8px", fontSize: "13px" }}>
+          <p className="extra login-forgot">
             <Link to="/recuperar-contrasena">
               <span>¿Olvidaste tu contraseña?</span>
             </Link>
           </p>
 
-          <button
-            type="submit"
-            disabled={loading}
-          >
+          <button type="submit" disabled={loading}>
             {loading ? "Verificando..." : "Entrar"}
           </button>
 
