@@ -29,19 +29,19 @@ const TEXTO_BRAND =
   "La Universidad Católica de Colombia es una Institución de Educación Superior sujeta a inspección y vigilancia por el Ministerio de Educación, reconocida mediante Resolución Número 2271 de julio 7 de 1970 del Ministerio de Justicia.";
 
 const LEGAL_COL1 = [
-  "Aviso de Privacidad",
-  "Estatuto General",
-  "Información Tributaria",
-  "Política de Bienestar Universitario",
-  "Reglamento Estudiantil",
-  "Valores Pecuniarios",
+  { label: "Aviso de Privacidad",                    href: "#" },
+  { label: "Estatuto General",                       href: "#" },
+  { label: "Información Tributaria",                 href: "#" },
+  { label: "Política de Bienestar Universitario",    href: "#" },
+  { label: "Reglamento Estudiantil",                 href: "#" },
+  { label: "Valores Pecuniarios",                    href: "#" },
 ];
 
 const LEGAL_COL2 = [
-  "Autorización Tratamiento de Datos Personales Web",
-  "Política de Tratamiento de Datos Personales",
-  "Términos y Condiciones de Uso del Sitio",
-  "Transparencia y Acceso a la Información Pública",
+  { label: "Autorización Tratamiento de Datos Personales Web", href: "/politica-tratamiento-datos.pdf" },
+  { label: "Política de Tratamiento de Datos Personales",      href: "/politica-tratamiento-datos.pdf" },
+  { label: "Términos y Condiciones de Uso del Sitio",          href: "#" },
+  { label: "Transparencia y Acceso a la Información Pública",  href: "#" },
 ];
 
 function Footer() {
@@ -79,12 +79,21 @@ function Footer() {
           <div className="footer-legal-grid">
             <ul>
               {LEGAL_COL1.map((item) => (
-                <li key={item}><a href="#">{item}</a></li>
+                <li key={item.label}>
+                  <a href={item.href}>{item.label}</a>
+                </li>
               ))}
             </ul>
             <ul>
               {LEGAL_COL2.map((item) => (
-                <li key={item}><a href="#">{item}</a></li>
+                <li key={item.label}>
+                  <a
+                    href={item.href}
+                    {...(item.href !== "#" && { target: "_blank", rel: "noopener noreferrer" })}
+                  >
+                    {item.label}
+                  </a>
+                </li>
               ))}
             </ul>
           </div>

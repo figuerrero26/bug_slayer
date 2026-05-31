@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from datetime import datetime
 import httpx
 import os
 
@@ -22,6 +23,12 @@ async def register(payload: UserRegister, db: Session = Depends(get_db)):
     2. Llama al dashboard_service para crear el perfil con los datos personales.
     3. Devuelve el JWT solo si el dashboard confirma la creación del perfil.
     """
+    if not payload.acepta_tratamiento_datos:
+        raise HTTPException(
+            status_code=400,
+            detail="Es obligatorio aceptar la política de tratamiento de datos para registrarse"
+        )
+
     if db.query(User).filter(User.email == payload.email).first():
         raise HTTPException(status_code=400, detail="El correo ya está registrado")
 
@@ -29,6 +36,8 @@ async def register(payload: UserRegister, db: Session = Depends(get_db)):
         email=payload.email,
         password_hash=hash_password(payload.password),
         is_active=True,
+        acepta_tratamiento_datos=True,
+        fecha_aceptacion_legal=datetime.utcnow(),
     )
     db.add(new_user)
     db.commit()

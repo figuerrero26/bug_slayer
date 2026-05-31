@@ -10,6 +10,7 @@ class UserRegister(BaseModel):
     birth_date: Optional[date] = None
     phone: str
     country_city: str
+    acepta_tratamiento_datos: bool
 
 
 class UserLogin(BaseModel):

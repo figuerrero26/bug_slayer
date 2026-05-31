@@ -376,6 +376,42 @@
   word-break: break-word;
 }
 
+/* Consentimiento legal — Ley 1581 de 2012 */
+.legal-checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 4px 0;
+  margin-top: 4px;
+}
+
+.legal-checkbox-container input[type="checkbox"] {
+  flex-shrink: 0;
+  width: 17px;
+  height: 17px;
+  margin-top: 2px;
+  cursor: pointer;
+  accent-color: #facc15;
+}
+
+.legal-checkbox-container label {
+  font-size: 0.77rem;
+  color: #94a3b8;
+  line-height: 1.65;
+  cursor: pointer;
+}
+
+.legal-checkbox-container a {
+  color: #facc15;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 600;
+}
+
+.legal-checkbox-container a:hover {
+  opacity: 0.8;
+}
+
 /* Botones */
 .reg-actions {
   display: flex;

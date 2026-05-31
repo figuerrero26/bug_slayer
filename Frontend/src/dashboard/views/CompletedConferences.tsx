@@ -1,16 +1,17 @@
-import { useState, useEffect, useMemo } from "react";
-import { Search, Award } from "lucide-react";
+import { useState, useEffect, useMemo, useRef } from "react";
+import { Search, Award, Layers, ListFilter, ChevronDown } from "lucide-react";
 import { SEARCH_URL } from "../../services/api";
 import { useLang } from "../../context/LanguageContext";
 import "./CompletedConferences.css";
 
 interface CompletedConference {
-  id_inscripcion: number;
-  title: string;
-  speaker_name: string | null;
-  schedule: string | null;
-  location_text: string | null;
+  id_inscripcion:   number;
+  title:            string;
+  speaker_name:     string | null;
+  schedule:         string | null;
+  location_text:    string | null;
   fecha_validacion: string | null;
+  category:         string | null;
 }
 
 const PAGE_SIZE = 8;
@@ -18,9 +19,7 @@ const PAGE_SIZE = 8;
 function fmtDate(iso: string | null): string {
   if (!iso) return "—";
   return new Date(iso).toLocaleDateString("es-CO", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
+    day: "numeric", month: "long", year: "numeric",
   });
 }
 
@@ -39,12 +38,17 @@ function getPagesToShow(current: number, total: number): (number | "...")[] {
 export default function CompletedConferences({ userId }: { userId: number }) {
   const { t } = useLang();
 
-  const [items, setItems]     = useState<CompletedConference[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState("");
-  const [search, setSearch]   = useState("");
-  const [page, setPage]       = useState(1);
+  const [items, setItems]                       = useState<CompletedConference[]>([]);
+  const [loading, setLoading]                   = useState(true);
+  const [error, setError]                       = useState("");
+  const [search, setSearch]                     = useState("");
+  const [page, setPage]                         = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [sortOrder, setSortOrder]               = useState<"newest" | "oldest">("newest");
+  const [filterOpen, setFilterOpen]             = useState(false);
+  const filterRef = useRef<HTMLDivElement>(null);
 
+  // ── Fetch ─────────────────────────────────────────────────────────────────────
   useEffect(() => {
     const ctrl = new AbortController();
     fetch(`${SEARCH_URL}/conferences/completed?user_id=${userId}`, { signal: ctrl.signal })
@@ -58,24 +62,51 @@ export default function CompletedConferences({ userId }: { userId: number }) {
     return () => ctrl.abort();
   }, [userId]);
 
+  // ── Close category dropdown on outside click ──────────────────────────────────
+  useEffect(() => {
+    if (!filterOpen) return;
+    function onDown(e: MouseEvent) {
+      if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
+        setFilterOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [filterOpen]);
+
+  // ── Derived data ──────────────────────────────────────────────────────────────
+  const categories = useMemo(() =>
+    [...new Set(items.map(c => c.category).filter((c): c is string => !!c))].sort(),
+    [items]
+  );
+
+  // Paso 1 → texto · Paso 2 → categoría · Paso 3 → orden cronológico
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();
-    if (!q) return items;
-    return items.filter(c =>
-      c.title.toLowerCase().includes(q) ||
-      (c.speaker_name ?? "").toLowerCase().includes(q)
-    );
-  }, [items, search]);
+    let result = q
+      ? items.filter(c =>
+          c.title.toLowerCase().includes(q) ||
+          (c.speaker_name ?? "").toLowerCase().includes(q)
+        )
+      : [...items];
+
+    if (selectedCategory) {
+      result = result.filter(c => c.category === selectedCategory);
+    }
+
+    result.sort((a, b) => {
+      const da = a.schedule ? new Date(a.schedule).getTime() : 0;
+      const db = b.schedule ? new Date(b.schedule).getTime() : 0;
+      return sortOrder === "newest" ? db - da : da - db;
+    });
+
+    return result;
+  }, [items, search, selectedCategory, sortOrder]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const safePage   = Math.min(page, totalPages);
   const start      = (safePage - 1) * PAGE_SIZE;
   const paginated  = filtered.slice(start, start + PAGE_SIZE);
-
-  function onSearch(val: string) {
-    setSearch(val);
-    setPage(1);
-  }
 
   // ── Loading ───────────────────────────────────────────────────────────────────
   if (loading) return (
@@ -125,15 +156,76 @@ export default function CompletedConferences({ userId }: { userId: number }) {
         {/* ── Header ── */}
         <div className="ccv-card-header">
           <h2 className="ccv-heading">{t.ccv_heading}</h2>
-          <div className="ccv-search-wrap">
-            <Search size={14} strokeWidth={2.2} className="ccv-search-icon" />
-            <input
-              className="ccv-search-input"
-              type="text"
-              placeholder={t.ccv_search_ph}
-              value={search}
-              onChange={e => onSearch(e.target.value)}
-            />
+
+          <div className="ccv-controls">
+
+            {/* Search */}
+            <div className="ccv-search-wrap">
+              <Search size={14} strokeWidth={2.2} className="ccv-search-icon" />
+              <input
+                className="ccv-search-input"
+                type="text"
+                placeholder={t.ccv_search_ph}
+                value={search}
+                onChange={e => { setSearch(e.target.value); setPage(1); }}
+              />
+            </div>
+
+            {/* ── Category filter button ── */}
+            {categories.length > 0 && (
+              <div className="ccv-filter-wrap" ref={filterRef}>
+                <button
+                  className={[
+                    "ccv-ctrl-btn",
+                    filterOpen       ? "ccv-ctrl-btn--open"   : "",
+                    selectedCategory ? "ccv-ctrl-btn--active" : "",
+                  ].filter(Boolean).join(" ")}
+                  onClick={() => setFilterOpen(o => !o)}
+                >
+                  <Layers size={13} strokeWidth={2} />
+                  <span>{selectedCategory ?? t.ccv_filter_all}</span>
+                  <ChevronDown
+                    size={12}
+                    strokeWidth={2.5}
+                    className={`ccv-filter-chevron${filterOpen ? " ccv-filter-chevron--open" : ""}`}
+                  />
+                </button>
+
+                {filterOpen && (
+                  <div className="ccv-filter-dropdown">
+                    <button
+                      className={`ccv-filter-option${!selectedCategory ? " ccv-filter-option--active" : ""}`}
+                      onClick={() => { setSelectedCategory(null); setFilterOpen(false); setPage(1); }}
+                    >
+                      {t.ccv_filter_all}
+                    </button>
+                    {categories.map(cat => (
+                      <button
+                        key={cat}
+                        className={`ccv-filter-option${selectedCategory === cat ? " ccv-filter-option--active" : ""}`}
+                        onClick={() => { setSelectedCategory(cat); setFilterOpen(false); setPage(1); }}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ── Sort toggle button ── */}
+            <button
+              className={`ccv-ctrl-btn ccv-sort-btn${sortOrder === "oldest" ? " ccv-ctrl-btn--active" : ""}`}
+              onClick={() => {
+                setSortOrder(o => o === "newest" ? "oldest" : "newest");
+                setPage(1);
+              }}
+              title={sortOrder === "newest" ? t.ccv_sort_newest : t.ccv_sort_oldest}
+            >
+              <ListFilter size={14} strokeWidth={2} />
+              <span>{sortOrder === "newest" ? t.ccv_sort_newest : t.ccv_sort_oldest}</span>
+            </button>
+
           </div>
         </div>
 

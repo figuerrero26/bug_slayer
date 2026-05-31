@@ -143,6 +143,7 @@ class CompletedConferenceOut(BaseModel):
     schedule:         Optional[datetime]
     location_text:    Optional[str]
     fecha_validacion: Optional[datetime]
+    category:         Optional[str] = None
 
     model_config = {"from_attributes": True}
 

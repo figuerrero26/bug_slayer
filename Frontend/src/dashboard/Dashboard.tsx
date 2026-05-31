@@ -128,7 +128,7 @@ export default function Dashboard() {
                 )}
                 {activeNav === "conferences" && <InscritasView userId={userId} />}
                 {activeNav === "calendar"    && <CalendarioView />}
-                {(activeNav === "favorites" || activeNav === "events") && (
+                {activeNav === "favorites" && (
                   <PlaceholderView section={activeNav} />
                 )}
                 {activeNav === "completed" && (

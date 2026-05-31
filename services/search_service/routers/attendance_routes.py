@@ -105,6 +105,7 @@ def get_completed_conferences(user_id: int, db: Session = Depends(get_db)):
             schedule=conf.schedule,
             location_text=conf.location_text,
             fecha_validacion=reg.fecha_validacion,
+            category=conf.category,
         )
         for conf, reg in rows
     ]

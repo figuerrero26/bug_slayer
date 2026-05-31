@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import {
-  Home, CalendarDays, CheckSquare, Compass,
+  Home, CalendarDays, CheckSquare,
   Heart, Calendar, Mail, LogOut, ChevronRight,
 } from "lucide-react";
 import { useLang } from "../../context/LanguageContext";
@@ -34,7 +34,6 @@ const NAV_DEFS: NavDef[] = [
   { id: "profile",     icon: <Home        size={18} strokeWidth={2} />, badge: false },
   { id: "conferences", icon: <CalendarDays size={18} strokeWidth={2} />, badge: false },
   { id: "completed",   icon: <CheckSquare  size={18} strokeWidth={2} />, badge: false },
-  { id: "events",      icon: <Compass      size={18} strokeWidth={2} />, badge: false },
   { id: "favorites",   icon: <Heart        size={18} strokeWidth={2} />, badge: false },
   { id: "calendar",    icon: <Calendar     size={18} strokeWidth={2} />, badge: false },
   { id: "messages",    icon: <Mail         size={18} strokeWidth={2} />, badge: true  },
@@ -59,7 +58,6 @@ export default function DashboardSidebar({
     profile:     t.dash_profile,
     conferences: t.dash_conferences,
     completed:   t.dash_completed,
-    events:      t.dash_events,
     favorites:   t.dash_favorites,
     calendar:    t.dash_calendar,
     messages:    t.dash_messages,

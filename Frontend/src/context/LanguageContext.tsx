@@ -52,7 +52,7 @@ const ES: T = {
   back: "Volver al inicio",
   /* Dashboard nav */
   dash_profile: "Perfil", dash_conferences: "Mis conferencias", dash_completed: "Completadas",
-  dash_events: "Eventos", dash_favorites: "Favoritos", dash_calendar: "Calendario",
+  dash_favorites: "Favoritos", dash_calendar: "Calendario",
   dash_messages: "Mensajes", dash_settings: "Ajustes", dash_logout: "Cerrar sesión",
   dash_mobile_talks: "Mis charlas", dash_go_home: "Inicio", dash_loading: "Cargando…",
   dash_welcome_back: "Bienvenido de nuevo,", dash_welcome_first: "¡Bienvenido al CONIITI 2026!",
@@ -126,7 +126,7 @@ const ES: T = {
   msv_reply_close: "Responder (Cerrar)", msv_mark_unread: "Marcar como no leído",
   /* PlaceholderView */
   ph_favorites_title: "Favoritos", ph_favorites_msg: "Función de favoritos próximamente disponible.",
-  ph_events_title: "Eventos", ph_completed_title: "Completadas",
+  ph_completed_title: "Completadas",
   ph_system_ready: "El sistema está listo para recibir estos datos en la siguiente fase del proyecto.",
   ph_soon: "Próximamente", ph_dev_title: "Sección en desarrollo",
   ph_dev_msg: "Esta funcionalidad estará disponible próximamente.",
@@ -140,6 +140,8 @@ const ES: T = {
   ccv_empty_title: "Aún no registras asistencias a conferencias finalizadas.",
   ccv_empty_sub: "Recuerda escanear tu código QR al ingresar al aula.",
   ccv_showing: "Mostrando registros", ccv_no_results: "Sin resultados para esta búsqueda",
+  ccv_filter_label: "Categoría", ccv_filter_all: "Todas",
+  ccv_sort_by: "Ordenar", ccv_sort_newest: "Más recientes", ccv_sort_oldest: "Más antiguas",
   /* Ticket */
   prof_ticket_sede: "SEDE", prof_ticket_sala: "SALA", prof_ticket_serial: "SERIAL",
   prof_ticket_venue: "Universidad Católica de Colombia",
@@ -175,7 +177,7 @@ const ES: T = {
 const EN: T = {
   /* Dashboard nav */
   dash_profile: "Profile", dash_conferences: "My Conferences", dash_completed: "Completed",
-  dash_events: "Events", dash_favorites: "Favorites", dash_calendar: "Calendar",
+  dash_favorites: "Favorites", dash_calendar: "Calendar",
   dash_messages: "Messages", dash_settings: "Settings", dash_logout: "Log out",
   dash_mobile_talks: "My talks", dash_go_home: "Home", dash_loading: "Loading…",
   dash_welcome_back: "Welcome back,", dash_welcome_first: "Welcome to CONIITI 2026!",
@@ -249,7 +251,7 @@ const EN: T = {
   msv_reply_close: "Reply (Close)", msv_mark_unread: "Mark as unread",
   /* PlaceholderView */
   ph_favorites_title: "Favorites", ph_favorites_msg: "Favorites feature coming soon.",
-  ph_events_title: "Events", ph_completed_title: "Completed",
+  ph_completed_title: "Completed",
   ph_system_ready: "The system is ready to receive this data in the next project phase.",
   ph_soon: "Coming soon", ph_dev_title: "Section under development",
   ph_dev_msg: "This functionality will be available soon.",
@@ -263,6 +265,8 @@ const EN: T = {
   ccv_empty_title: "No completed conference attendance on record.",
   ccv_empty_sub: "Remember to scan your QR code when entering the room.",
   ccv_showing: "Showing records", ccv_no_results: "No results for this search",
+  ccv_filter_label: "Category", ccv_filter_all: "All",
+  ccv_sort_by: "Sort by", ccv_sort_newest: "Newest", ccv_sort_oldest: "Oldest",
 
   home: "Home", nosotros: "About Us", ferias: "Our Fairs",
   inscripciones: "Conferences", noticias: "News", ponentes: "Speakers", login: "Login",
@@ -380,7 +384,7 @@ const IT: T = {
   insc_to_define: "Da definire",
   /* Dashboard nav */
   dash_profile: "Profilo", dash_conferences: "Le mie conferenze", dash_completed: "Completate",
-  dash_events: "Eventi", dash_favorites: "Preferiti", dash_calendar: "Calendario",
+  dash_favorites: "Preferiti", dash_calendar: "Calendario",
   dash_messages: "Messaggi", dash_settings: "Impostazioni", dash_logout: "Esci",
   dash_mobile_talks: "I miei talk", dash_go_home: "Inizio", dash_loading: "Caricamento…",
   dash_welcome_back: "Bentornato,", dash_welcome_first: "Benvenuto al CONIITI 2026!",
@@ -454,7 +458,7 @@ const IT: T = {
   msv_reply_close: "Rispondi (Chiudi)", msv_mark_unread: "Segna come non letto",
   /* PlaceholderView */
   ph_favorites_title: "Preferiti", ph_favorites_msg: "Funzione preferiti disponibile a breve.",
-  ph_events_title: "Eventi", ph_completed_title: "Completate",
+  ph_completed_title: "Completate",
   ph_system_ready: "Il sistema è pronto per ricevere questi dati nella prossima fase del progetto.",
   ph_soon: "Prossimamente", ph_dev_title: "Sezione in sviluppo",
   ph_dev_msg: "Questa funzionalità sarà disponibile a breve.",
@@ -468,6 +472,8 @@ const IT: T = {
   ccv_empty_title: "Nessuna presenza registrata per conferenze concluse.",
   ccv_empty_sub: "Ricorda di scansionare il QR code all'ingresso.",
   ccv_showing: "Visualizzazione record", ccv_no_results: "Nessun risultato per questa ricerca",
+  ccv_filter_label: "Categoria", ccv_filter_all: "Tutte",
+  ccv_sort_by: "Ordina", ccv_sort_newest: "Più recenti", ccv_sort_oldest: "Più antichi",
   /* Ticket */
   prof_ticket_sede: "SEDE", prof_ticket_sala: "SALA", prof_ticket_serial: "SERIALE",
   prof_ticket_venue: "Universidad Católica de Colombia",
@@ -530,7 +536,7 @@ const PT: T = {
   insc_to_define: "A definir",
   /* Dashboard nav */
   dash_profile: "Perfil", dash_conferences: "Minhas conferências", dash_completed: "Concluídas",
-  dash_events: "Eventos", dash_favorites: "Favoritos", dash_calendar: "Calendário",
+  dash_favorites: "Favoritos", dash_calendar: "Calendário",
   dash_messages: "Mensagens", dash_settings: "Configurações", dash_logout: "Sair",
   dash_mobile_talks: "Minhas palestras", dash_go_home: "Início", dash_loading: "Carregando…",
   dash_welcome_back: "Bem-vindo de volta,", dash_welcome_first: "Bem-vindo ao CONIITI 2026!",
@@ -604,7 +610,7 @@ const PT: T = {
   msv_reply_close: "Responder (Fechar)", msv_mark_unread: "Marcar como não lida",
   /* PlaceholderView */
   ph_favorites_title: "Favoritos", ph_favorites_msg: "Função de favoritos em breve.",
-  ph_events_title: "Eventos", ph_completed_title: "Concluídas",
+  ph_completed_title: "Concluídas",
   ph_system_ready: "O sistema está pronto para receber estes dados na próxima fase do projeto.",
   ph_soon: "Em breve", ph_dev_title: "Seção em desenvolvimento",
   ph_dev_msg: "Esta funcionalidade estará disponível em breve.",
@@ -618,6 +624,8 @@ const PT: T = {
   ccv_empty_title: "Você ainda não tem presenças registradas em conferências concluídas.",
   ccv_empty_sub: "Lembre-se de escanear seu QR code ao entrar na sala.",
   ccv_showing: "Mostrando registros", ccv_no_results: "Sem resultados para esta pesquisa",
+  ccv_filter_label: "Categoria", ccv_filter_all: "Todas",
+  ccv_sort_by: "Ordenar", ccv_sort_newest: "Mais recentes", ccv_sort_oldest: "Mais antigas",
   /* Ticket */
   prof_ticket_sede: "LOCAL", prof_ticket_sala: "SALA", prof_ticket_serial: "SERIAL",
   prof_ticket_venue: "Universidad Católica de Colombia",
@@ -680,7 +688,7 @@ const FR: T = {
   insc_to_define: "À définir",
   /* Dashboard nav */
   dash_profile: "Profil", dash_conferences: "Mes conférences", dash_completed: "Terminées",
-  dash_events: "Événements", dash_favorites: "Favoris", dash_calendar: "Calendrier",
+  dash_favorites: "Favoris", dash_calendar: "Calendrier",
   dash_messages: "Messages", dash_settings: "Paramètres", dash_logout: "Se déconnecter",
   dash_mobile_talks: "Mes conférences", dash_go_home: "Accueil", dash_loading: "Chargement…",
   dash_welcome_back: "Bon retour,", dash_welcome_first: "Bienvenue au CONIITI 2026 !",
@@ -754,7 +762,7 @@ const FR: T = {
   msv_reply_close: "Répondre (Fermer)", msv_mark_unread: "Marquer comme non lu",
   /* PlaceholderView */
   ph_favorites_title: "Favoris", ph_favorites_msg: "Fonctionnalité favoris bientôt disponible.",
-  ph_events_title: "Événements", ph_completed_title: "Terminées",
+  ph_completed_title: "Terminées",
   ph_system_ready: "Le système est prêt à recevoir ces données lors de la prochaine phase du projet.",
   ph_soon: "Bientôt", ph_dev_title: "Section en développement",
   ph_dev_msg: "Cette fonctionnalité sera disponible prochainement.",
@@ -768,6 +776,8 @@ const FR: T = {
   ccv_empty_title: "Aucune présence enregistrée pour des conférences terminées.",
   ccv_empty_sub: "Pensez à scanner votre QR code en entrant dans la salle.",
   ccv_showing: "Affichage des enregistrements", ccv_no_results: "Aucun résultat pour cette recherche",
+  ccv_filter_label: "Catégorie", ccv_filter_all: "Toutes",
+  ccv_sort_by: "Trier", ccv_sort_newest: "Plus récentes", ccv_sort_oldest: "Plus anciennes",
   /* Ticket */
   prof_ticket_sede: "LIEU", prof_ticket_sala: "SALLE", prof_ticket_serial: "SÉRIE",
   prof_ticket_venue: "Universidad Católica de Colombia",

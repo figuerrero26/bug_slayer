@@ -53,11 +53,12 @@ export default function Register() {
 
   const navigate = useNavigate();
 
-  const [step, setStep]       = useState(1);
-  const [form, setForm]       = useState(INITIAL);
-  const [error, setError]     = useState("");
-  const [loading, setLoading] = useState(false);
-  const [done, setDone]       = useState(false);
+  const [step, setStep]             = useState(1);
+  const [form, setForm]             = useState(INITIAL);
+  const [error, setError]           = useState("");
+  const [loading, setLoading]       = useState(false);
+  const [done, setDone]             = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   const set = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm((p) => ({ ...p, [field]: e.target.value }));
@@ -117,12 +118,13 @@ export default function Register() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email:        form.email,
-          password:     form.password,
-          full_name:    form.full_name,
-          birth_date:   form.birth_date || null,
-          phone:        form.phone,
-          country_city: form.country_city,
+          email:                    form.email,
+          password:                 form.password,
+          full_name:                form.full_name,
+          birth_date:               form.birth_date || null,
+          phone:                    form.phone,
+          country_city:             form.country_city,
+          acepta_tratamiento_datos: true,
         }),
       });
 
@@ -341,38 +343,62 @@ export default function Register() {
             )}
 
             {step === 4 && (
-              <div className="reg-summary">
+              <>
+                <div className="reg-summary">
 
-                <div className="reg-summary__row">
-                  <span className="reg-summary__label">Correo</span>
-                  <span className="reg-summary__value">{form.email}</span>
+                  <div className="reg-summary__row">
+                    <span className="reg-summary__label">Correo</span>
+                    <span className="reg-summary__value">{form.email}</span>
+                  </div>
+
+                  <div className="reg-summary__row">
+                    <span className="reg-summary__label">Nombre</span>
+                    <span className="reg-summary__value">{form.full_name}</span>
+                  </div>
+
+                  <div className="reg-summary__row">
+                    <span className="reg-summary__label">Fecha de nacimiento</span>
+                    <span className="reg-summary__value">
+                      {form.birth_date
+                        ? new Date(form.birth_date + "T12:00:00").toLocaleDateString("es-CO")
+                        : "—"}
+                    </span>
+                  </div>
+
+                  <div className="reg-summary__row">
+                    <span className="reg-summary__label">País</span>
+                    <span className="reg-summary__value">{form.country_city}</span>
+                  </div>
+
+                  <div className="reg-summary__row">
+                    <span className="reg-summary__label">Teléfono</span>
+                    <span className="reg-summary__value">{form.phone}</span>
+                  </div>
+
                 </div>
 
-                <div className="reg-summary__row">
-                  <span className="reg-summary__label">Nombre</span>
-                  <span className="reg-summary__value">{form.full_name}</span>
+                <div className="legal-checkbox-container">
+                  <input
+                    type="checkbox"
+                    id="legal-consent"
+                    checked={acceptedTerms}
+                    onChange={(e) => setAcceptedTerms(e.target.checked)}
+                  />
+                  <label htmlFor="legal-consent">
+                    Autorizo de manera expresa a CONIITI para el tratamiento de mis
+                    datos personales según su{" "}
+                    <a
+                      href="/politica-tratamiento-datos.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Política de Tratamiento de Datos
+                    </a>{" "}
+                    y acepto el envío de notificaciones por correo de carácter
+                    estrictamente informativo y académico, no comercial.
+                  </label>
                 </div>
-
-                <div className="reg-summary__row">
-                  <span className="reg-summary__label">Fecha de nacimiento</span>
-                  <span className="reg-summary__value">
-                    {form.birth_date
-                      ? new Date(form.birth_date + "T12:00:00").toLocaleDateString("es-CO")
-                      : "—"}
-                  </span>
-                </div>
-
-                <div className="reg-summary__row">
-                  <span className="reg-summary__label">País</span>
-                  <span className="reg-summary__value">{form.country_city}</span>
-                </div>
-
-                <div className="reg-summary__row">
-                  <span className="reg-summary__label">Teléfono</span>
-                  <span className="reg-summary__value">{form.phone}</span>
-                </div>
-
-              </div>
+              </>
             )}
 
           </div>
@@ -396,7 +422,7 @@ export default function Register() {
               <button
                 className="reg-btn reg-btn--gold"
                 onClick={handleSubmit}
-                disabled={loading}
+                disabled={loading || !acceptedTerms}
               >
                 {loading ? "Registrando..." : "✓ Confirmar registro"}
               </button>

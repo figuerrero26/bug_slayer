@@ -10,12 +10,7 @@ export default function PlaceholderView({ section }: { section: string }) {
       title:   t.ph_favorites_title,
       message: t.ph_favorites_msg,
     },
-    events: {
-      icon:    "🎟️",
-      title:   t.ph_events_title,
-      message: t.ph_system_ready,
-    },
-    completed: {
+completed: {
       icon:    "✅",
       title:   t.ph_completed_title,
       message: t.ph_system_ready,
