@@ -88,7 +88,9 @@ export default function Inscripciones() {
   const [loading, setLoading]             = useState(true);
   const [actionLoading, setActionLoading] = useState<number | null>(null);
   const [error, setError]                 = useState("");
-  const [toast, setToast]                 = useState("");
+  const [toast, setToast]                 = useState<string | null>(null);
+  const [tipToast, setTipToast]           = useState(false);
+  const [fadingOutId, setFadingOutId]     = useState<number | null>(null);
 
   const [search,   setSearch]   = useState("");
   const [category, setCategory] = useState("");
@@ -132,11 +134,16 @@ export default function Inscripciones() {
 
   function showToast(msg: string) {
     setToast(msg);
-    setTimeout(() => setToast(""), 3500);
+    setTimeout(() => setToast(null), 3500);
   }
 
-  function isRegistered(conferenceId: number): Registration | undefined {
-    return myRegs.find((r) => r.conference_id === conferenceId);
+  function showSmartToast(title: string) {
+    showToast(`¡Inscripción exitosa a "${title}"!`);
+    if (!sessionStorage.getItem("is_dashboard_aware")) {
+      sessionStorage.setItem("is_dashboard_aware", "1");
+      setTipToast(true);
+      setTimeout(() => setTipToast(false), 6000);
+    }
   }
 
   async function handleRegister(conf: Conference) {
@@ -156,14 +163,8 @@ export default function Inscripciones() {
         showToast(data.detail || "No se pudo completar la inscripción");
       } else {
         setMyRegs((prev) => [...prev, data]);
-        setConferences((prev) =>
-          prev.map((c) =>
-            c.id === conf.id ? { ...c, registered_count: c.registered_count + 1 } : c
-          )
-        );
-        showToast(`Inscrito en "${conf.title}"`);
-        // Avisa a UserAvatar después de un delay para que la notificación
-        // ya esté guardada (el backend la crea en un BackgroundTask)
+        setFadingOutId(conf.id);
+        showSmartToast(conf.title);
         setTimeout(() => window.dispatchEvent(new Event("new-notification")), 1500);
       }
     } catch {
@@ -173,52 +174,57 @@ export default function Inscripciones() {
     }
   }
 
-  async function handleCancel(conf: Conference) {
-    const reg = isRegistered(conf.id);
-    if (!reg) return;
-    setActionLoading(conf.id);
-    try {
-      const res = await fetch(`${SEARCH_URL}/registrations/${reg.id}`, {
-        method: "DELETE",
-      });
-      if (res.ok) {
-        setMyRegs((prev) => prev.filter((r) => r.id !== reg.id));
-        setConferences((prev) =>
-          prev.map((c) =>
-            c.id === conf.id ? { ...c, registered_count: c.registered_count - 1 } : c
-          )
-        );
-        showToast(`Inscripción a "${conf.title}" cancelada`);
-      } else {
-        const data = await res.json();
-        showToast(data.detail || "No se pudo cancelar la inscripción");
-      }
-    } catch {
-      showToast("Error de conexión");
-    } finally {
-      setActionLoading(null);
-    }
-  }
+  // ── Filtro local por texto + excluir ya inscritas ──────────────────────────
 
-  // ── Filtro local por texto ──────────────────────────────────────────────────
+  const registeredIds = useMemo(
+    () => new Set(myRegs.map((r) => r.conference_id)),
+    [myRegs]
+  );
+
+  // Conferencias que el usuario aún no ha inscrito (excluye la que está animándose)
+  const availableCount = useMemo(
+    () => conferences.filter((c) => !registeredIds.has(c.id) || c.id === fadingOutId).length,
+    [conferences, registeredIds, fadingOutId]
+  );
 
   const visible = useMemo(() => {
     const q = search.toLowerCase();
-    if (!q) return conferences;
-    return conferences.filter((c) =>
-      c.title.toLowerCase().includes(q) ||
-      (c.speaker_name ?? "").toLowerCase().includes(q) ||
-      (c.description ?? "").toLowerCase().includes(q)
-    );
-  }, [conferences, search]);
+    return conferences.filter((c) => {
+      // Mantener visible la tarjeta que está en animación de salida
+      if (registeredIds.has(c.id) && c.id !== fadingOutId) return false;
+      if (!q) return true;
+      return (
+        c.title.toLowerCase().includes(q) ||
+        (c.speaker_name ?? "").toLowerCase().includes(q) ||
+        (c.description ?? "").toLowerCase().includes(q)
+      );
+    });
+  }, [conferences, search, registeredIds, fadingOutId]);
 
   // ── Render ──────────────────────────────────────────────────────────────────
 
   return (
     <div className="insc-page">
 
-      {/* Toast */}
+      {/* Toast de confirmación — centro inferior */}
       {toast && <div className="insc-toast">{toast}</div>}
+
+      {/* Tip flotante — lateral derecho, solo primera inscripción */}
+      {tipToast && (
+        <div className="insc-tip-toast">
+          <span className="insc-tip-toast__icon">💡</span>
+          <p className="insc-tip-toast__text">
+            Recuerda que puedes gestionar tus ferias inscritas, modificar tu información
+            personal y descargar tus certificados directamente desde tu{" "}
+            <strong>Dashboard</strong>.
+          </p>
+          <button
+            className="insc-tip-toast__close"
+            aria-label="Cerrar"
+            onClick={() => setTipToast(false)}
+          >✕</button>
+        </div>
+      )}
 
       {/* Hero */}
       <section className="insc-hero" style={{ ["--conf-img" as string]: `url(${conferenciasBg})` }}>
@@ -274,8 +280,36 @@ export default function Inscripciones() {
           </div>
         )}
 
-        {/* Sin resultados */}
-        {!loading && !error && visible.length === 0 && (
+        {/* Todas inscritas / sin eventos programados */}
+        {!loading && !error && availableCount === 0 && (
+          <div className="insc-all-done">
+            <div className="insc-all-done__icon" aria-hidden="true">
+              <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+                <circle cx="28" cy="28" r="28" fill="#03124e"/>
+                <path d="M28 14c-7.732 0-14 6.268-14 14s6.268 14 14 14 14-6.268 14-14S35.732 14 28 14z"
+                  fill="none" stroke="#FFD100" strokeWidth="2"/>
+                <path d="M20 28.5l5.5 5.5 10.5-11" stroke="#FFD100" strokeWidth="2.5"
+                  strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <h2 className="insc-all-done__title">
+              ¡Estás al día con la agenda!
+            </h2>
+            <p className="insc-all-done__desc">
+              Ya aseguraste tu lugar en todos los eventos disponibles de CONIITI.
+              Puedes revisar tus horarios, salas y descargar tus certificados en cualquier momento.
+            </p>
+            <button
+              className="insc-all-done__cta"
+              onClick={() => navigate("/dashboard")}
+            >
+              Ir a mi Dashboard
+            </button>
+          </div>
+        )}
+
+        {/* Sin resultados por búsqueda o filtro activo */}
+        {!loading && !error && availableCount > 0 && visible.length === 0 && (
           <div className="insc-empty">
             <p>{t.insc_empty}</p>
           </div>
@@ -285,14 +319,21 @@ export default function Inscripciones() {
         {!loading && !error && visible.length > 0 && (
           <div className="insc-grid">
             {visible.map((conf) => {
-              const reg        = isRegistered(conf.id);
-              const isMine     = !!reg;
-              const spots      = spotsLeft(conf);
-              const full       = spots <= 0;
-              const isActing   = actionLoading === conf.id;
+              const spots    = spotsLeft(conf);
+              const full     = spots <= 0;
+              const isActing = actionLoading === conf.id;
 
               return (
-                <article key={conf.id} className={`insc-card ${isMine ? "card-registered" : ""}`}>
+                <article
+                  key={conf.id}
+                  className={`insc-card${fadingOutId === conf.id ? " card-fade-out" : ""}`}
+                  onAnimationEnd={() => {
+                    if (conf.id === fadingOutId) {
+                      setConferences((prev) => prev.filter((c) => c.id !== conf.id));
+                      setFadingOutId(null);
+                    }
+                  }}
+                >
 
                   {/* Cabecera navy con líneas animadas */}
                   <div className="insc-card-header">
@@ -301,12 +342,9 @@ export default function Inscripciones() {
                       <path className="hc hc-2" d="M-20 18 C60 4,140 32,220 14 C270 2,300 16,340 12"/>
                     </svg>
                     {conf.category && (
-                      <span className={`insc-badge-cat ${isMine ? "category-text-light-bg" : "category-text-dark-bg"}`}>
+                      <span className="insc-badge-cat">
                         {translateCat(conf.category)}
                       </span>
-                    )}
-                    {isMine && (
-                      <span className="insc-badge-mine">{t.insc_registered_badge}</span>
                     )}
                   </div>
 
@@ -376,23 +414,13 @@ export default function Inscripciones() {
                   </ul>
 
                   <div className="insc-card-footer">
-                    {isMine ? (
-                      <button
-                        className="insc-btn-cancel"
-                        disabled={isActing}
-                        onClick={() => handleCancel(conf)}
-                      >
-                        {isActing ? t.insc_cancelling : t.insc_cancel}
-                      </button>
-                    ) : (
-                      <button
-                        className={`insc-btn-register ${full ? "btn-full" : ""}`}
-                        disabled={isActing || full}
-                        onClick={() => handleRegister(conf)}
-                      >
-                        {isActing ? t.insc_registering : full ? t.insc_full : t.insc_register}
-                      </button>
-                    )}
+                    <button
+                      className={`insc-btn-register ${full ? "btn-full" : ""}`}
+                      disabled={isActing || full}
+                      onClick={() => handleRegister(conf)}
+                    >
+                      {isActing ? t.insc_registering : full ? t.insc_full : t.insc_register}
+                    </button>
                   </div>
                   </div>{/* /insc-card-body */}
 

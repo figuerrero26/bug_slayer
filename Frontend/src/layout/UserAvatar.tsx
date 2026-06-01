@@ -11,7 +11,7 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 
-import { NOTIFICATIONS_URL } from "../services/api";
+import { NOTIFICATIONS_URL, DASHBOARD_URL } from "../services/api";
 import "../css/UserAvatar.css";
 
 import type { UserSession } from "../interfaces/user";
@@ -34,6 +34,7 @@ const LOGOUT_MESSAGES = [
 ];
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
+
 function getSession(): UserSession | null {
   try {
     const raw = sessionStorage.getItem("session");
@@ -109,6 +110,7 @@ export default function UserAvatar() {
   const [open, setOpen]                 = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [unreadCount, setUnreadCount]   = useState(0);
+  const [displayName, setDisplayName]   = useState("");
   const wrapperRef                      = useRef<HTMLDivElement>(null);
   const navigate                        = useNavigate();
 
@@ -135,6 +137,17 @@ export default function UserAvatar() {
     };
   }, [session?.user_id]);
 
+  // Obtiene el nombre completo del perfil y lo formatea
+  useEffect(() => {
+    if (!session) return;
+    fetch(`${DASHBOARD_URL}/profile/${session.user_id}`)
+      .then((r) => r.ok ? r.json() : null)
+      .then((data: { full_name?: string } | null) => {
+        if (data?.full_name) setDisplayName(data.full_name);
+      })
+      .catch(() => {});
+  }, [session?.user_id]);
+
   // Sincroniza si el usuario hace login/logout en otra pestaña
   useEffect(() => {
     const sync = () => setSession(getSession());
@@ -158,8 +171,7 @@ export default function UserAvatar() {
 
   if (!session) return null;
 
-  const initial     = session.email.charAt(0).toUpperCase();
-  const displayName = session.email.split("@")[0];
+  const initial = session.email.charAt(0).toUpperCase();
 
   const handleLogout = () => {
     setOpen(false);
@@ -210,7 +222,9 @@ export default function UserAvatar() {
               <div className="ua-header">
                 <div className="ua-header-avatar">{initial}</div>
                 <div className="ua-header-info">
-                  <p className="ua-header-name">{displayName}</p>
+                  <p className="ua-header-name">
+                    {displayName || session.email.split("@")[0]}
+                  </p>
                   <p className="ua-header-email">{session.email}</p>
                 </div>
               </div>

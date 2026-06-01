@@ -113,7 +113,7 @@
 /* ── Cabecera del dropdown ── */
 .ua-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   padding: 18px 16px 14px;
 }
@@ -146,9 +146,9 @@
   font-size: 14px;
   font-weight: 600;
   color: #0a0f2c;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.35;
   text-transform: capitalize;
 }
 

@@ -195,12 +195,74 @@
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* Error / vacío */
+/* Error / vacío por filtro */
 .insc-error,
 .insc-empty {
   text-align: center;
   padding: 60px 0;
   color: var(--gray-500);
+}
+
+/* ── Empty state: todas inscritas / sin eventos ───────────────────────────── */
+.insc-all-done {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 72px 24px;
+  max-width: 480px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.insc-all-done__icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #03124e 0%, #0c2260 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 28px rgba(3,18,78,0.22);
+  border: 2px solid rgba(255,209,0,0.25);
+}
+
+.insc-all-done__title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.insc-all-done__desc {
+  font-size: 0.95rem;
+  color: var(--gray-500);
+  line-height: 1.65;
+  margin: 0;
+}
+
+.insc-all-done__cta {
+  margin-top: 4px;
+  background: linear-gradient(135deg, #03124e 0%, #0055cc 100%);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 13px 36px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,85,204,0.30);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.insc-all-done__cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,85,204,0.38);
+}
+
+.insc-all-done__cta:active {
+  transform: translateY(0);
 }
 
 .insc-error button {
@@ -235,10 +297,6 @@
 .insc-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 16px 40px rgba(3,18,78,0.14), 0 4px 10px rgba(0,0,0,0.05);
-}
-
-.insc-card.card-registered .insc-card-header {
-  background: linear-gradient(135deg, #0055cc 0%, #2b7fff 100%);
 }
 
 /* Cabecera navy */
@@ -295,55 +353,20 @@
   100% { stroke-dashoffset:  700; opacity: 0;    }
 }
 
-/* Badges en cabecera */
+/* Etiqueta de categoría — texto flotante, sin caja */
 .insc-badge-cat {
-  /* ── Contenedor: intacto (animación del compañero) ─── */
   position: relative;
   z-index: 1;
-  background: #03124e;
-  border: 1px solid rgba(255,209,0,0.3);
-  padding: 4px 12px;
-  border-radius: 8px;
-
-  /* ── Comportamiento wrap ─────────────────────────── */
-  white-space: normal;
-  word-break: break-word;
-  text-align: center;
-  line-height: 1.4;
-
-  /* ── Tipografía base ─────────────────────────────── */
+  color: #ffffff;
   font-family: 'Inter', sans-serif;
   font-size: 0.65rem;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1.2px;
-
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.4;
 }
-
-/* Fondo oscuro: header navy normal (#03124e → #0c2260) */
-.category-text-dark-bg {
-  color: #FFFFFF !important;
-  font-weight: 600;
-  text-shadow: none;
-}
-
-/* Fondo claro: header azul brillante de tarjeta inscrita (#0055cc → #2b7fff) */
-.category-text-light-bg {
-  color: #FFFFFF !important;
-  font-weight: 800;
-  -webkit-text-stroke: 1px #000000;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-}
-
-/*
- * Alternativa C — mix-blend-mode automático (sin clases condicionales):
- * Invierte el color del texto según el brillo del fondo. No requiere lógica JS
- * pero puede interferir con capas animadas — probar con precaución.
- *
- * .insc-badge-cat {
- *   color: #ffffff;
- *   mix-blend-mode: difference;
- * }
- */
 
 
 .insc-badge-mine {
@@ -474,6 +497,17 @@
   cursor: not-allowed;
 }
 
+/* ── Animación de salida de tarjeta ───────────────────────────────────────── */
+@keyframes cardFadeOut {
+  from { opacity: 1; transform: scale(1);    }
+  to   { opacity: 0; transform: scale(0.95); }
+}
+
+.card-fade-out {
+  animation: cardFadeOut 500ms ease forwards;
+  pointer-events: none;
+}
+
 /* ── Toast ────────────────────────────────────────────────────────────────── */
 .insc-toast {
   position: fixed;
@@ -495,6 +529,62 @@
   from { opacity: 0; transform: translateX(-50%) translateY(12px); }
   to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
+
+/* ── Tip flotante lateral (solo primera inscripción) ──────────────────────── */
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(110%); }
+  to   { opacity: 1; transform: translateX(0);    }
+}
+
+.insc-tip-toast {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 320px;
+  background: linear-gradient(135deg, #03124e 0%, #0c2260 100%);
+  color: #fff;
+  border-left: 4px solid #FFD100;
+  border-radius: 14px;
+  padding: 16px 14px 16px 18px;
+  box-shadow: 0 12px 36px rgba(3,18,78,0.40);
+  z-index: 9998;
+  animation: slideInRight 0.4s ease-out;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.insc-tip-toast__icon {
+  font-size: 1.15rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.insc-tip-toast__text {
+  font-size: 0.83rem;
+  line-height: 1.6;
+  margin: 0;
+  flex: 1;
+}
+
+.insc-tip-toast__text strong {
+  color: #FFD100;
+}
+
+.insc-tip-toast__close {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.45);
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0;
+  flex-shrink: 0;
+  line-height: 1;
+  transition: color 0.15s;
+  margin-top: 1px;
+}
+
+.insc-tip-toast__close:hover { color: #fff; }
 
 /* ── Avatar del ponente ───────────────────────────────────────────────────── */
 

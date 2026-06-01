@@ -31,7 +31,341 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 18px;
+  margin-bottom: 14px;
+}
+
+.msv-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* ── Advanced search toggle button ── */
+.msv-adv-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.msv-adv-toggle:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+  background: var(--blue-dim);
+}
+
+.msv-adv-toggle--active {
+  border-color: var(--blue);
+  color: var(--blue);
+  background: var(--blue-dim);
+}
+
+/* Punto indicador de filtros activos */
+.msv-adv-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--blue);
+  flex-shrink: 0;
+}
+
+/* ── Advanced panel (collapsible) ── */
+.msv-adv-panel {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.30s ease, opacity 0.22s ease, margin-bottom 0.22s ease;
+  margin-bottom: 0;
+}
+
+.msv-adv-panel--open {
+  max-height: 600px;
+  overflow: visible;
+  opacity: 1;
+  margin-bottom: 14px;
+}
+
+.msv-adv-inner {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── Panel section ── */
+.msv-adv-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.msv-adv-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ── Quick range buttons ── */
+.msv-adv-quick-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.msv-adv-quick-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  padding: 4px 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.msv-adv-quick-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+.msv-adv-quick-btn--active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* ── Date inputs ── */
+.msv-adv-dates {
+  display: flex;
+  gap: 12px;
+}
+
+.msv-adv-date-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.msv-adv-date-label {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* ── Shared input/select ── */
+.msv-adv-input,
+.msv-adv-select {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 12.5px;
+  font-family: 'DM Sans', sans-serif;
+  padding: 7px 10px;
+  outline: none;
+  transition: border-color 0.15s ease;
+  width: 100%;
+}
+
+.msv-adv-input:focus,
+.msv-adv-select:focus { border-color: var(--blue); }
+
+.msv-adv-input--full { width: 100%; }
+
+/* ── Date inputs — estilo premium ── */
+.msv-adv-date-input {
+  background: rgba(26, 37, 69, 0.055);
+  border: 1.5px solid var(--border);
+  color: var(--navy);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+}
+
+.msv-adv-date-input:focus {
+  border-color: var(--blue);
+  background: rgba(30, 111, 189, 0.06);
+  box-shadow: 0 0 0 3px var(--blue-dim);
+  outline: none;
+}
+
+/* Icono nativo del calendario → tono azul CONIITI */
+.msv-adv-date-input::-webkit-calendar-picker-indicator {
+  filter: invert(38%) sepia(70%) saturate(500%) hue-rotate(190deg) brightness(95%);
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  padding: 2px;
+  border-radius: 4px;
+  transition: filter 0.15s ease, opacity 0.15s ease;
+  opacity: 0.75;
+}
+
+.msv-adv-date-input::-webkit-calendar-picker-indicator:hover {
+  filter: invert(35%) sepia(90%) saturate(700%) hue-rotate(190deg) brightness(90%);
+  opacity: 1;
+}
+
+/* Texto del placeholder de fecha nativo */
+.msv-adv-date-input::-webkit-datetime-edit-fields-wrapper { color: var(--navy); }
+.msv-adv-date-input::-webkit-datetime-edit-text           { color: var(--muted); }
+.msv-adv-date-input::-webkit-datetime-edit-day-field,
+.msv-adv-date-input::-webkit-datetime-edit-month-field,
+.msv-adv-date-input::-webkit-datetime-edit-year-field     { color: var(--navy); }
+
+[data-theme="dark"] .msv-adv-date-input {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .msv-adv-date-input::-webkit-calendar-picker-indicator {
+  filter: invert(80%) sepia(20%) saturate(300%) hue-rotate(190deg);
+  opacity: 0.8;
+}
+
+[data-theme="dark"] .msv-adv-date-input::-webkit-datetime-edit-fields-wrapper,
+[data-theme="dark"] .msv-adv-date-input::-webkit-datetime-edit-day-field,
+[data-theme="dark"] .msv-adv-date-input::-webkit-datetime-edit-month-field,
+[data-theme="dark"] .msv-adv-date-input::-webkit-datetime-edit-year-field { color: var(--text); }
+
+/* ── Panel footer actions ── */
+.msv-adv-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
+  margin-top: 2px;
+}
+
+.msv-adv-btn-clear {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.msv-adv-btn-clear:hover {
+  border-color: var(--red, #dc2626);
+  color: var(--red, #dc2626);
+}
+
+.msv-adv-btn-apply {
+  background: var(--blue);
+  border: 1px solid var(--blue);
+  border-radius: 999px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  padding: 6px 20px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.msv-adv-btn-apply:hover {
+  background: #1558a0;
+  border-color: #1558a0;
+}
+
+/* ── Barra de búsqueda global ── */
+.msv-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.msv-search-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--muted);
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.msv-global-search {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  padding: 9px 36px 9px 36px;
+  outline: none;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.msv-global-search:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px var(--blue-dim);
+}
+
+.msv-global-search::placeholder { color: var(--muted); }
+
+.msv-search-clear {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 50%;
+  transition: color 0.14s, background 0.14s;
+}
+
+.msv-search-clear:hover { color: var(--navy); background: var(--surface2); }
+
+/* ── Dark mode additions ── */
+[data-theme="dark"] .msv-adv-inner {
+  background: var(--surface);
+}
+
+[data-theme="dark"] .msv-adv-input,
+[data-theme="dark"] .msv-adv-select {
+  background: var(--surface2);
+  color: var(--text);
+}
+
+[data-theme="dark"] .msv-global-search {
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .msv-header-actions { gap: 6px; }
+  .msv-adv-toggle span { display: none; }
+  .msv-adv-toggle { padding: 7px 10px; }
+  .msv-adv-dates { flex-direction: column; gap: 8px; }
 }
 
 .msv-heading {
@@ -711,4 +1045,224 @@
 /* Responsive: una columna en móvil */
 @media (max-width: 768px) {
   .msv-conf-card-grid { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   THEME SELECT — dropdown personalizado
+   ═══════════════════════════════════════════════════════ */
+
+.msv-theme-select {
+  position: relative;
+  width: 100%;
+}
+
+/* ── Botón disparador ── */
+.msv-theme-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: rgba(26, 37, 69, 0.055);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  color: var(--navy);
+  font-size: 12.5px;
+  font-family: 'DM Sans', sans-serif;
+  padding: 7px 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.msv-theme-trigger:hover,
+.msv-theme-trigger--open {
+  border-color: var(--blue);
+  background: rgba(30, 111, 189, 0.06);
+  box-shadow: 0 0 0 3px var(--blue-dim);
+}
+
+.msv-theme-trigger-value       { font-weight: 500; color: var(--navy); }
+.msv-theme-trigger-placeholder { color: var(--muted); font-weight: 400; }
+
+/* Flecha — rota 180° cuando el menú está abierto */
+.msv-theme-chevron {
+  flex-shrink: 0;
+  color: var(--muted);
+  transition: transform 0.22s ease;
+}
+
+.msv-theme-trigger--open .msv-theme-chevron { transform: rotate(180deg); }
+
+/* ── Menú flotante ── */
+.msv-theme-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 200;
+  background: rgba(15, 26, 53, 0.96);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  animation: msv-dropdown-in 0.18s ease;
+}
+
+@keyframes msv-dropdown-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Opciones individuales ── */
+.msv-theme-option {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  font-size: 12.5px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  padding: 10px 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.13s ease;
+}
+
+.msv-theme-option:last-child { border-bottom: none; }
+
+.msv-theme-option:hover {
+  background: rgba(30, 111, 189, 0.28);
+}
+
+/* Opción actualmente seleccionada — solo negrita, sin fondo */
+.msv-theme-option--active {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════════════
+   REACT DATEPICKER — override completo
+   ═══════════════════════════════════════════════════════ */
+
+/* Wrapper ocupa todo el ancho del campo */
+.msv-dp-wrapper { width: 100%; }
+
+/* ── Input del selector ── */
+.msv-dp-input {
+  width: 100%;
+  background: rgba(26, 37, 69, 0.055);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  color: var(--navy);
+  font-size: 12.5px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  padding: 7px 10px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  box-sizing: border-box;
+}
+
+.msv-dp-input:focus {
+  border-color: var(--blue);
+  background: rgba(30, 111, 189, 0.06);
+  box-shadow: 0 0 0 3px var(--blue-dim);
+}
+
+.msv-dp-input::placeholder { color: var(--muted); font-weight: 400; }
+
+/* ── Contenedor flotante del calendario ── */
+.msv-dp-calendar.react-datepicker {
+  background: #1a2545;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  font-family: 'DM Sans', sans-serif;
+  overflow: hidden;
+}
+
+/* ── Cabecera (mes/año + flechas) ── */
+.msv-dp-calendar .react-datepicker__header {
+  background: #0f1a35;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 10px 0 8px;
+}
+
+.msv-dp-calendar .react-datepicker__current-month {
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.msv-dp-calendar .react-datepicker__day-name {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ── Flechas de navegación ── */
+.msv-dp-calendar .react-datepicker__navigation-icon::before {
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+.msv-dp-calendar .react-datepicker__navigation:hover .react-datepicker__navigation-icon::before {
+  border-color: #ffffff;
+}
+
+/* ── Días individuales ── */
+.msv-dp-calendar .react-datepicker__day {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 12px;
+  border-radius: 50%;
+  transition: background 0.14s ease, color 0.14s ease;
+}
+
+.msv-dp-calendar .react-datepicker__day:hover:not(.react-datepicker__day--disabled) {
+  background: rgba(30, 111, 189, 0.35);
+  color: #ffffff;
+}
+
+/* Día seleccionado — círculo azul vibrante */
+.msv-dp-calendar .react-datepicker__day--selected,
+.msv-dp-calendar .react-datepicker__day--range-start,
+.msv-dp-calendar .react-datepicker__day--range-end {
+  background: var(--blue) !important;
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+/* Día de hoy — borde sutil */
+.msv-dp-calendar .react-datepicker__day--today {
+  border: 1.5px solid rgba(30, 111, 189, 0.55);
+  color: #7ab8f5;
+  font-weight: 700;
+}
+
+/* Días deshabilitados */
+.msv-dp-calendar .react-datepicker__day--disabled {
+  color: rgba(255, 255, 255, 0.18) !important;
+  cursor: not-allowed;
+}
+
+/* Triángulo apuntador — oculto para look más limpio */
+.msv-dp-calendar .react-datepicker__triangle { display: none; }
+
+/* Dark mode — input */
+[data-theme="dark"] .msv-dp-input {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .msv-dp-input:focus {
+  background: rgba(30, 111, 189, 0.1);
 }
