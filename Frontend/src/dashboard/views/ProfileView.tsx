@@ -17,15 +17,6 @@ function serial(n: number) {
   return `A ${String(n).padStart(7, "0")}`;
 }
 
-function parseLocation(loc: string | null): { sede: string; sala: string } {
-  if (!loc) return { sede: "—", sala: "—" };
-  const idx = loc.indexOf("-");
-  if (idx === -1) return { sede: loc.trim() || "—", sala: "—" };
-  return {
-    sede: loc.slice(0, idx).trim() || "—",
-    sala: loc.slice(idx + 1).trim() || "—",
-  };
-}
 
 function fmtDateShort(iso: string | null): string {
   if (!iso) return "—";
@@ -208,13 +199,13 @@ function TicketsTiltCard({ userId }: { userId: number }) {
                       <div className="profv-ticket-grid-cell">
                         <span className="profv-ticket-grid-label">{t.prof_ticket_sede}</span>
                         <span className="profv-ticket-grid-value">
-                          {parseLocation(conf.location_text).sede}
+                          {conf.campus_name || "—"}
                         </span>
                       </div>
                       <div className="profv-ticket-grid-cell">
                         <span className="profv-ticket-grid-label">{t.prof_ticket_sala}</span>
                         <span className="profv-ticket-grid-value">
-                          {parseLocation(conf.location_text).sala}
+                          {conf.room_name || "—"}
                         </span>
                       </div>
                       <div className="profv-ticket-grid-cell">

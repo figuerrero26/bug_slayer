@@ -58,7 +58,8 @@ class ConferenceSummary(BaseModel):
     speaker_image_url: Optional[str]
     category: Optional[str]
     schedule: Optional[datetime]
-    location_text: Optional[str]
+    campus_name: Optional[str]
+    room_name: Optional[str]
     registration_id: int
     registration_status: str
 

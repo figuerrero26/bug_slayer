@@ -117,7 +117,8 @@ def get_completed_conferences(user_id: int, db: Session = Depends(get_db)):
             title=conf.title,
             speaker_name=conf.speaker_name,
             schedule=conf.schedule,
-            location_text=conf.location_text,
+            campus_name=conf.campus_name,
+            room_name=conf.room_name,
             fecha_validacion=reg.fecha_validacion,
             category=conf.category,
         )
@@ -152,7 +153,8 @@ def get_current_conferences(user_id: int, db: Session = Depends(get_db)):
             title=conf.title,
             speaker_name=conf.speaker_name,
             schedule=conf.schedule,
-            location_text=conf.location_text,
+            campus_name=conf.campus_name,
+            room_name=conf.room_name,
         )
         for conf, reg in rows
     ]

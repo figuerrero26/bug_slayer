@@ -26,7 +26,8 @@ interface Conference {
   speaker_image_url: string | null;
   category: string | null;
   schedule: string | null;
-  location_text: string | null;
+  campus_name: string | null;
+  room_name: string | null;
   capacity: number;
   is_active: boolean;
   registered_count: number;
@@ -38,7 +39,8 @@ interface ConferenceForm {
   speaker_name: string;
   category: string;
   schedule: string;
-  location_text: string;
+  campus_name: string;
+  room_name: string;
   capacity: number;
 }
 
@@ -59,11 +61,17 @@ interface SpeakerForm {
 
 // ── Constantes ────────────────────────────────────────────────────────────────
 
-const CATEGORIES = ["IA", "Software", "Redes", "Datos", "Robótica", "Gestión", "Innovación", "Otro"];
+const CATEGORIES = [
+  "Software Engineering and Information Systems",
+  "Artificial Intelligence and Co-existence",
+  "Smart Cities and Sustainable Development",
+  "Security, Privacy and Infrastructure",
+  "Technology, Society and Innovation",
+];
 
 const EMPTY_FORM: ConferenceForm = {
   title: "", description: "", speaker_name: "",
-  category: "", schedule: "", location_text: "", capacity: 100,
+  category: "", schedule: "", campus_name: "", room_name: "", capacity: 100,
 };
 
 const EMPTY_SPEAKER_FORM: SpeakerForm = {
@@ -226,7 +234,8 @@ export default function Admin() {
     setForm({
       title: conf.title, description: conf.description ?? "",
       speaker_name: conf.speaker_name ?? "", category: conf.category ?? "",
-      schedule: toLocalDT(conf.schedule), location_text: conf.location_text ?? "",
+      schedule: toLocalDT(conf.schedule),
+      campus_name: conf.campus_name ?? "", room_name: conf.room_name ?? "",
       capacity: conf.capacity,
     });
     setFormError(""); clearImage();
@@ -238,6 +247,8 @@ export default function Admin() {
 
   function validate(): string | null {
     if (!form.title.trim()) return "El título es obligatorio.";
+    if (!form.campus_name.trim()) return "La sede es obligatoria.";
+    if (!form.room_name.trim()) return "El salón / aula es obligatorio.";
     if (form.capacity <= 0) return "La capacidad debe ser mayor a 0.";
     return null;
   }
@@ -256,7 +267,8 @@ export default function Admin() {
       speaker_name: form.speaker_name.trim() || null,
       category: form.category || null,
       schedule: form.schedule ? form.schedule + ":00" : null,
-      location_text: form.location_text.trim() || null,
+      campus_name: form.campus_name.trim(),
+      room_name: form.room_name.trim(),
       capacity: form.capacity,
     };
 
@@ -748,9 +760,25 @@ export default function Admin() {
                   <input type="number" min={1} value={form.capacity} onChange={e => setForm({ ...form, capacity: parseInt(e.target.value) || 0 })} />
                 </div>
               </div>
-              <div className="fld">
-                <label>Ubicación</label>
-                <input value={form.location_text} onChange={e => setForm({ ...form, location_text: e.target.value })} placeholder="Ej: Salón 301 — Bloque C" />
+              <div className="fld-row">
+                <div className="fld">
+                  <label>Sede <span className="req">*</span></label>
+                  <input
+                    value={form.campus_name}
+                    onChange={e => setForm({ ...form, campus_name: e.target.value })}
+                    placeholder="Ej: Claustro"
+                    required
+                  />
+                </div>
+                <div className="fld">
+                  <label>Salón / Aula <span className="req">*</span></label>
+                  <input
+                    value={form.room_name}
+                    onChange={e => setForm({ ...form, room_name: e.target.value })}
+                    placeholder="Ej: Sala 3"
+                    required
+                  />
+                </div>
               </div>
               <div className="modal-foot">
                 <button type="button" className="btn-cancel-modal" onClick={closeModal}>Cancelar</button>

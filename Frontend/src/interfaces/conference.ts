@@ -5,7 +5,8 @@ export interface Conference {
   speaker_image_url: string | null;
   category: string | null;
   schedule: string | null;
-  location_text: string | null;
+  campus_name: string | null;
+  room_name: string | null;
   registration_id: number;
   registration_status: string;
 }
@@ -15,7 +16,8 @@ export interface ConferenceTicket {
   title: string;
   speaker_name: string | null;
   schedule: string | null;
-  location_text: string | null;
+  campus_name: string | null;
+  room_name: string | null;
   registration_id: number;
   conference_id?: number;
   qr_payload?: string;

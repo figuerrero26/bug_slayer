@@ -1,18 +1,26 @@
 from pydantic import BaseModel, field_validator
-from typing import Optional, List
+from typing import Optional, List, Literal
 from datetime import datetime
 
+ConferenceCategory = Literal[
+    "Software Engineering and Information Systems",
+    "Artificial Intelligence and Co-existence",
+    "Smart Cities and Sustainable Development",
+    "Security, Privacy and Infrastructure",
+    "Technology, Society and Innovation",
+]
 
 # ── Conferencias ──────────────────────────────────────────────────────────────
 
 class ConferenceCreate(BaseModel):
     title:             str
-    description:       Optional[str]      = None
-    speaker_name:      Optional[str]      = None
-    speaker_image_url: Optional[str]      = None
-    category:          Optional[str]      = None
+    description:       Optional[str]             = None
+    speaker_name:      Optional[str]             = None
+    speaker_image_url: Optional[str]             = None
+    category:          Optional[ConferenceCategory] = None
     schedule:          Optional[datetime] = None
-    location_text:     Optional[str]      = None
+    campus_name:       str
+    room_name:         str
     capacity:          int                = 100
     duration_minutes:  int                = 60
 
@@ -24,6 +32,14 @@ class ConferenceCreate(BaseModel):
             raise ValueError("El título no puede estar vacío")
         return v
 
+    @field_validator("campus_name", "room_name")
+    @classmethod
+    def location_not_empty(cls, v: str) -> str:
+        v = v.strip()
+        if not v:
+            raise ValueError("La sede y el salón son obligatorios")
+        return v
+
     @field_validator("capacity")
     @classmethod
     def capacity_positive(cls, v: int) -> int:
@@ -33,13 +49,14 @@ class ConferenceCreate(BaseModel):
 
 
 class ConferenceUpdate(BaseModel):
-    title:             Optional[str]      = None
-    description:       Optional[str]      = None
-    speaker_name:      Optional[str]      = None
-    speaker_image_url: Optional[str]      = None
-    category:          Optional[str]      = None
+    title:             Optional[str]             = None
+    description:       Optional[str]             = None
+    speaker_name:      Optional[str]             = None
+    speaker_image_url: Optional[str]             = None
+    category:          Optional[ConferenceCategory] = None
     schedule:          Optional[datetime] = None
-    location_text:     Optional[str]      = None
+    campus_name:       Optional[str]      = None
+    room_name:         Optional[str]      = None
     capacity:          Optional[int]      = None
     duration_minutes:  Optional[int]      = None
 
@@ -68,7 +85,8 @@ class ConferenceResponse(BaseModel):
     speaker_image_url: Optional[str]
     category:         Optional[str]
     schedule:         Optional[datetime]
-    location_text:    Optional[str]
+    campus_name:      Optional[str]
+    room_name:        Optional[str]
     capacity:         int
     duration_minutes: int
     is_active:        bool
@@ -111,7 +129,8 @@ class UserConferenceOut(BaseModel):
     speaker_image_url:   str | None = None
     category:            Optional[str]
     schedule:            Optional[datetime]
-    location_text:       Optional[str]
+    campus_name:         Optional[str]
+    room_name:           Optional[str]
     registration_id:     int
     registration_status: str
     qr_payload:          str = ""
@@ -141,7 +160,8 @@ class CompletedConferenceOut(BaseModel):
     title:            str
     speaker_name:     Optional[str]
     schedule:         Optional[datetime]
-    location_text:    Optional[str]
+    campus_name:      Optional[str]
+    room_name:        Optional[str]
     fecha_validacion: Optional[datetime]
     category:         Optional[str] = None
 
@@ -153,6 +173,7 @@ class CurrentConferenceOut(BaseModel):
     title:          str
     speaker_name:   Optional[str]
     schedule:       Optional[datetime]
-    location_text:  Optional[str]
+    campus_name:    Optional[str]
+    room_name:      Optional[str]
 
     model_config = {"from_attributes": True}

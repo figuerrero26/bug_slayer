@@ -19,7 +19,8 @@ interface ConferenceDetails {
   speaker_name: string | null;
   category: string | null;
   schedule: string | null;
-  location_text: string | null;
+  campus_name: string | null;
+  room_name: string | null;
 }
 
 type Tab = "all" | "unread";
@@ -226,10 +227,10 @@ export default function MessagesView({ userId, onUnreadChange, searchQuery = "" 
                     <span>{matched.speaker_name}</span>
                   </div>
                 )}
-                {matched.location_text && (
+                {matched.campus_name && (
                   <div className="msv-conf-card-row">
                     <MapPin size={16} strokeWidth={1.8} className="msv-conf-card-icon" />
-                    <span>{matched.location_text}</span>
+                    <span>{matched.campus_name}{matched.room_name ? ` · ${matched.room_name}` : ""}</span>
                   </div>
                 )}
               </div>
@@ -281,10 +282,10 @@ export default function MessagesView({ userId, onUnreadChange, searchQuery = "" 
                       <span>{conference.schedule}</span>
                     </div>
                   )}
-                  {conference.location_text && (
+                  {conference.campus_name && (
                     <div className="msv-ticket-row">
                       <MapPin size={13} strokeWidth={2} className="msv-ti" />
-                      <span>{conference.location_text}</span>
+                      <span>{conference.campus_name}{conference.room_name ? ` · ${conference.room_name}` : ""}</span>
                     </div>
                   )}
                   {conference.category && (

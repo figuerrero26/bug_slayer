@@ -172,6 +172,12 @@ const ES: T = {
   insc_full: "Sin cupos",
   insc_registered_badge: "Inscrito",
   insc_to_define: "Por definir",
+  /* Categorías oficiales */
+  cat_software: "Ingeniería de Software y Sistemas de Información",
+  cat_ai:       "Inteligencia Artificial y Co-existencia",
+  cat_cities:   "Ciudades Inteligentes y Desarrollo Sostenible",
+  cat_security: "Seguridad, Privacidad e Infraestructura",
+  cat_tech:     "Tecnología, Sociedad e Innovación",
 };
 
 const EN: T = {
@@ -322,6 +328,12 @@ const EN: T = {
   insc_full: "Full",
   insc_registered_badge: "Registered",
   insc_to_define: "To be defined",
+  /* Official categories */
+  cat_software: "Software Engineering and Information Systems",
+  cat_ai:       "Artificial Intelligence and Co-existence",
+  cat_cities:   "Smart Cities and Sustainable Development",
+  cat_security: "Security, Privacy and Infrastructure",
+  cat_tech:     "Technology, Society and Innovation",
   /* Ticket */
   prof_ticket_sede: "VENUE", prof_ticket_sala: "ROOM", prof_ticket_serial: "SERIAL",
   prof_ticket_venue: "Universidad Católica de Colombia",
@@ -382,6 +394,12 @@ const IT: T = {
   insc_full: "Completo",
   insc_registered_badge: "Iscritto",
   insc_to_define: "Da definire",
+  /* Categorie ufficiali */
+  cat_software: "Ingegneria del Software e Sistemi Informativi",
+  cat_ai:       "Intelligenza Artificiale e Co-esistenza",
+  cat_cities:   "Città Intelligenti e Sviluppo Sostenibile",
+  cat_security: "Sicurezza, Privacy e Infrastruttura",
+  cat_tech:     "Tecnologia, Società e Innovazione",
   /* Dashboard nav */
   dash_profile: "Profilo", dash_conferences: "Le mie conferenze", dash_completed: "Completate",
   dash_favorites: "Preferiti", dash_calendar: "Calendario",
@@ -534,6 +552,12 @@ const PT: T = {
   insc_full: "Sem vagas",
   insc_registered_badge: "Inscrito",
   insc_to_define: "A definir",
+  /* Categorias oficiais */
+  cat_software: "Engenharia de Software e Sistemas de Informação",
+  cat_ai:       "Inteligência Artificial e Co-existência",
+  cat_cities:   "Cidades Inteligentes e Desenvolvimento Sustentável",
+  cat_security: "Segurança, Privacidade e Infraestrutura",
+  cat_tech:     "Tecnologia, Sociedade e Inovação",
   /* Dashboard nav */
   dash_profile: "Perfil", dash_conferences: "Minhas conferências", dash_completed: "Concluídas",
   dash_favorites: "Favoritos", dash_calendar: "Calendário",
@@ -686,6 +710,12 @@ const FR: T = {
   insc_full: "Complet",
   insc_registered_badge: "Inscrit",
   insc_to_define: "À définir",
+  /* Catégories officielles */
+  cat_software: "Génie Logiciel et Systèmes d'Information",
+  cat_ai:       "Intelligence Artificielle et Co-existence",
+  cat_cities:   "Villes Intelligentes et Développement Durable",
+  cat_security: "Sécurité, Confidentialité et Infrastructure",
+  cat_tech:     "Technologie, Société et Innovation",
   /* Dashboard nav */
   dash_profile: "Profil", dash_conferences: "Mes conférences", dash_completed: "Terminées",
   dash_favorites: "Favoris", dash_calendar: "Calendrier",

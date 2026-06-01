@@ -10,6 +10,14 @@ import type { Conference } from "../../interfaces/conference";
 // ── Types ─────────────────────────────────────────────────────────────────────
 type Status = "confirmada" | "en-curso" | "finalizada";
 
+const CATEGORY_KEY_MAP: Record<string, string> = {
+  "Software Engineering and Information Systems": "cat_software",
+  "Artificial Intelligence and Co-existence":     "cat_ai",
+  "Smart Cities and Sustainable Development":     "cat_cities",
+  "Security, Privacy and Infrastructure":         "cat_security",
+  "Technology, Society and Innovation":           "cat_tech",
+};
+
 const STATUS_PRIORITY: Record<Status, number> = {
   "en-curso":   0,
   "confirmada": 1,
@@ -42,15 +50,6 @@ function fmtTime(iso: string | null): string {
   });
 }
 
-function parseLocation(loc: string | null): { sede: string; sala: string } {
-  if (!loc) return { sede: "—", sala: "—" };
-  const idx = loc.indexOf("-");
-  if (idx === -1) return { sede: loc.trim() || "—", sala: "—" };
-  return {
-    sede: loc.slice(0, idx).trim() || "—",
-    sala: loc.slice(idx + 1).trim() || "—",
-  };
-}
 
 // ── ActionsMenu ───────────────────────────────────────────────────────────────
 const ActionsMenu = memo(function ActionsMenu({
@@ -131,6 +130,11 @@ export default function InscritasView({
 }) {
   const { t } = useLang();
   const navigate = useNavigate();
+
+  function translateCat(cat: string | null | undefined): string {
+    if (!cat) return "";
+    return t[CATEGORY_KEY_MAP[cat] ?? ""] ?? cat;
+  }
 
   const [conferences, setConferences]   = useState<Conference[]>([]);
   const [loading, setLoading]           = useState(true);
@@ -224,9 +228,10 @@ export default function InscritasView({
       return (
         !q ||
         c.title.toLowerCase().includes(q) ||
-        (c.speaker_name  ?? "").toLowerCase().includes(q) ||
-        (c.location_text ?? "").toLowerCase().includes(q) ||
-        (c.category      ?? "").toLowerCase().includes(q)
+        (c.speaker_name ?? "").toLowerCase().includes(q) ||
+        (c.campus_name  ?? "").toLowerCase().includes(q) ||
+        (c.room_name    ?? "").toLowerCase().includes(q) ||
+        (c.category     ?? "").toLowerCase().includes(q)
       );
     });
     return [...filtered].sort(
@@ -385,7 +390,7 @@ export default function InscritasView({
                         <path d="M2 12l10 5 10-5"/>
                       </svg>
                     </div>
-                    <span className="iv-cat-card-label">{cat}</span>
+                    <span className="iv-cat-card-label">{translateCat(cat)}</span>
                     <span className="iv-cat-card-count">
                       {count} {count !== 1 ? t.iv_conference_pl : t.iv_conference_s}
                     </span>
@@ -410,7 +415,7 @@ export default function InscritasView({
                     {t.iv_back_cats}
                   </button>
                   {selectedCategory !== null && selectedCategory !== "TODAS" && (
-                    <span className="iv-drill-label">{selectedCategory}</span>
+                    <span className="iv-drill-label">{translateCat(selectedCategory)}</span>
                   )}
                   {selectedStatus !== null && selectedStatus !== "TODAS" && (
                     <span className={`iv-drill-label iv-drill-label--${selectedStatus}`}>
@@ -450,15 +455,14 @@ export default function InscritasView({
                     </thead>
                     <tbody>
                       {visible.map((conf, rowIdx) => {
-                        const status         = getStatus(conf.schedule);
-                        const { sede, sala } = parseLocation(conf.location_text);
+                        const status = getStatus(conf.schedule);
                         return (
                           <tr key={conf.id}>
                             <td className="iv-td-id">#{conf.registration_id}</td>
                             <td className="iv-td-title">{conf.title}</td>
                             <td>
                               {conf.category
-                                ? <span className="iv-cat">{conf.category}</span>
+                                ? <span className="iv-cat">{translateCat(conf.category)}</span>
                                 : <span className="iv-muted">—</span>}
                             </td>
                             <td>
@@ -470,10 +474,10 @@ export default function InscritasView({
                               {conf.speaker_name ?? <span className="iv-muted">—</span>}
                             </td>
                             <td className="iv-td-location">
-                              {conf.location_text ? (
+                              {conf.campus_name ? (
                                 <>
-                                  <span className="iv-loc-sede">{sede}</span>
-                                  {sala !== "—" && <span className="iv-loc-sala">{sala}</span>}
+                                  <span className="iv-loc-sede">{conf.campus_name}</span>
+                                  {conf.room_name && <span className="iv-loc-sala">{conf.room_name}</span>}
                                 </>
                               ) : (
                                 <span className="iv-muted">—</span>

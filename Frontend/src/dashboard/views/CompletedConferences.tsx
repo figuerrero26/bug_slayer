@@ -9,7 +9,8 @@ interface CompletedConference {
   title:            string;
   speaker_name:     string | null;
   schedule:         string | null;
-  location_text:    string | null;
+  campus_name:      string | null;
+  room_name:        string | null;
   fecha_validacion: string | null;
   category:         string | null;
 }
@@ -297,7 +298,14 @@ export default function CompletedConferences({ userId }: { userId: number }) {
                       {item.speaker_name ?? <span className="ccv-muted">—</span>}
                     </td>
                     <td className="ccv-td-location">
-                      {item.location_text ?? <span className="ccv-muted">—</span>}
+                      {item.campus_name ? (
+                        <>
+                          <span className="ccv-loc-sede">{item.campus_name}</span>
+                          {item.room_name && <span className="ccv-loc-sala">{item.room_name}</span>}
+                        </>
+                      ) : (
+                        <span className="ccv-muted">—</span>
+                      )}
                     </td>
                     <td className="ccv-td-date">{fmtDate(item.schedule)}</td>
                     <td className="ccv-td-action">

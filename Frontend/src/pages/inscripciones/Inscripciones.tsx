@@ -15,7 +15,8 @@ interface Conference {
   speaker_image_url: string | null;
   category: string | null;
   schedule: string | null;
-  location_text: string | null;
+  campus_name: string | null;
+  room_name: string | null;
   capacity: number;
   registered_count: number;
 }
@@ -52,7 +53,14 @@ function spotsLeft(conf: Conference): number {
   return conf.capacity - conf.registered_count;
 }
 
-const CATEGORIES = ["Todas", "IA", "Software", "Redes", "Datos", "Robótica", "Gestión", "Innovación"];
+const CATEGORY_FILTERS: { value: string; labelKey: string }[] = [
+  { value: "",                                                  labelKey: "ccv_filter_all" },
+  { value: "Software Engineering and Information Systems",     labelKey: "cat_software"   },
+  { value: "Artificial Intelligence and Co-existence",         labelKey: "cat_ai"         },
+  { value: "Smart Cities and Sustainable Development",         labelKey: "cat_cities"     },
+  { value: "Security, Privacy and Infrastructure",             labelKey: "cat_security"   },
+  { value: "Technology, Society and Innovation",               labelKey: "cat_tech"       },
+];
 
 // ── Componente principal ──────────────────────────────────────────────────────
 
@@ -69,6 +77,12 @@ export default function Inscripciones() {
     });
   }
 
+  function translateCat(cat: string | null): string {
+    if (!cat) return "";
+    const entry = CATEGORY_FILTERS.find((f) => f.value === cat);
+    return entry ? (t[entry.labelKey] ?? cat) : cat;
+  }
+
   const [conferences, setConferences]     = useState<Conference[]>([]);
   const [myRegs, setMyRegs]               = useState<Registration[]>([]);
   const [loading, setLoading]             = useState(true);
@@ -77,14 +91,14 @@ export default function Inscripciones() {
   const [toast, setToast]                 = useState("");
 
   const [search,   setSearch]   = useState("");
-  const [category, setCategory] = useState("Todas");
+  const [category, setCategory] = useState("");
 
   // ── Carga de datos ──────────────────────────────────────────────────────────
 
   const fetchConferences = useCallback(async () => {
     try {
       const params = new URLSearchParams();
-      if (category !== "Todas") params.set("category", category);
+      if (category) params.set("category", category);
       const res = await fetch(`${SEARCH_URL}/conferences?${params}`);
       if (!res.ok) throw new Error("Error al cargar conferencias");
       const data: Conference[] = await res.json();
@@ -230,13 +244,13 @@ export default function Inscripciones() {
 
       {/* Filtros por categoría */}
       <div className="insc-filters">
-        {CATEGORIES.map((cat) => (
+        {CATEGORY_FILTERS.map(({ value, labelKey }) => (
           <button
-            key={cat}
-            className={`insc-filter-btn ${category === cat ? "active" : ""}`}
-            onClick={() => setCategory(cat)}
+            key={value || "__all__"}
+            className={`insc-filter-btn ${category === value ? "active" : ""}`}
+            onClick={() => setCategory(value)}
           >
-            {cat}
+            {t[labelKey]}
           </button>
         ))}
       </div>
@@ -287,7 +301,9 @@ export default function Inscripciones() {
                       <path className="hc hc-2" d="M-20 18 C60 4,140 32,220 14 C270 2,300 16,340 12"/>
                     </svg>
                     {conf.category && (
-                      <span className="insc-badge-cat">{conf.category}</span>
+                      <span className={`insc-badge-cat ${isMine ? "category-text-light-bg" : "category-text-dark-bg"}`}>
+                        {translateCat(conf.category)}
+                      </span>
                     )}
                     {isMine && (
                       <span className="insc-badge-mine">{t.insc_registered_badge}</span>
@@ -341,12 +357,12 @@ export default function Inscripciones() {
                         {formatDate(conf.schedule)}
                       </li>
                     )}
-                    {conf.location_text && (
+                    {conf.campus_name && (
                       <li>
                         <span className="meta-icon" aria-hidden="true">
                           <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M8 1.5C5.515 1.5 3.5 3.515 3.5 6c0 3.5 4.5 8.5 4.5 8.5s4.5-5 4.5-8.5C12.5 3.515 10.485 1.5 8 1.5z" stroke="currentColor" strokeWidth="1.5"/><circle cx="8" cy="6" r="1.5" stroke="currentColor" strokeWidth="1.5"/></svg>
                         </span>
-                        {conf.location_text}
+                        {conf.campus_name}{conf.room_name ? ` · ${conf.room_name}` : ""}
                       </li>
                     )}
                     <li>
