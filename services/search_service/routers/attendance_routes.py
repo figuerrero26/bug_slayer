@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import func, text
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List
 
 from database import get_db
@@ -15,6 +15,10 @@ from schemas.conference_schema import (
 from utils.qr_utils import parse_qr_string, verify_qr_signature
 
 router = APIRouter(tags=["attendance"])
+
+# Minutos de tolerancia tras la hora de fin oficial antes de cerrar validaciones.
+# Cubre el caso de eventos que se alargan un poco; pasado este margen el cierre es definitivo.
+GRACE_MINUTES = 15
 
 # Expresión SQL reutilizable: fecha/hora de fin de cada conferencia.
 # MySQL evalúa el valor de la columna duration_minutes por cada fila.
@@ -62,6 +66,16 @@ def validate_attendance(body: AttendanceValidateRequest, db: Session = Depends(g
             conference_title=conf.title if conf else None,
             already_validated=True,
         )
+
+    # Cierre temporal: bloquear nuevas validaciones si el evento ya finalizó.
+    # Ventana = hora_fin + GRACE_MINUTES para absorber eventos que se alargan.
+    if conf and conf.schedule:
+        deadline = conf.schedule + timedelta(minutes=conf.duration_minutes + GRACE_MINUTES)
+        if datetime.utcnow() > deadline:
+            raise HTTPException(
+                status_code=400,
+                detail="La conferencia ya ha finalizado y no se admiten más validaciones de asistencia.",
+            )
 
     reg.asistio = True
     reg.fecha_validacion = datetime.utcnow()
