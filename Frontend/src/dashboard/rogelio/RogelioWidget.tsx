@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback, KeyboardEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRogelio } from "../../hooks/useRogelio";
+import rogelioLogo from "../../assets/rogelio-logo.svg";
 import "./rogelio.css";
 
 interface Props {
@@ -22,6 +23,7 @@ function formatTime(date: Date): string {
 
 export default function RogelioWidget({ userId }: Props) {
   const [open, setOpen]               = useState(false);
+  const [visible, setVisible]         = useState(false);
   const [input, setInput]             = useState("");
   const [hasUnread, setHasUnread]     = useState(false);
   const bottomRef                     = useRef<HTMLDivElement>(null);
@@ -29,6 +31,13 @@ export default function RogelioWidget({ userId }: Props) {
   const prevCountRef                  = useRef(1);
 
   const { messages, isTyping, sendMessage, resetChat } = useRogelio(userId);
+
+  // El robot recorre la barra en 6s con delay 6.6s → termina a los 12.6s
+  // El FAB aparece justo cuando el robotito sale de pantalla
+  useEffect(() => {
+    const showTimer = setTimeout(() => setVisible(true), 12_600);
+    return () => clearTimeout(showTimer);
+  }, []);
 
   // Auto-scroll
   useEffect(() => {
@@ -92,7 +101,9 @@ export default function RogelioWidget({ userId }: Props) {
           >
             {/* Header */}
             <div className="rogelio-header">
-              <div className="rogelio-avatar-sm">R</div>
+              <div className="rogelio-avatar-sm">
+                <img src={rogelioLogo} className="rogelio-avatar-img" alt="Rogelio" />
+              </div>
               <div className="rogelio-header-info">
                 <span className="rogelio-name">Rogelio</span>
                 <span className="rogelio-status">
@@ -136,7 +147,9 @@ export default function RogelioWidget({ userId }: Props) {
                     transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
                   >
                     {msg.role === "assistant" && (
-                      <div className="rogelio-msg-avatar">R</div>
+                      <div className="rogelio-msg-avatar">
+                        <img src={rogelioLogo} className="rogelio-avatar-img" alt="" />
+                      </div>
                     )}
                     <div className="rogelio-msg-bubble">
                       <RenderContent content={msg.content} />
@@ -174,7 +187,9 @@ export default function RogelioWidget({ userId }: Props) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.18 }}
                 >
-                  <div className="rogelio-msg-avatar">R</div>
+                  <div className="rogelio-msg-avatar">
+                    <img src={rogelioLogo} className="rogelio-avatar-img" alt="" />
+                  </div>
                   <div className="rogelio-msg-bubble rogelio-typing">
                     <span /><span /><span />
                   </div>
@@ -219,43 +234,51 @@ export default function RogelioWidget({ userId }: Props) {
         )}
       </AnimatePresence>
 
-      {/* ── FAB flotante ── */}
-      <motion.button
-        className={`rogelio-fab ${open ? "rogelio-fab--open" : ""}`}
-        onClick={() => setOpen((v) => !v)}
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.95 }}
-        aria-label={open ? "Cerrar asistente Rogelio" : "Abrir asistente Rogelio"}
-        title="Rogelio — Asistente CONIITI"
-      >
-        {hasUnread && !open && <span className="rogelio-unread-dot" aria-label="Mensaje nuevo" />}
-        <AnimatePresence mode="wait">
-          {open ? (
-            <motion.span
-              key="close"
-              initial={{ rotate: -90, opacity: 0 }}
-              animate={{ rotate: 0,   opacity: 1 }}
-              exit={{    rotate:  90, opacity: 0 }}
-              transition={{ duration: 0.18 }}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M18 6L6 18M6 6l12 12"/>
-              </svg>
-            </motion.span>
-          ) : (
-            <motion.span
-              key="bot"
-              initial={{ rotate: 90, opacity: 0 }}
-              animate={{ rotate: 0,  opacity: 1 }}
-              exit={{    rotate: -90, opacity: 0 }}
-              transition={{ duration: 0.18 }}
-              className="rogelio-fab-content"
-            >
-              <span className="rogelio-fab-letter">R</span>
-            </motion.span>
-          )}
-        </AnimatePresence>
-      </motion.button>
+      {/* ── FAB flotante — aparece solo cuando el robotito termina de cruzar la barra ── */}
+      <AnimatePresence>
+        {visible && (
+          <motion.button
+            className={`rogelio-fab ${open ? "rogelio-fab--open" : ""}`}
+            onClick={() => setOpen((v) => !v)}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label={open ? "Cerrar asistente Rogelio" : "Abrir asistente Rogelio"}
+            title="Rogelio — Asistente CONIITI"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{    scale: 0, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 320, damping: 20 }}
+          >
+            {hasUnread && !open && <span className="rogelio-unread-dot" aria-label="Mensaje nuevo" />}
+            <AnimatePresence mode="wait">
+              {open ? (
+                <motion.span
+                  key="close"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0,   opacity: 1 }}
+                  exit={{    rotate:  90, opacity: 0 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                  </svg>
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="bot"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0,  opacity: 1 }}
+                  exit={{    rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.18 }}
+                  className="rogelio-fab-content"
+                >
+                  <img src={rogelioLogo} className="rogelio-fab-img" alt="Rogelio" />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
+        )}
+      </AnimatePresence>
     </>
   );
 }

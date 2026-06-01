@@ -41,6 +41,18 @@
   z-index: 5;
 }
 
+.login-text h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 10px;
+}
+
+.login-text p {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
 .overlay {
   position: absolute;
   top: 0; left: 0;
@@ -70,6 +82,7 @@
   gap: 8px;
   color: #94a3b8;
   font-size: 14px;
+  text-decoration: none;
   transition: color 0.3s;
   z-index: 10;
 }
@@ -78,52 +91,180 @@
   color: #facc15;
 }
 
+/* ── FORMULARIO ── */
 .login-form {
-  width: 70%;
+  width: 72%;
   max-width: 380px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .login-form h2 {
   color: white;
-  margin-bottom: 20px;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 6px;
 }
 
-.login-form input {
-  padding: 14px;
+/* Grupo label + input */
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.login-label {
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Input con icono */
+.input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #334155;
+  font-size: 13px;
+  pointer-events: none;
+  transition: color 0.3s, opacity 0.2s;
+  z-index: 1;
+  opacity: 1;
+}
+
+/* Desaparece cuando hay texto escrito */
+.input-group:has(input:not(:placeholder-shown)) .input-icon {
+  opacity: 0;
+}
+
+/* Sin ícono visible → padding normal sin hueco */
+.login-form .input-group:has(input:not(:placeholder-shown)) input {
+  padding-left: 16px;
+}
+
+.login-form .input-group input {
+  width: 100%;
+  padding: 13px 14px 13px 40px;
   border-radius: 8px;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.06);
   background: #1e293b;
   color: white;
   font-size: 15px;
-  width: 100%;
   box-sizing: border-box;
-  transition: 0.3s;
+  transition: border-color 0.25s, box-shadow 0.25s;
 }
 
-.login-form input:focus {
+/* Espacio extra a la derecha cuando hay botón ojo */
+.login-form .input-group--has-eye input {
+  padding-right: 40px;
+}
+
+.login-form .input-group input::placeholder {
+  color: #334155;
+}
+
+.login-form .input-group input:focus {
   outline: none;
-  box-shadow: 0 0 0 2px #facc15;
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
-.login-form button {
+.login-form .input-group input:-webkit-autofill,
+.login-form .input-group input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #1e293b inset;
+  -webkit-text-fill-color: #ffffff;
+  caret-color: #ffffff;
+}
+
+/* Botón mostrar/ocultar contraseña */
+.input-eye-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #334155;
+  opacity: 0.45;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  transition: color 0.2s, opacity 0.2s;
+  z-index: 1;
+  border-radius: 4px;
+}
+
+.input-eye-btn:hover {
+  color: #94a3b8;
+  opacity: 0.9;
+}
+
+.input-eye-btn:focus {
+  outline: none;
+}
+
+.input-eye-btn:focus-visible {
+  outline: 2px solid rgba(250, 204, 21, 0.45);
+  border-radius: 4px;
+}
+
+/* Error */
+.login-error {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #fca5a5;
+  font-size: 0.85rem;
+  margin: 0;
+  padding: 10px 13px;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 7px;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+/* Olvidé mi contraseña */
+.login-forgot {
+  text-align: right !important;
+  margin-top: -4px;
+  font-size: 13px !important;
+}
+
+/* Botón submit */
+.login-form button[type="submit"] {
   padding: 14px;
   background: #facc15;
   border: none;
   border-radius: 8px;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 15px;
+  color: #0b1f3a;
   cursor: pointer;
   width: 100%;
   box-sizing: border-box;
-  transition: 0.3s;
+  margin-top: 4px;
+  transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
 }
 
-.login-form button:hover {
+.login-form button[type="submit"]:hover:not(:disabled) {
   background: #eab308;
   transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(250, 204, 21, 0.3);
+}
+
+.login-form button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .extra {
@@ -138,15 +279,24 @@
 }
 
 /* ════════════════════════════════════════
+   RESPONSIVE — tablet intermedio (769 – 1024px)
+   ════════════════════════════════════════ */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .login-form {
+    width: 82%;
+  }
+}
+
+/* ════════════════════════════════════════
    RESPONSIVE — móvil (≤ 768px)
-   Oculta la imagen, formulario pantalla completa
+   Oculta la imagen, formulario centrado en pantalla completa
    ════════════════════════════════════════ */
 @media (max-width: 768px) {
 
   .login-container {
     flex-direction: column;
     height: auto;
-    min-height: 100vh;
+    min-height: 100dvh;
     overflow-x: hidden;
   }
 
@@ -155,18 +305,17 @@
   }
 
   .login-right {
-    width: 100vw;
-    min-height: 100vh;
-    padding: 80px 28px 48px;
+    width: 100%;
+    min-height: 100dvh;
+    padding: 24px;
     box-sizing: border-box;
-    justify-content: flex-start;
-    align-items: stretch;
+    justify-content: center;
+    align-items: center;
   }
 
   .login-form {
     width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
+    max-width: 400px;
   }
 
   .login-form h2 {
@@ -174,9 +323,9 @@
     text-align: center;
   }
 
-  .login-form input,
-  .login-form button {
-    padding: 13px;
+  /* 16px evita el zoom automático en iOS al hacer focus */
+  .input-group input,
+  .login-form button[type="submit"] {
     font-size: 16px;
   }
 

@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import {
+  ArrowLeft, Lock, User, Phone, CheckCircle2,
+  Check, AlertTriangle, ChevronLeft, ChevronRight,
+} from "lucide-react";
 
 import { AUTH_URL } from "../services/api";
 
@@ -32,11 +35,11 @@ const PAISES = [
   "Venezuela","Vietnam","Yemen","Zimbabwe"
 ];
 
-const STEPS = [
-  { id: 1, label: "Cuenta",    icon: "🔐" },
-  { id: 2, label: "Personal",  icon: "👤" },
-  { id: 3, label: "Contacto",  icon: "📞" },
-  { id: 4, label: "Confirmar", icon: "✅" },
+const STEPS: Array<{ id: number; label: string; Icon: React.ComponentType<{ size?: number }> }> = [
+  { id: 1, label: "Cuenta",    Icon: Lock },
+  { id: 2, label: "Personal",  Icon: User },
+  { id: 3, label: "Contacto",  Icon: Phone },
+  { id: 4, label: "Confirmar", Icon: CheckCircle2 },
 ];
 
 const INITIAL = {
@@ -170,7 +173,9 @@ export default function Register() {
           initial={{ scale: 0.7, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
         >
-          <div className="reg-success-card__icon">🎉</div>
+          <div className="reg-success-card__icon">
+            <CheckCircle2 size={64} strokeWidth={1.5} />
+          </div>
           <h2>¡Registro exitoso!</h2>
 
           <p>
@@ -221,7 +226,7 @@ export default function Register() {
               className={`reg-stepper__item ${step === s.id ? "active" : ""} ${step > s.id ? "done" : ""}`}
             >
               <div className="reg-stepper__circle">
-                {step > s.id ? "✓" : s.icon}
+                {step > s.id ? <Check size={16} /> : <s.Icon size={16} />}
               </div>
 
               <span className="reg-stepper__label">{s.label}</span>
@@ -267,7 +272,10 @@ export default function Register() {
           </div>
 
           {error && (
-            <div className="reg-alert">⚠ {error}</div>
+            <div className="reg-alert">
+              <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+              {error}
+            </div>
           )}
 
           {/* CAMPOS */}
@@ -408,13 +416,13 @@ export default function Register() {
 
             {step > 1 && (
               <button className="reg-btn reg-btn--ghost" onClick={back}>
-                ← Anterior
+                <ChevronLeft size={16} /> Anterior
               </button>
             )}
 
             {step < 4 && (
               <button className="reg-btn" onClick={next}>
-                Siguiente →
+                Siguiente <ChevronRight size={16} />
               </button>
             )}
 
@@ -424,7 +432,7 @@ export default function Register() {
                 onClick={handleSubmit}
                 disabled={loading || !acceptedTerms}
               >
-                {loading ? "Registrando..." : "✓ Confirmar registro"}
+                {loading ? "Registrando..." : <><Check size={16} /> Confirmar registro</>}
               </button>
             )}
 

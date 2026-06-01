@@ -1,7 +1,12 @@
+
+
+
+
 import { lazy, Suspense, useState, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { User, CalendarDays, Calendar, Heart, Mail } from "lucide-react";
 
 import "./Dashboard.css";
 
@@ -68,11 +73,11 @@ export default function Dashboard() {
   }
 
   const MOBILE_NAV = [
-    { id: "profile",     label: t.dash_profile,     emoji: "👤" },
-    { id: "conferences", label: t.dash_mobile_talks, emoji: "🎤" },
-    { id: "calendar",    label: t.dash_calendar,     emoji: "📅" },
-    { id: "favorites",   label: t.dash_favorites,    emoji: "❤️" },
-    { id: "messages",    label: t.dash_messages,     emoji: "✉️" },
+    { id: "profile",     label: t.dash_profile,     icon: <User         size={20} strokeWidth={2} aria-hidden="true" /> },
+    { id: "conferences", label: t.dash_mobile_talks, icon: <CalendarDays size={20} strokeWidth={2} aria-hidden="true" /> },
+    { id: "calendar",    label: t.dash_calendar,     icon: <Calendar     size={20} strokeWidth={2} aria-hidden="true" /> },
+    { id: "favorites",   label: t.dash_favorites,    icon: <Heart        size={20} strokeWidth={2} aria-hidden="true" /> },
+    { id: "messages",    label: t.dash_messages,     icon: <Mail         size={20} strokeWidth={2} aria-hidden="true" /> },
   ];
 
   return (
@@ -150,13 +155,14 @@ export default function Dashboard() {
 
       {/* Bottom nav — solo móvil */}
       <nav className="mobile-bottom-nav">
-        {MOBILE_NAV.map(({ id, label, emoji }) => (
+        {MOBILE_NAV.map(({ id, label, icon }) => (
           <button
             key={id}
             className={`mobile-nav-btn ${activeNav === id ? "mobile-nav-active" : ""}`}
             onClick={() => setActiveNav(id)}
+            aria-current={activeNav === id ? "page" : undefined}
           >
-            <span className="mobile-nav-emoji">{emoji}</span>
+            <span className="mobile-nav-icon">{icon}</span>
             <span className="mobile-nav-label">{label}</span>
           </button>
         ))}

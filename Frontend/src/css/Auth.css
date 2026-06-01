@@ -41,43 +41,6 @@
   width: 100%; height: 100%;
   background: rgba(0,0,0,0.35);
 }
-.login-right {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #0f172a;
-}
-.login-form {
-  width: 70%;
-  max-width: 380px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.login-form h2 { color: white; margin-bottom: 20px; }
-.login-form input {
-  padding: 14px;
-  border-radius: 8px;
-  border: none;
-  background: #1e293b;
-  color: white;
-  transition: 0.3s;
-}
-.login-form input:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px #facc15;
-}
-.login-form button {
-  padding: 14px;
-  background: #facc15;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-.login-form button:hover { background: #eab308; transform: translateY(-2px); }
 .extra { color: #94a3b8; font-size: 14px; text-align: center; }
 .extra span { color: #facc15; cursor: pointer; }
 
@@ -133,7 +96,7 @@
 }
 
 .reg-left__text h1 {
-  font-size: 1.15rem;
+  font-size: 2rem;
   font-weight: 700;
   line-height: 1.4;
   margin-bottom: 10px;
@@ -286,6 +249,9 @@
 
 /* Alerta de error */
 .reg-alert {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 11px 15px;
   border-radius: 8px;
   background: rgba(239,68,68,0.12);
@@ -421,6 +387,10 @@
 
 .reg-btn {
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   padding: 14px;
   background: #facc15;
   border: none;
@@ -474,7 +444,13 @@
   color: white;
   box-shadow: 0 30px 80px rgba(0,0,0,0.5);
 }
-.reg-success-card__icon { font-size: 60px; margin-bottom: 20px; }
+.reg-success-card__icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  color: #facc15;
+}
 .reg-success-card h2 { font-size: 1.9rem; color: #facc15; margin-bottom: 14px; }
 .reg-success-card p  { font-size: 1rem; opacity: 0.85; line-height: 1.6; }
 .reg-success-card__sub { font-size: 0.82rem; opacity: 0.45; margin-top: 8px; }
@@ -500,11 +476,81 @@
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
-  .reg-container { flex-direction: column; }
-  .reg-left { width: 100%; height: 240px; }
-  .reg-stepper { top: auto; bottom: 20px; transform: none;
-    flex-direction: row; gap: 8px; left: 20px; }
-  .reg-stepper__label { display: none; }
-  .reg-stepper__line  { display: none; }
-  .reg-right { padding: 30px 24px; }
+
+  /* Contenedor: desbloquear altura fija para que el formulario pueda crecer */
+  .reg-container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+
+  /* Panel de imagen: compacto arriba */
+  .reg-left {
+    width: 100%;
+    height: 190px;
+    flex-shrink: 0;
+  }
+
+  /* Ocultar el texto largo que no cabe en 190px */
+  .reg-left__text { display: none; }
+
+  /* Logo más pequeño */
+  .reg-left__logo {
+    top: 18px;
+    left: 18px;
+    width: 130px;
+  }
+
+  /* Stepper horizontal centrado en el panel imagen */
+  .reg-stepper {
+    top: auto;
+    bottom: 14px;
+    left: 16px;
+    right: 16px;
+    transform: none;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .reg-stepper__circle { width: 34px; height: 34px; font-size: 13px; }
+  .reg-stepper__label  { display: none; }
+  .reg-stepper__line   { display: none; }
+
+  /* Panel derecho: scroll natural, alineado desde arriba */
+  .reg-right {
+    flex: 1;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 64px 20px 48px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Formulario ocupa todo el ancho disponible */
+  .reg-form-wrapper {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .reg-title { font-size: 1.4rem; }
+
+  .reg-back {
+    top: 16px;
+    left: 16px;
+  }
+
+  /* Inputs y botón con tamaño táctil mínimo de 44px */
+  .reg-input,
+  .reg-btn {
+    font-size: 16px; /* evita zoom automático en iOS */
+    min-height: 48px;
+  }
+
+  /* Pantalla de éxito */
+  .reg-success-card {
+    padding: 40px 24px;
+  }
 }

@@ -164,11 +164,11 @@ const Barra = () => {
               className={`nav-login-pill${location.pathname === "/login" ? " nav-login-pill--active" : ""}`}
             >
               <svg className="nav-login-svg" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M6 2H3.5A1.2 1.2 0 0 0 2.3 3.2v9.6A1.2 1.2 0 0 0 3.5 14H6"
+                <path d="M10 2h2.5a1.2 1.2 0 0 1 1.2 1.2v9.6a1.2 1.2 0 0 1-1.2 1.2H10"
                   stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M9 5.5L12.5 8 9 10.5"
+                <path d="M7 5.5L10.5 8 7 10.5"
                   stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M6.5 8h6"
+                <path d="M2.5 8h8"
                   stroke="currentColor" strokeWidth="1" strokeLinecap="round"/>
               </svg>
               <span className="nav-login-label">{t.login}</span>

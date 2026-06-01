@@ -144,7 +144,7 @@
     background: rgba(30, 111, 189, 0.30) !important;
   }
 
-  .mobile-nav-emoji { font-size: 19px; line-height: 1; }
+  .mobile-nav-icon { display: flex; align-items: center; justify-content: center; line-height: 1; }
 
   .mobile-nav-label {
     font-size: 9px;

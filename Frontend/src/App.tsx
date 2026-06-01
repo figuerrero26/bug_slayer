@@ -2,10 +2,12 @@ import { lazy, Suspense, useState } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { LanguageProvider } from "./context/LanguageContext";
+import { getSession } from "./hooks/useSession";
 
-import Barra        from "./layout/Barra.tsx";
-import Footer       from "./layout/Footer.tsx";
-import SplashScreen from "./SplashScreen.tsx";
+import Barra          from "./layout/Barra.tsx";
+import Footer         from "./layout/Footer.tsx";
+import SplashScreen   from "./SplashScreen.tsx";
+import RogelioWidget  from "./dashboard/rogelio/RogelioWidget.tsx";
 
 const Home          = lazy(() => import("./pages/home/Home.tsx"));
 const Nosotros      = lazy(() => import("./pages/nosotros/Nosotros.tsx"));
@@ -23,6 +25,8 @@ const PasswordReset  = lazy(() => import("./auth/PasswordReset.tsx"));
 function Layout() {
 
   const location = useLocation();
+  const session  = getSession();
+  const userId   = session?.user_id ?? null;
 
   const hideBar =
     location.pathname === "/login" ||
@@ -63,6 +67,7 @@ function Layout() {
       </Suspense>
 
       {!hideBar && <Footer />}
+      {!hideBar && <RogelioWidget userId={userId} />}
     </>
   );
 }
