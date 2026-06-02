@@ -54,3 +54,15 @@ class PasswordResetTokenResponse(BaseModel):
 
 class MessageResponse(BaseModel):
     message: str
+
+
+# ── Flujo 2FA ─────────────────────────────────────────────────────────────────
+
+class TwoFactorRequired(BaseModel):
+    status: str   # siempre "2fa_required"
+    user_id: int
+
+
+class TwoFactorVerify(BaseModel):
+    user_id: int
+    code: str
