@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { FaArrowLeft, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 
 import "../css/Login.css";
@@ -13,6 +13,8 @@ import { AUTH_URL } from "../services/api";
 export default function Login() {
 
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const sessionExpired = searchParams.get("expired") === "1";
 
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
@@ -96,6 +98,18 @@ export default function Login() {
         <form className="login-form" onSubmit={handleSubmit} noValidate>
 
           <h2>Iniciar Sesión</h2>
+
+          {sessionExpired && (
+            <p className="login-expired" role="alert" aria-live="polite">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"
+                stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                style={{ flexShrink: 0 }}>
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              Tu sesión ha expirado por inactividad. Por favor inicia sesión nuevamente.
+            </p>
+          )}
 
           {error && (
             <p className="login-error" role="alert" aria-live="assertive">

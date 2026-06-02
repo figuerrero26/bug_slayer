@@ -1042,6 +1042,27 @@
   color: var(--muted);
 }
 
+/* ── Ubicación en dos niveles: sede + sala ── */
+.msv-conf-card-location {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.msv-conf-card-campus {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.3;
+}
+
+.msv-conf-card-room {
+  font-size: 11.5px;
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.3;
+}
+
 /* Responsive: una columna en móvil */
 @media (max-width: 768px) {
   .msv-conf-card-grid { grid-template-columns: 1fr; }

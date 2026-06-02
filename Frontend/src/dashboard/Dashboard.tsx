@@ -15,6 +15,7 @@ import { getSession }       from "../hooks/useSession";
 import { useDashboard }     from "../hooks/useDashboard";
 import { useNotifications } from "../hooks/useNotifications";
 import { useLogout }        from "../hooks/useLogout";
+import { useIdleLogout }   from "../hooks/useIdleLogout";
 import { useLang }          from "../context/LanguageContext";
 
 // ── Layout components ─────────────────────────────────────────────────────────
@@ -53,6 +54,7 @@ export default function Dashboard() {
   const { user, confCount, loading, handleUserSaved } = useDashboard(userId, session?.email ?? "");
   const { unreadCount, setUnreadCount }               = useNotifications(userId);
   const { isLoggingOut, handleLogout }                = useLogout();
+  useIdleLogout();
 
   const isFirstVisit = useMemo(() => {
     if (!userId) return false;

@@ -190,11 +190,11 @@ export default function MessagesView({ userId, onUnreadChange, searchQuery = "" 
   }, [userId]);
 
   useEffect(() => {
-    fetch(`${SEARCH_URL}/users/${userId}/conferences`)
+    fetch(`${SEARCH_URL}/conferences`)
       .then((r) => r.ok ? r.json() as Promise<Conference[]> : Promise.reject())
       .then(setConferences)
       .catch(() => {});
-  }, [userId]);
+  }, []);
 
   useEffect(() => {
     if (!selected?.conference_id) { setConference(null); return; }
@@ -373,10 +373,17 @@ export default function MessagesView({ userId, onUnreadChange, searchQuery = "" 
                     <span>{matched.speaker_name}</span>
                   </div>
                 )}
-                {matched.location_text && (
+                {(matched.campus_name || matched.room_name) && (
                   <div className="msv-conf-card-row">
                     <MapPin size={16} strokeWidth={1.8} className="msv-conf-card-icon" />
-                    <span>{matched.location_text}</span>
+                    <div className="msv-conf-card-location">
+                      <span className="msv-conf-card-campus">
+                        {matched.campus_name ?? t.prof_ticket_venue}
+                      </span>
+                      {matched.room_name && (
+                        <span className="msv-conf-card-room">{matched.room_name}</span>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
