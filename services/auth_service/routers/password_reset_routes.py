@@ -52,7 +52,7 @@ async def password_reset_request(payload: PasswordResetRequest, db: Session = De
                 json={
                     "user_id": user.id,
                     "title":   "Código de recuperación de contraseña",
-                    "message": f"Tu código de verificación es: {otp}. Expira en {OTP_EXPIRE_MINUTES} minutos.",
+                    "message": otp,
                     "type":    "sistema",
                     "email":   user.email,
                 },

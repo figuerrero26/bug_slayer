@@ -9,6 +9,7 @@ from utils.email import send_email
 from utils.templates.email_templates import (
     html_confirmada,
     html_cancelada,
+    html_otp,
     html_generica,
 )
 
@@ -16,6 +17,8 @@ router = APIRouter(prefix="/notifications", tags=["notifications"])
 
 TITLE_INSCRIPCION_CONFIRMADA = "Inscripción confirmada"
 TITLE_INSCRIPCION_CANCELADA  = "Inscripción cancelada"
+TITLE_OTP                    = "Código de recuperación de contraseña"
+
 
 def _dispatch_email(title: str, message: str, email: str | None) -> None:
     """Selecciona la plantilla correcta según el título y despacha el correo."""
@@ -37,11 +40,17 @@ def _dispatch_email(title: str, message: str, email: str | None) -> None:
             to=email,
             body_plain=message,
         )
+    elif title == TITLE_OTP:
+        send_email(
+            subject="Tu código de verificación — CONIITI 2026",
+            body_html=html_otp(message),   # message = los 6 dígitos
+            to=email,
+            body_plain=f"Tu código de verificación es: {message}. Expira en 5 minutos.",
+        )
     else:
-        # Notificación genérica (bienvenida, sistema, etc.)
         send_email(
             subject=title,
-            body_html=html_generica(message),
+            body_html=html_generica(title, message),
             to=email,
             body_plain=message,
         )
