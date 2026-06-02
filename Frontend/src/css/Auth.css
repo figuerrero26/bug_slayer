@@ -474,10 +474,61 @@
   to   { transform: scaleX(1); }
 }
 
-/* ── Responsive ── */
+/* ════════════════════════════════════════
+   RESPONSIVE — tablet grande (1025 – 1280px)
+   ════════════════════════════════════════ */
+@media (max-width: 1280px) and (min-width: 1025px) {
+  .reg-left { width: 46%; }
+  .reg-left__text h1 { font-size: 1.75rem; }
+  .reg-stepper { left: 32px; }
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE — tablet (769 – 1024px)
+   Panel izquierdo más angosto con stepper visible
+   ════════════════════════════════════════ */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .reg-left {
+    width: 40%;
+  }
+
+  .reg-left__logo {
+    top: 28px;
+    left: 28px;
+    width: 150px;
+  }
+
+  .reg-left__text {
+    bottom: 60px;
+    left: 28px;
+    right: 28px;
+  }
+
+  .reg-left__text h1 { font-size: 1.5rem; }
+
+  .reg-stepper {
+    left: 28px;
+  }
+
+  .reg-stepper__circle { width: 36px; height: 36px; }
+
+  .reg-right {
+    padding: 36px 24px;
+  }
+
+  .reg-form-wrapper {
+    max-width: 340px;
+  }
+
+  .reg-title { font-size: 1.5rem; }
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE — móvil (≤ 768px)
+   Panel imagen compacto arriba, formulario en scroll
+   ════════════════════════════════════════ */
 @media (max-width: 768px) {
 
-  /* Contenedor: desbloquear altura fija para que el formulario pueda crecer */
   .reg-container {
     flex-direction: column;
     height: auto;
@@ -486,24 +537,21 @@
     overflow-y: visible;
   }
 
-  /* Panel de imagen: compacto arriba */
   .reg-left {
     width: 100%;
     height: 190px;
     flex-shrink: 0;
   }
 
-  /* Ocultar el texto largo que no cabe en 190px */
   .reg-left__text { display: none; }
 
-  /* Logo más pequeño */
   .reg-left__logo {
     top: 18px;
     left: 18px;
     width: 130px;
   }
 
-  /* Stepper horizontal centrado en el panel imagen */
+  /* Stepper horizontal en la franja de imagen */
   .reg-stepper {
     top: auto;
     bottom: 14px;
@@ -519,7 +567,6 @@
   .reg-stepper__label  { display: none; }
   .reg-stepper__line   { display: none; }
 
-  /* Panel derecho: scroll natural, alineado desde arriba */
   .reg-right {
     flex: 1;
     justify-content: flex-start;
@@ -529,7 +576,6 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Formulario ocupa todo el ancho disponible */
   .reg-form-wrapper {
     width: 100%;
     max-width: 100%;
@@ -542,15 +588,70 @@
     left: 16px;
   }
 
-  /* Inputs y botón con tamaño táctil mínimo de 44px */
+  /* 16px evita zoom automático en iOS; 48px es mínimo táctil recomendado */
   .reg-input,
   .reg-btn {
-    font-size: 16px; /* evita zoom automático en iOS */
+    font-size: 16px;
     min-height: 48px;
   }
 
-  /* Pantalla de éxito */
   .reg-success-card {
     padding: 40px 24px;
+  }
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE — teléfonos pequeños (≤ 390px)
+   iPhone SE y similares
+   ════════════════════════════════════════ */
+@media (max-width: 390px) {
+  .reg-right {
+    padding: 60px 16px 40px;
+  }
+
+  .reg-form-wrapper {
+    gap: 16px;
+  }
+
+  .reg-title {
+    font-size: 1.3rem;
+  }
+
+  .reg-fields {
+    gap: 12px;
+  }
+
+  .reg-actions {
+    gap: 8px;
+  }
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE — landscape en móvil
+   Pantalla ancha pero baja (ej. teléfono girado)
+   ════════════════════════════════════════ */
+@media (max-height: 500px) and (orientation: landscape) {
+  .reg-left {
+    display: none;
+  }
+
+  .reg-right {
+    justify-content: flex-start;
+    padding-top: 52px;
+    padding-bottom: 32px;
+    min-height: 100dvh;
+  }
+
+  .reg-form-wrapper {
+    gap: 14px;
+  }
+
+  .reg-fields {
+    min-height: unset;
+    gap: 10px;
+  }
+
+  .reg-title {
+    font-size: 1.25rem;
   }
 }

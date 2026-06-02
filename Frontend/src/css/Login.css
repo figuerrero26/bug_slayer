@@ -332,17 +332,33 @@
 }
 
 /* ════════════════════════════════════════
-   RESPONSIVE — tablet intermedio (769 – 1024px)
+   RESPONSIVE — tablet grande (1025 – 1280px)
+   Proporciones del split izquierdo/derecho
+   ════════════════════════════════════════ */
+@media (max-width: 1280px) and (min-width: 1025px) {
+  .login-left  { width: 48%; }
+  .login-form  { width: 80%; max-width: 360px; }
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE — tablet (769 – 1024px)
+   Panel izquierdo más estrecho, formulario centrado
    ════════════════════════════════════════ */
 @media (max-width: 1024px) and (min-width: 769px) {
-  .login-form {
-    width: 82%;
-  }
+  .login-left  { width: 42%; }
+
+  .login-right { padding: 0 28px; }
+
+  .logo-login  { width: 160px; top: 28px; left: 28px; }
+
+  .login-text h1 { font-size: 1.6rem; }
+
+  .login-form  { width: 90%; max-width: 360px; }
 }
 
 /* ════════════════════════════════════════
    RESPONSIVE — móvil (≤ 768px)
-   Oculta la imagen, formulario centrado en pantalla completa
+   Panel imagen oculto, formulario a pantalla completa
    ════════════════════════════════════════ */
 @media (max-width: 768px) {
 
@@ -360,7 +376,7 @@
   .login-right {
     width: 100%;
     min-height: 100dvh;
-    padding: 24px;
+    padding: 28px 24px;
     box-sizing: border-box;
     justify-content: center;
     align-items: center;
@@ -368,23 +384,77 @@
 
   .login-form {
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
+    gap: 14px;
   }
 
   .login-form h2 {
-    font-size: 1.6rem;
+    font-size: 1.65rem;
     text-align: center;
   }
 
-  /* 16px evita el zoom automático en iOS al hacer focus */
+  /* 16px evita zoom automático en iOS al hacer focus */
   .input-group input,
   .login-form button[type="submit"] {
     font-size: 16px;
+  }
+
+  .login-form button[type="submit"] {
+    padding: 15px;
   }
 
   .login-back {
     top: 20px;
     left: 20px;
     font-size: 13px;
+  }
+
+  .login-2fa-back {
+    font-size: 15px;
+    padding: 13px 14px;
+  }
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE — teléfonos pequeños (≤ 390px)
+   iPhone SE y similares
+   ════════════════════════════════════════ */
+@media (max-width: 390px) {
+  .login-right {
+    padding: 24px 18px;
+  }
+
+  .login-form {
+    gap: 12px;
+  }
+
+  .login-form h2 {
+    font-size: 1.45rem;
+  }
+
+  .login-label {
+    font-size: 12px;
+  }
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE — landscape en móvil
+   Pantalla ancha pero baja (ej. iPhone girado)
+   ════════════════════════════════════════ */
+@media (max-height: 500px) and (orientation: landscape) {
+  .login-right {
+    justify-content: flex-start;
+    padding-top: 52px;
+    padding-bottom: 32px;
+    overflow-y: auto;
+  }
+
+  .login-form {
+    gap: 10px;
+  }
+
+  .login-form h2 {
+    font-size: 1.35rem;
+    margin-bottom: 0;
   }
 }
