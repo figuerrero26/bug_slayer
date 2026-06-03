@@ -5,9 +5,8 @@ import { useLang, LANGUAGES, LangCode } from "../context/LanguageContext";
 
 import GifConiiti from "../assets/CONIITI3.gif";
 import logoMenu     from "../assets/logomenu.svg";
-import imgCulture   from "../assets/selloycalidad.png";
-import escudo       from "../assets/escudo-ucatolica.png";
-import rogelio      from "../assets/rogelio.png";
+import imgCulture   from "../assets/selloycalidad.webp";
+import rogelio      from "../assets/rogelio.webp";
 import UserAvatar   from "./UserAvatar";
 
 import "../css/Home.css";
@@ -150,7 +149,7 @@ const Barra = () => {
             ))}
 
             <li className="menu-logo-item">
-              <img src={logoMenu} alt="CONIITI" className="menu-logo-icon" />
+              <img src={logoMenu} alt="CONIITI" className="menu-logo-icon" loading="lazy" />
             </li>
           </ul>
         </div>

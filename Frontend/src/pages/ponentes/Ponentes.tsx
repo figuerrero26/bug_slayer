@@ -8,7 +8,7 @@ import {
   AREAS_LIST,
   PROFESSIONS_LIST,
 } from "../../interfaces/ponente";
-import ponentesHero from "../../assets/ponententesimagen.png";
+import ponentesHero from "../../assets/ponententesimagen.webp";
 import "../../css/Ponentes.css";
 
 const AREAS_FILTER  = ["Todos", ...AREAS_LIST];

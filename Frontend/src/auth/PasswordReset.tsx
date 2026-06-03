@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,7 +7,7 @@ import { ArrowLeft, ShieldCheck, Clock, CheckCircle2 } from "lucide-react";
 import "../css/Login.css";
 import "../css/PasswordReset.css";
 
-import ImagenFondo   from "../assets/C_C_08.jpg";
+import ImagenFondo   from "../assets/C_C_08.webp";
 import logoUCatolica from "../assets/LOGO-LOGIN.svg";
 
 import { AUTH_URL } from "../services/api";
@@ -24,7 +25,7 @@ const stepVariants = {
   exit:   { opacity: 0, x: -30 },
 };
 
-const stepTransition = { duration: 0.22, ease: "easeInOut" };
+const stepTransition = { duration: 0.22, ease: "easeInOut" as const };
 
 // ─────────────────────────────────────────────────────────────────────────────
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowLeft, Lock, User, Phone, CheckCircle2,
@@ -9,7 +9,7 @@ import {
 import { AUTH_URL } from "../services/api";
 
 // ── Imágenes ──────────────────────────────────────────
-import ImagenFondo from "../assets/C_C_08.jpg";
+import ImagenFondo from "../assets/C_C_08.webp";
 import logoUCatolica from "../assets/LOGO-LOGIN.svg";
 
 import "../css/Auth.css";
@@ -152,9 +152,8 @@ export default function Register() {
         setError(data.detail || "Error al registrar. Intenta de nuevo.");
       }
 
-    } catch (err) {
+    } catch {
 
-      console.error("Error de red al registrar:", err);
       setError("No se pudo conectar con el servidor. Verifica tu conexión.");
 
     } finally {

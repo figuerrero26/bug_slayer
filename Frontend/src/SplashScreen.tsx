@@ -1,8 +1,7 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import "./css/Splash.css";
-
-const LOGO_URL = "https://www.ucatolica.edu.co/portal/wp-content/uploads/2025/10/Logos_White.png";
+import logoLocal from "./assets/LogoUcatolica.webp";
 
 interface Props {
   onDone: () => void;
@@ -23,7 +22,7 @@ export default function SplashScreen({ onDone }: Props) {
       transition={{ duration: 0.4, ease: "easeInOut" }}
     >
       <motion.img
-        src={LOGO_URL}
+        src={logoLocal}
         className="splash-logo"
         initial={{ opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1 }}

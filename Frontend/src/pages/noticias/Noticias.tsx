@@ -1,5 +1,5 @@
 import { useState, useEffect, memo } from "react";
-import edificioImg from "../../assets/ucatolica-edificio3.jpg";
+import edificioImg from "../../assets/ucatolica-edificio3.webp";
 import "../../css/Noticias.css";
 
 interface Noticia {
@@ -188,7 +188,7 @@ export default function Noticias() {
 
       {/* HERO */}
       <section className="noticias-hero">
-        <img src={edificioImg} alt="" className="noticias-hero-img" aria-hidden="true" />
+        <img src={edificioImg} alt="" className="noticias-hero-img" aria-hidden="true" loading="eager" fetchPriority="high" />
         <div className="noticias-hero-overlay" />
         <div className="noticias-hero-content">
           <div className="noticias-live-pill">
