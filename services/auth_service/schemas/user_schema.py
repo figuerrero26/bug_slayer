@@ -23,6 +23,7 @@ class TokenResponse(BaseModel):
     token_type: str
     user_id: int
     email: str
+    session_id: Optional[str] = None
 
 
 class PasswordChange(BaseModel):

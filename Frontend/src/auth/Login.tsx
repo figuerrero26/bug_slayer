@@ -89,9 +89,10 @@ export default function Login() {
         sessionStorage.setItem(
           "session",
           JSON.stringify({
-            token:   data.access_token,
-            user_id: data.user_id,
-            email:   data.email,
+            token:      data.access_token,
+            user_id:    data.user_id,
+            email:      data.email,
+            session_id: data.session_id ?? null,
           })
         );
         navigate("/dashboard");
@@ -129,9 +130,10 @@ export default function Login() {
         sessionStorage.setItem(
           "session",
           JSON.stringify({
-            token:   data.access_token,
-            user_id: data.user_id,
-            email:   data.email,
+            token:      data.access_token,
+            user_id:    data.user_id,
+            email:      data.email,
+            session_id: data.session_id ?? null,
           })
         );
         navigate("/dashboard");

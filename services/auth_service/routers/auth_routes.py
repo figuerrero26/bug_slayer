@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+import uuid
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 import httpx
@@ -7,6 +8,7 @@ import secrets
 
 from database import get_db
 from models.user_model import User
+from models.session_model import UserSession
 from schemas.user_schema import (
     UserRegister, UserLogin, TokenResponse, PasswordChange,
     TwoFactorRequired, TwoFactorVerify, TwoFAUpdate,
@@ -22,18 +24,64 @@ OTP_EXPIRE_MINUTES = 5
 MAX_OTP_ATTEMPTS   = 5
 
 
+# ── Helpers ───────────────────────────────────────────────────────────────────
+
+def _parse_device(user_agent: str) -> str:
+    """Extrae 'Navegador · SO' del User-Agent."""
+    ua = user_agent.lower()
+    if "edg/" in ua:           browser = "Edge"
+    elif "opr/" in ua:         browser = "Opera"
+    elif "firefox/" in ua:     browser = "Firefox"
+    elif "chrome/" in ua:      browser = "Chrome"
+    elif "safari/" in ua:      browser = "Safari"
+    else:                      browser = "Navegador"
+
+    if "iphone" in ua:         os_name = "iPhone"
+    elif "ipad" in ua:         os_name = "iPad"
+    elif "android" in ua:      os_name = "Android"
+    elif "windows" in ua:      os_name = "Windows"
+    elif "macintosh" in ua:    os_name = "Mac"
+    elif "linux" in ua:        os_name = "Linux"
+    else:                      os_name = "Dispositivo"
+
+    return f"{browser} · {os_name}"
+
+
+def _create_session(db: Session, user_id: int, request: Request) -> UserSession:
+    ua     = request.headers.get("user-agent", "")
+    device = _parse_device(ua) if ua else "Dispositivo desconocido"
+    sid    = str(uuid.uuid4())
+    session = UserSession(
+        session_id=sid,
+        user_id=user_id,
+        device=device,
+        location="Colombia",
+    )
+    db.add(session)
+    db.commit()
+    db.refresh(session)
+    return session
+
+
+def _build_token_response(user: User, session: UserSession) -> TokenResponse:
+    token = create_token(user.id, user.email, session_id=session.session_id)
+    return TokenResponse(
+        access_token=token,
+        token_type="bearer",
+        user_id=user.id,
+        email=user.email,
+        session_id=session.session_id,
+    )
+
+
+# ── Endpoints ─────────────────────────────────────────────────────────────────
+
 @router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
-async def register(payload: UserRegister, db: Session = Depends(get_db)):
-    """
-    Registro doble:
-    1. Guarda email + password_hash en db_auth.
-    2. Llama al dashboard_service para crear el perfil con los datos personales.
-    3. Devuelve el JWT solo si el dashboard confirma la creación del perfil.
-    """
+async def register(payload: UserRegister, request: Request, db: Session = Depends(get_db)):
     if not payload.acepta_tratamiento_datos:
         raise HTTPException(
             status_code=400,
-            detail="Es obligatorio aceptar la política de tratamiento de datos para registrarse"
+            detail="Es obligatorio aceptar la política de tratamiento de datos para registrarse",
         )
 
     if db.query(User).filter(User.email == payload.email).first():
@@ -50,7 +98,6 @@ async def register(payload: UserRegister, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
 
-    # Comunicación síncrona con dashboard_service
     try:
         async with httpx.AsyncClient() as client:
             resp = await client.post(
@@ -65,22 +112,14 @@ async def register(payload: UserRegister, db: Session = Depends(get_db)):
                 timeout=10.0,
             )
         if resp.status_code not in (200, 201):
-            # Si el dashboard falla, se revierte el usuario para mantener consistencia
             db.delete(new_user)
             db.commit()
-            raise HTTPException(
-                status_code=503,
-                detail="Error al crear el perfil en el servicio de dashboard",
-            )
+            raise HTTPException(status_code=503, detail="Error al crear el perfil en el servicio de dashboard")
     except httpx.RequestError:
         db.delete(new_user)
         db.commit()
-        raise HTTPException(
-            status_code=503,
-            detail="No se pudo conectar con el servicio de dashboard",
-        )
+        raise HTTPException(status_code=503, detail="No se pudo conectar con el servicio de dashboard")
 
-    # Notificación de bienvenida — fire-and-forget, no bloquea el registro
     try:
         async with httpx.AsyncClient() as client:
             await client.post(
@@ -96,18 +135,12 @@ async def register(payload: UserRegister, db: Session = Depends(get_db)):
     except Exception:
         pass
 
-    token = create_token(new_user.id, new_user.email)
-    return TokenResponse(
-        access_token=token,
-        token_type="bearer",
-        user_id=new_user.id,
-        email=new_user.email,
-    )
+    session = _create_session(db, new_user.id, request)
+    return _build_token_response(new_user, session)
 
 
 @router.post("/change-password")
 def change_password(payload: PasswordChange, db: Session = Depends(get_db)):
-    """Cambia la contraseña del usuario verificando la contraseña actual."""
     user = db.query(User).filter(User.id == payload.user_id).first()
     if not user or not verify_password(payload.current_password, user.password_hash):
         raise HTTPException(status_code=401, detail="Contraseña actual incorrecta")
@@ -117,12 +150,12 @@ def change_password(payload: PasswordChange, db: Session = Depends(get_db)):
 
 
 @router.post("/login")
-async def login(payload: UserLogin, db: Session = Depends(get_db)):
+async def login(payload: UserLogin, request: Request, db: Session = Depends(get_db)):
     """
     Login con soporte de 2FA configurable por usuario.
     - Si two_fa_enabled (o no definido): genera OTP, envía correo y devuelve
       {"status": "2fa_required", "user_id": X}.
-    - Si two_fa_enabled = False: salta el OTP y devuelve el JWT directamente.
+    - Si two_fa_enabled = False: salta el OTP y devuelve el JWT + session_id directamente.
     """
     user = db.query(User).filter(User.email == payload.email).first()
 
@@ -132,19 +165,13 @@ async def login(payload: UserLogin, db: Session = Depends(get_db)):
     if not user.is_active:
         raise HTTPException(status_code=403, detail="La cuenta está desactivada")
 
-    # two_fa_enabled: None o True → activo; False → desactivado
     fa_active = user.two_fa_enabled is None or user.two_fa_enabled
 
     if not fa_active:
-        token = create_token(user.id, user.email)
-        return TokenResponse(
-            access_token=token,
-            token_type="bearer",
-            user_id=user.id,
-            email=user.email,
-        )
+        session = _create_session(db, user.id, request)
+        return _build_token_response(user, session)
 
-    otp    = str(secrets.randbelow(900_000) + 100_000)  # 100000–999999
+    otp    = str(secrets.randbelow(900_000) + 100_000)
     expiry = datetime.utcnow() + timedelta(minutes=OTP_EXPIRE_MINUTES)
 
     user.otp_code     = otp
@@ -170,6 +197,43 @@ async def login(payload: UserLogin, db: Session = Depends(get_db)):
     return TwoFactorRequired(status="2fa_required", user_id=user.id)
 
 
+@router.post("/verify-2fa", response_model=TokenResponse)
+def verify_2fa(payload: TwoFactorVerify, request: Request, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == payload.user_id).first()
+
+    if not user or not user.otp_code:
+        raise HTTPException(status_code=400, detail="No hay un código de verificación activo. Inicia sesión nuevamente.")
+
+    now = datetime.utcnow()
+
+    if not user.otp_expiry or user.otp_expiry < now:
+        user.otp_code = user.otp_expiry = None
+        user.otp_attempts = 0
+        db.commit()
+        raise HTTPException(status_code=400, detail="El código ha expirado. Inicia sesión nuevamente.")
+
+    if user.otp_code != payload.code:
+        user.otp_attempts += 1
+        if user.otp_attempts >= MAX_OTP_ATTEMPTS:
+            user.otp_code = user.otp_expiry = None
+            user.otp_attempts = 0
+            db.commit()
+            raise HTTPException(status_code=429, detail="Demasiados intentos fallidos. Inicia sesión nuevamente.")
+        db.commit()
+        restantes = MAX_OTP_ATTEMPTS - user.otp_attempts
+        raise HTTPException(
+            status_code=400,
+            detail=f"Código incorrecto. Te queda{'n' if restantes > 1 else ''} {restantes} intento{'s' if restantes > 1 else ''}.",
+        )
+
+    user.otp_code = user.otp_expiry = None
+    user.otp_attempts = 0
+    db.commit()
+
+    session = _create_session(db, user.id, request)
+    return _build_token_response(user, session)
+
+
 @router.patch("/2fa")
 def toggle_2fa(payload: TwoFAUpdate, db: Session = Depends(get_db)):
     """Activa o desactiva el factor de doble autenticación para un usuario."""
@@ -181,58 +245,37 @@ def toggle_2fa(payload: TwoFAUpdate, db: Session = Depends(get_db)):
     return {"two_fa_enabled": user.two_fa_enabled}
 
 
-@router.post("/verify-2fa", response_model=TokenResponse)
-def verify_2fa(payload: TwoFactorVerify, db: Session = Depends(get_db)):
-    """
-    Paso 2 del login con 2FA.
-    Valida el OTP contra la BD. Máximo MAX_OTP_ATTEMPTS intentos fallidos
-    consecutivos; al superarlos, se borra el código para obligar a reiniciar login.
-    Si el código es correcto y vigente, lo invalida y emite el JWT de sesión.
-    """
-    user = db.query(User).filter(User.id == payload.user_id).first()
+# ── Gestión de sesiones activas ───────────────────────────────────────────────
 
-    if not user or not user.otp_code:
-        raise HTTPException(status_code=400, detail="No hay un código de verificación activo. Inicia sesión nuevamente.")
-
-    now = datetime.utcnow()
-
-    # Código expirado — limpiar y forzar nuevo login
-    if not user.otp_expiry or user.otp_expiry < now:
-        user.otp_code     = None
-        user.otp_expiry   = None
-        user.otp_attempts = 0
-        db.commit()
-        raise HTTPException(status_code=400, detail="El código ha expirado. Inicia sesión nuevamente.")
-
-    # Código incorrecto
-    if user.otp_code != payload.code:
-        user.otp_attempts += 1
-        if user.otp_attempts >= MAX_OTP_ATTEMPTS:
-            user.otp_code     = None
-            user.otp_expiry   = None
-            user.otp_attempts = 0
-            db.commit()
-            raise HTTPException(
-                status_code=429,
-                detail="Demasiados intentos fallidos. Inicia sesión nuevamente.",
-            )
-        db.commit()
-        restantes = MAX_OTP_ATTEMPTS - user.otp_attempts
-        raise HTTPException(
-            status_code=400,
-            detail=f"Código incorrecto. Te queda{'n' if restantes > 1 else ''} {restantes} intento{'s' if restantes > 1 else ''}.",
-        )
-
-    # Código correcto — invalida OTP (un solo uso) y emite token de sesión
-    user.otp_code     = None
-    user.otp_expiry   = None
-    user.otp_attempts = 0
-    db.commit()
-
-    token = create_token(user.id, user.email)
-    return TokenResponse(
-        access_token=token,
-        token_type="bearer",
-        user_id=user.id,
-        email=user.email,
+@router.get("/sessions/{user_id}")
+def get_sessions(user_id: int, db: Session = Depends(get_db)):
+    """Devuelve todas las sesiones activas del usuario."""
+    sessions = (
+        db.query(UserSession)
+        .filter(UserSession.user_id == user_id, UserSession.is_active == True)  # noqa: E712
+        .order_by(UserSession.created_at.desc())
+        .all()
     )
+    return [
+        {
+            "session_id": s.session_id,
+            "device":     s.device,
+            "location":   s.location,
+            "created_at": s.created_at.isoformat(),
+        }
+        for s in sessions
+    ]
+
+
+@router.delete("/sessions/{session_id}")
+def close_session(session_id: str, db: Session = Depends(get_db)):
+    """Invalida una sesión específica (cierre remoto de sesión)."""
+    s = db.query(UserSession).filter(
+        UserSession.session_id == session_id,
+        UserSession.is_active == True,  # noqa: E712
+    ).first()
+    if not s:
+        raise HTTPException(status_code=404, detail="Sesión no encontrada o ya cerrada")
+    s.is_active = False
+    db.commit()
+    return {"message": "Sesión cerrada correctamente"}

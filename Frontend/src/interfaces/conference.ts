@@ -16,6 +16,7 @@ export interface ConferenceTicket {
   title: string;
   speaker_name: string | null;
   schedule: string | null;
+  schedule_end?: string | null;
   campus_name: string | null;
   room_name: string | null;
   registration_id: number;

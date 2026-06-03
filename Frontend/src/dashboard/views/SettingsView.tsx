@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   User, Phone, MapPin, Calendar, Lock, Eye, EyeOff,
-  Camera, ShieldCheck, Monitor, Sun, Moon, Bell, Clock,
+  ShieldCheck, Monitor, Sun, Moon, Bell, Clock, LogOut,
 } from "lucide-react";
 import { DASHBOARD_URL, AUTH_URL } from "../../services/api";
 import { useLang } from "../../context/LanguageContext";
@@ -144,8 +144,6 @@ export default function SettingsView({ user, onSaved }: Props) {
 // ── Panel: Datos de perfil ────────────────────────────────────────────────────
 function ProfilePanel({ user, onSaved }: Props) {
   const { t } = useLang();
-  const fileRef = useRef<HTMLInputElement>(null);
-  const [avatarSrc, setAvatarSrc] = useState<string | null>(null);
   const [form, setForm] = useState({
     name:      user.name,
     phone:     user.phone        ?? "",
@@ -158,12 +156,6 @@ function ProfilePanel({ user, onSaved }: Props) {
   const set = (k: keyof typeof form) =>
     (e: React.ChangeEvent<HTMLInputElement>) =>
       setForm(p => ({ ...p, [k]: e.target.value }));
-
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setAvatarSrc(URL.createObjectURL(file));
-  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -203,22 +195,8 @@ function ProfilePanel({ user, onSaved }: Props) {
       {/* ── Avatar ── */}
       <div className="stv-avatar-area">
         <div className="stv-avatar">
-          {avatarSrc
-            ? <img src={avatarSrc} alt="avatar" className="stv-avatar-img" />
-            : <span className="stv-avatar-initials">{initials(user.name)}</span>
-          }
+          <span className="stv-avatar-initials">{initials(user.name)}</span>
         </div>
-        <button type="button" className="stv-avatar-btn" onClick={() => fileRef.current?.click()}>
-          <Camera size={12} />
-          {t.stv_avatar_change}
-        </button>
-        <input
-          ref={fileRef}
-          type="file"
-          accept="image/*"
-          className="stv-hidden-input"
-          onChange={handleFile}
-        />
       </div>
 
       {/* ── Nombre completo ── */}
@@ -274,6 +252,25 @@ function ProfilePanel({ user, onSaved }: Props) {
   );
 }
 
+// ── Tipos de sesión ───────────────────────────────────────────────────────────
+interface SessionData {
+  session_id: string;
+  device:     string;
+  location:   string;
+  created_at: string;
+}
+
+function fmtSessionAge(isoDate: string): string {
+  const diff = Date.now() - new Date(isoDate).getTime();
+  const mins  = Math.floor(diff / 60_000);
+  const hours = Math.floor(diff / 3_600_000);
+  const days  = Math.floor(diff / 86_400_000);
+  if (mins < 2)    return "Ahora";
+  if (hours < 1)   return `Hace ${mins} min`;
+  if (days < 1)    return `Hace ${hours} h`;
+  return `Hace ${days} día${days > 1 ? "s" : ""}`;
+}
+
 // ── Panel: Seguridad ──────────────────────────────────────────────────────────
 function SecurityPanel({ userId }: { userId: number }) {
   const { t } = useLang();
@@ -281,6 +278,24 @@ function SecurityPanel({ userId }: { userId: number }) {
   const [saving, setSaving] = useState(false);
   const [msg, setMsg]       = useState<{ ok: boolean; text: string } | null>(null);
   const [twoFA, setTwoFA]   = useState(get2FA);
+
+  // ── Sesiones ──
+  const [sessions,     setSessions]     = useState<SessionData[]>([]);
+  const [sessionsLoad, setSessionsLoad] = useState(true);
+  const [closingId,    setClosingId]    = useState<string | null>(null);
+
+  const currentSessionId: string | null = (() => {
+    try { return JSON.parse(sessionStorage.getItem("session") ?? "{}").session_id ?? null; }
+    catch { return null; }
+  })();
+
+  useEffect(() => {
+    fetch(`${AUTH_URL}/auth/sessions/${userId}`)
+      .then(r => r.json())
+      .then((data: SessionData[]) => setSessions(data))
+      .catch(() => {})
+      .finally(() => setSessionsLoad(false));
+  }, [userId]);
 
   const set = (k: keyof typeof form) =>
     (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -322,15 +337,23 @@ function SecurityPanel({ userId }: { userId: number }) {
         body:    JSON.stringify({ user_id: userId, enabled: v }),
       });
     } catch {
-      // si falla la red, el estado local ya refleja la preferencia del usuario;
-      // se sincronizará al próximo login
+      // preferencia persiste en localStorage; se sincronizará al próximo login
     }
   };
 
-  const SESSIONS = [
-    { browser: "Chrome · Windows", location: "Bogotá, Colombia", time: "Ahora"        },
-    { browser: "Safari · iPhone",  location: "Bogotá, Colombia", time: "Hace 2 días"  },
-  ];
+  const handleCloseSession = async (sessionId: string) => {
+    setClosingId(sessionId);
+    try {
+      const res = await fetch(`${AUTH_URL}/auth/sessions/${sessionId}`, { method: "DELETE" });
+      if (res.ok) {
+        setSessions(prev => prev.filter(s => s.session_id !== sessionId));
+      }
+    } catch {
+      // silencioso — la sesión permanece visible si falla la red
+    } finally {
+      setClosingId(null);
+    }
+  };
 
   return (
     <div className="stv-panel">
@@ -393,16 +416,46 @@ function SecurityPanel({ userId }: { userId: number }) {
           <Monitor size={17} className="stv-section-icon" />
           <h4 className="stv-section-title">{t.stv_sessions_title}</h4>
         </div>
+
         <div className="stv-sessions">
-          {SESSIONS.map((s, i) => (
-            <div key={i} className="stv-session">
-              <div className="stv-session-info">
-                <span className="stv-session-browser">{s.browser}</span>
-                <span className="stv-session-location">{s.location} · {s.time}</span>
+          {sessionsLoad && (
+            <p className="stv-section-desc">Cargando sesiones…</p>
+          )}
+
+          {!sessionsLoad && sessions.length === 0 && (
+            <p className="stv-section-desc">No hay sesiones activas registradas.</p>
+          )}
+
+          {sessions.map(s => {
+            const isCurrent = s.session_id === currentSessionId;
+            const isClosing = closingId === s.session_id;
+            return (
+              <div key={s.session_id} className="stv-session">
+                <div className="stv-session-info">
+                  <span className="stv-session-browser">{s.device}</span>
+                  <span className="stv-session-location">
+                    {s.location} · {fmtSessionAge(s.created_at)}
+                  </span>
+                </div>
+
+                {isCurrent ? (
+                  <span className="stv-session-badge">{t.stv_session_badge} · Este dispositivo</span>
+                ) : (
+                  <button
+                    className="stv-session-close"
+                    onClick={() => handleCloseSession(s.session_id)}
+                    disabled={isClosing}
+                  >
+                    {isClosing
+                      ? <span className="stv-spinner stv-spinner--dark" />
+                      : <LogOut size={13} />
+                    }
+                    {isClosing ? "Cerrando…" : "Cerrar sesión"}
+                  </button>
+                )}
               </div>
-              <span className="stv-session-badge">{t.stv_session_badge}</span>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

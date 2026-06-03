@@ -22,12 +22,14 @@ def verify_password(plain: str, hashed: str) -> bool:
     return pwd_context.verify(plain, hashed)
 
 
-def create_token(user_id: int, email: str) -> str:
+def create_token(user_id: int, email: str, session_id: str | None = None) -> str:
     payload = {
-        "sub": str(user_id),
+        "sub":   str(user_id),
         "email": email,
-        "exp": datetime.utcnow() + timedelta(minutes=EXPIRE_MINUTES),
+        "exp":   datetime.utcnow() + timedelta(minutes=EXPIRE_MINUTES),
     }
+    if session_id:
+        payload["jti"] = session_id
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
 

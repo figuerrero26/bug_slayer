@@ -6,8 +6,9 @@ from sqlalchemy import text
 from database import engine, Base
 from routers.auth_routes import router as auth_router
 from routers.password_reset_routes import router as password_reset_router
+import models.session_model  # noqa: F401 — registra UserSession en Base.metadata
 
-# Crea las tablas en db_auth si no existen
+# Crea las tablas en db_auth si no existen (incluyendo 'sessions')
 Base.metadata.create_all(bind=engine)
 
 

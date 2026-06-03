@@ -11,7 +11,7 @@ export function useLogout() {
       sessionStorage.removeItem("session");
       localStorage.removeItem("token");
       navigate("/login");
-    }, 2800);
+    }, 1000);
   };
 
   return { isLoggingOut, handleLogout };

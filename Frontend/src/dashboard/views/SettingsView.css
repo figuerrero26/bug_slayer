@@ -102,28 +102,6 @@
   object-fit: cover;
 }
 
-.stv-avatar-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  color: var(--muted);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.18s ease;
-}
-
-.stv-avatar-btn:hover {
-  border-color: var(--blue);
-  color: var(--blue);
-}
-
-.stv-hidden-input { display: none; }
 
 /* ── Campo con icono ── */
 .stv-field {
@@ -389,6 +367,35 @@
   color: var(--green);
   border: 1px solid rgba(39, 174, 96, 0.25);
   white-space: nowrap;
+}
+
+.stv-session-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(220, 38, 38, 0.35);
+  background: rgba(220, 38, 38, 0.06);
+  color: var(--red);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s ease;
+}
+
+.stv-session-close:hover:not(:disabled) {
+  background: rgba(220, 38, 38, 0.14);
+  border-color: var(--red);
+}
+
+.stv-session-close:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.stv-spinner--dark {
+  border-color: rgba(220, 38, 38, 0.3);
+  border-top-color: var(--red);
 }
 
 /* ── Tema: tarjetas grandes (2 columnas) ── */

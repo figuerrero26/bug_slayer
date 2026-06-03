@@ -24,15 +24,13 @@
 
 /* ── Estado vacío del ticket ────────────────────────────────────── */
 .profv-empty-ticket {
-  background: linear-gradient(145deg, #07101f 0%, #0f1f40 55%, #172a55 100%);
-  border-radius: var(--radius);
-  height: 100%;
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 32px 24px;
+  padding: 16px 8px;
   text-align: center;
   box-sizing: border-box;
 }
@@ -220,17 +218,171 @@
   --stub-w:   0px;
   --perf-w:   24px;
   --stub-rw:  132px;
-  --notch-d:  28px;             /* diámetro de muesca top/bottom   */
-  --hole-r:   8px;              /* radio de cada agujero interior   */
-  --stub-col: #e8941a;          /* dorado CONIITI                   */
-  --body-col: #0b1628;          /* azul marino oscuro               */
+  --notch-d:  28px;
+  --hole-r:   8px;
+  --stub-col: #e8941a;
+  --body-col: #0b1628;
 
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
   height: 100%;
-  justify-content: center;
   box-sizing: border-box;
+
+  /* Card styling — idéntico al CountdownCard */
+  background: linear-gradient(145deg, #07101f 0%, #0f1f40 55%, #172a55 100%);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  box-shadow: 0 8px 32px rgba(0, 48, 135, 0.35);
+}
+
+/* ── Header: título + dropdown ──────────────────────────────────── */
+.profv-tickets-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.profv-tickets-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: 0.2px;
+}
+
+/* ── Wrapper posicionador del dropdown ──────────────────────────── */
+.profv-date-drop-wrap {
+  position: relative;
+}
+
+/* ── Botón trigger del dropdown ─────────────────────────────────── */
+.profv-date-drop-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.80);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.profv-date-drop-btn:hover {
+  background: rgba(232, 148, 26, 0.12);
+  border-color: rgba(232, 148, 26, 0.32);
+  color: #e8941a;
+}
+
+.profv-date-drop-btn--open {
+  background: rgba(232, 148, 26, 0.14);
+  border-color: rgba(232, 148, 26, 0.48);
+  color: #e8941a;
+}
+
+/* ── Chevron animado ────────────────────────────────────────────── */
+.profv-drop-chevron {
+  flex-shrink: 0;
+  transition: transform 0.22s ease;
+}
+.profv-drop-chevron--open {
+  transform: rotate(180deg);
+}
+
+/* ── Panel del dropdown ─────────────────────────────────────────── */
+.profv-date-drop-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 60;
+  min-width: 210px;
+  background: #0d1e3b;
+  border: 1px solid rgba(232, 148, 26, 0.18);
+  border-radius: 14px;
+  padding: 5px;
+  list-style: none;
+  margin: 0;
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
+  transform-origin: top right;
+}
+
+/* ── Ítem del dropdown ──────────────────────────────────────────── */
+.profv-date-drop-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  padding: 9px 11px;
+  background: none;
+  border: none;
+  border-radius: 9px;
+  color: rgba(255, 255, 255, 0.65);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease, color 0.15s ease;
+  line-height: 1.3;
+}
+
+.profv-date-drop-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+.profv-date-drop-item--active {
+  background: rgba(232, 148, 26, 0.13);
+  color: #e8941a;
+  font-weight: 700;
+}
+
+/* Placeholder fijo para el check — evita que el texto salte */
+.profv-drop-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* ── Estado vacío del día seleccionado ──────────────────────────── */
+.profv-no-day-tickets {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px 16px;
+  color: rgba(255, 255, 255, 0.30);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12.5px;
+  text-align: center;
+}
+
+/* ── Wrapper que centra verticalmente ticket + nav ──────────────── */
+.profv-ticket-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  min-height: 0;
 }
 
 /* ── Wrapper del tilt 3D ── */
@@ -671,10 +823,12 @@
   .profv-cd-num  { font-size: 20px; }
   .profv-cd-label { font-size: 8px; }
 
-  .profv-ticket-outer  { --stub-rw: 88px; --perf-w: 16px; }
+  .profv-ticket-outer  { --stub-rw: 88px; --perf-w: 16px; padding: 16px 14px; }
   .profv-ticket        { height: 165px; }
   .profv-ticket-conf-title { font-size: 13px; }
   .profv-ticket-grid-value { font-size: 12px; }
+  .profv-date-drop-btn { font-size: 10.5px; padding: 5px 9px; }
+  .profv-date-drop-menu { min-width: 180px; }
 }
 
 /* ══════════════════════════════════════════════════════════════════
