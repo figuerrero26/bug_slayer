@@ -284,7 +284,7 @@ function Home() {
       </section>
 
       {/* ── TARIFAS ── */}
-      <section className="cards-section">
+      <section id="tarifas" className="cards-section">
         <svg className="cards-deco-lines" viewBox="0 0 1440 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path ref={snakeRef1} className="snake-path-1" d="M 0,560 C 160,590 320,360 480,440 C 640,520 800,220 960,290 C 1120,360 1290,90 1440,50" fill="none" stroke="rgba(255,255,255,0.20)" strokeWidth="2.5"/>
           <path ref={snakeRef2} className="snake-path-2" d="M 0,360 C 160,390 320,160 480,240 C 640,320 800,20 960,90 C 1120,160 1290,-110 1440,-150" fill="none" stroke="rgba(255,255,255,0.13)" strokeWidth="2"/>
@@ -375,15 +375,10 @@ function Home() {
           <h2 className="sponsors-heading">Con el apoyo y copatrocinio de</h2>
           <div className="sponsors-divider" aria-hidden="true" />
           <div className="sponsors-grid">
-            <a
-              href="https://ieee.org.co/seccion/acerca-de-nosotros/"
-              target="_blank"
-              rel="noreferrer"
-              className="sponsor-card"
-            >
+            <div className="sponsor-card">
               <img src={ieeeLogo} alt="IEEE Colombia Section" className="sponsor-logo" loading="lazy" />
               <span className="sponsor-label">IEEE Colombia Section</span>
-            </a>
+            </div>
           </div>
           <a
             href="https://ieee.org.co/seccion/acerca-de-nosotros/"
