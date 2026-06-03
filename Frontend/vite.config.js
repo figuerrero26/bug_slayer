@@ -12,7 +12,7 @@ export default defineConfig({
       'X-XSS-Protection': '1; mode=block',
       'Referrer-Policy': 'strict-origin-when-cross-origin',
       'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
-      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' ws: wss:; frame-ancestors 'none'; object-src 'none';",
+      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' ws: wss:; frame-ancestors 'none'; object-src 'none';",
     },
     watch: {
       usePolling: true,   // necesario para detectar cambios desde Windows hacia el contenedor
@@ -58,6 +58,7 @@ export default defineConfig({
           vendor:  ['react', 'react-dom'],
           router:  ['react-router-dom'],
           motion:  ['framer-motion'],
+          icons:   ['react-icons', 'lucide-react'],
           qr:      ['qrcode.react'],
         },
       },

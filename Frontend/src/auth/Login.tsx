@@ -7,7 +7,7 @@ import { Clock, ArrowLeft } from "lucide-react";
 import "../css/Login.css";
 import "../css/PasswordReset.css";
 
-import ImagenFondo   from "../assets/C_C_08.jpg";
+import ImagenFondo   from "../assets/C_C_08.webp";
 import logoUCatolica from "../assets/LOGO-LOGIN.svg";
 
 import { AUTH_URL } from "../services/api";
@@ -23,7 +23,7 @@ const stepVariants = {
   center: { opacity: 1, x: 0   },
   exit:   { opacity: 0, x: -30 },
 };
-const stepTransition = { duration: 0.22, ease: "easeInOut" };
+const stepTransition = { duration: 0.22, ease: "easeInOut" as const };
 
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -145,6 +145,9 @@ export default function Login() {
           setOtp(Array(6).fill(""));
           setTimeout(() => otpRefs.current[0]?.focus(), 50);
         }
+
+
+        
       }
     } catch {
       setError("Error conectando con el servidor");

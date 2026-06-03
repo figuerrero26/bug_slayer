@@ -3,9 +3,9 @@ import { FaXTwitter } from "react-icons/fa6";
 import { useLang } from "../context/LanguageContext";
 import "../css/Home.css";
 
-import logoIcontec     from "../assets/sellos_footer.png";
+import logoIcontec     from "../assets/sellos_footer.webp";
 import logoAltaCalidad from "../assets/logo-alta-calidad-ho.svg";
-import logoUcatolica   from "../assets/LogoUcatolica.png";
+import logoUcatolica   from "../assets/LogoUcatolica.webp";
 
 const SEDES = [
   {
@@ -55,7 +55,7 @@ function Footer() {
 
         {/* Col 1 – Identidad universidad */}
         <div className="footer-col footer-col-brand">
-          <img src={logoUcatolica} alt="Universidad Católica de Colombia" className="footer-brand-logo" />
+          <img src={logoUcatolica} alt="Universidad Católica de Colombia" className="footer-brand-logo" loading="lazy" />
           <p className="footer-brand-legal">{TEXTO_BRAND}</p>
           <p className="footer-brand-copy">Universidad Católica de Colombia © Copyright 2017</p>
           <p className="footer-brand-hashtag">#Coniiti2026</p>
@@ -105,8 +105,8 @@ function Footer() {
       <div className="footer-bottom">
 
         <div className="footer-logos">
-          <img src={logoIcontec}     alt="Icontec"      />
-          <img src={logoAltaCalidad} alt="Alta Calidad" />
+          <img src={logoIcontec}     alt="Icontec"      loading="lazy" />
+          <img src={logoAltaCalidad} alt="Alta Calidad" loading="lazy" />
         </div>
 
         <div className="footer-info">

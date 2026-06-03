@@ -516,7 +516,7 @@ export default function MessagesView({ userId, onUnreadChange, searchQuery = "" 
                   className={`msv-adv-quick-btn${draftQuickRange === r ? " msv-adv-quick-btn--active" : ""}`}
                   onClick={() => {
                     setDraftQuickRange(draftQuickRange === r ? "" : r);
-                    setDraftDateFrom(""); setDraftDateTo("");
+                    setDraftDateFrom(null); setDraftDateTo(null);
                   }}
                 >
                   {r === "today" ? t.msv_adv_today : t.msv_adv_week}
@@ -529,7 +529,7 @@ export default function MessagesView({ userId, onUnreadChange, searchQuery = "" 
                 <DatePicker
                   locale="es"
                   selected={draftDateFrom}
-                  onChange={(d) => { setDraftDateFrom(d); setDraftQuickRange(""); }}
+                  onChange={(d: Date | null) => { setDraftDateFrom(d); setDraftQuickRange(""); }}
                   selectsStart
                   startDate={draftDateFrom}
                   endDate={draftDateTo}
@@ -547,7 +547,7 @@ export default function MessagesView({ userId, onUnreadChange, searchQuery = "" 
                 <DatePicker
                   locale="es"
                   selected={draftDateTo}
-                  onChange={(d) => { setDraftDateTo(d); setDraftQuickRange(""); }}
+                  onChange={(d: Date | null) => { setDraftDateTo(d); setDraftQuickRange(""); }}
                   selectsEnd
                   startDate={draftDateFrom}
                   endDate={draftDateTo}

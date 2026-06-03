@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useLang } from "../../context/LanguageContext";
 import VideoConiiti2 from "../../assets/videofondoconiiti.mp4";
-import ieeeGroup    from "../../assets/ieee_group.jpeg";
-import ieeeLogo     from "../../assets/logo_ieee_colombia.png";
+import ieeeGroup    from "../../assets/ieee_group.webp";
+import ieeeLogo     from "../../assets/logo_ieee_colombia.webp";
 import "../../css/Home.css";
 
 function CheckIcon() {
@@ -381,7 +381,7 @@ function Home() {
               rel="noreferrer"
               className="sponsor-card"
             >
-              <img src={ieeeLogo} alt="IEEE Colombia Section" className="sponsor-logo" />
+              <img src={ieeeLogo} alt="IEEE Colombia Section" className="sponsor-logo" loading="lazy" />
               <span className="sponsor-label">IEEE Colombia Section</span>
             </a>
           </div>

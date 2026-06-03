@@ -23,8 +23,15 @@ services:
     volumes:
       - ./services/auth_service:/app
     command: uvicorn main:app --host 0.0.0.0 --port 8001 --reload
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     depends_on:
-      - dashboard_service
+      dashboard_service:
+        condition: service_healthy
     networks:
       - coniiti_network
     restart: unless-stopped
@@ -39,6 +46,12 @@ services:
     volumes:
       - ./services/notifications_service:/app
     command: uvicorn main:app --host 0.0.0.0 --port 8004 --reload
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8004/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     networks:
       - coniiti_network
     restart: unless-stopped
@@ -61,8 +74,15 @@ services:
       - ./services/search_service:/app
       - speaker_images:/app/uploads/speakers
     command: uvicorn main:app --host 0.0.0.0 --port 8003 --reload
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8003/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     depends_on:
-      - notifications_service
+      notifications_service:
+        condition: service_healthy
     networks:
       - coniiti_network
     restart: unless-stopped
@@ -78,8 +98,15 @@ services:
     volumes:
       - ./services/dashboard_service:/app
     command: uvicorn main:app --host 0.0.0.0 --port 8002 --reload
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8002/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     depends_on:
-      - search_service
+      search_service:
+        condition: service_healthy
     networks:
       - coniiti_network
     restart: unless-stopped
@@ -97,6 +124,12 @@ services:
     volumes:
       - ./services/assistant_service:/app
     command: uvicorn main:app --host 0.0.0.0 --port 8006 --reload
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8006/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     networks:
       - coniiti_network
     restart: unless-stopped
@@ -119,10 +152,14 @@ services:
       - ./Frontend/public:/app/public
       - ./Frontend/index.html:/app/index.html
     depends_on:
-      - auth_service
-      - search_service
-      - dashboard_service
-      - assistant_service
+      auth_service:
+        condition: service_healthy
+      search_service:
+        condition: service_healthy
+      dashboard_service:
+        condition: service_healthy
+      assistant_service:
+        condition: service_healthy
     networks:
       - coniiti_network
     restart: unless-stopped

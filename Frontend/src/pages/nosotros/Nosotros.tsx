@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import edificioImg from "../../assets/ucatolica-edificio.jpg";
-import frenteSede4 from "../../assets/frente sede 4.jpg";
-import conferenciaImg from "../../assets/conferencias.jpg";
-import ieeeImg from "../../assets/ieee_group.jpeg";
-import logoUcc from "../../assets/LogoUcatolica.png";
+import edificioImg from "../../assets/ucatolica-edificio.webp";
+import frenteSede4 from "../../assets/frente sede 4.webp";
+import conferenciaImg from "../../assets/conferencias.webp";
+import ieeeImg from "../../assets/ieee_group.webp";
+import logoUcc from "../../assets/LogoUcatolica.webp";
 import { useLang } from "../../context/LanguageContext";
 import "../../css/Nosotros.css";
 
@@ -85,7 +85,7 @@ export default function Nosotros() {
 
       {/* HERO */}
       <section className="nos-hero">
-        <img src={edificioImg} alt="" className="nos-hero-img" aria-hidden="true" />
+        <img src={edificioImg} alt="" className="nos-hero-img" aria-hidden="true" loading="eager" fetchPriority="high" />
         <div className="nos-hero-overlay" />
         <div className="nos-hero-content">
           <span className="nos-hero-pill">CONIITI 2026</span>
@@ -120,7 +120,7 @@ export default function Nosotros() {
           </FadeIn>
           <FadeIn delay={120}>
             <div className="nos-img-wrap">
-              <img src={ieeeImg} alt="Congreso CONIITI" className="nos-section-img" />
+              <img src={ieeeImg} alt="Congreso CONIITI" className="nos-section-img" loading="lazy" />
             </div>
           </FadeIn>
         </div>
@@ -131,7 +131,7 @@ export default function Nosotros() {
         <div className="nos-container nos-two-col nos-two-col--reverse">
           <FadeIn>
             <div className="nos-img-wrap">
-              <img src={conferenciaImg} alt="Historia CONIITI" className="nos-section-img" />
+              <img src={conferenciaImg} alt="Historia CONIITI" className="nos-section-img" loading="lazy" />
             </div>
           </FadeIn>
           <FadeIn delay={120}>
@@ -146,11 +146,11 @@ export default function Nosotros() {
 
       {/* UNIVERSIDAD */}
       <section className="nos-section nos-section--uni">
-        <img src={frenteSede4} alt="" className="nos-uni-bg" aria-hidden="true" />
+        <img src={frenteSede4} alt="" className="nos-uni-bg" aria-hidden="true" loading="lazy" />
         <div className="nos-uni-overlay" />
         <FadeIn>
           <div className="nos-uni-center">
-            <img src={logoUcc} alt="Universidad Católica de Colombia" className="nos-uni-logo-main" />
+            <img src={logoUcc} alt="Universidad Católica de Colombia" className="nos-uni-logo-main" loading="lazy" />
             <div className="nos-uni-divider" />
             <h2>{t.nos_uni}</h2>
             <p>{t.nos_uni_p}</p>

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { SEARCH_URL } from "../../services/api";
 import { useLang } from "../../context/LanguageContext";
-import conferenciasBg from "../../assets/conferencias.jpg";
+import conferenciasBg from "../../assets/conferencias.webp";
 import "../../css/Inscripciones.css";
 
 // ── Tipos ─────────────────────────────────────────────────────────────────────
