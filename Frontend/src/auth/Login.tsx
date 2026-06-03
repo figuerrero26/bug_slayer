@@ -82,15 +82,27 @@ export default function Login() {
 
       const data = await response.json();
 
-      if (response.ok && data.status === "2fa_required") {
+      if (!response.ok) {
+        setError(data.detail || "Correo o contraseña incorrectos");
+      } else if (data.access_token) {
+        // 2FA desactivado — el backend emitió el token directamente
+        sessionStorage.setItem(
+          "session",
+          JSON.stringify({
+            token:   data.access_token,
+            user_id: data.user_id,
+            email:   data.email,
+          })
+        );
+        navigate("/dashboard");
+      } else if (data.status === "2fa_required") {
         setUserId(data.user_id);
         setOtp(Array(6).fill(""));
         setError("");
         setStep("2fa");
-        // foco en primer dígito tras la animación
         setTimeout(() => otpRefs.current[0]?.focus(), 280);
       } else {
-        setError(data.detail || "Correo o contraseña incorrectos");
+        setError("Respuesta inesperada del servidor");
       }
     } catch {
       setError("Error conectando con el servidor");

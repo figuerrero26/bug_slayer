@@ -73,7 +73,7 @@ export default function Inscripciones() {
     if (!iso) return t.insc_to_define;
     return new Date(iso).toLocaleDateString(LOCALE_MAP[lang] ?? "es-CO", {
       weekday: "long", year: "numeric", month: "long",
-      day: "numeric", hour: "2-digit", minute: "2-digit",
+      day: "numeric", hour: "2-digit", minute: "2-digit", hour12: true,
     });
   }
 

@@ -18,7 +18,7 @@ const SUGGESTIONS = [
 const MAX_CHARS = 2000;
 
 function formatTime(date: Date): string {
-  return date.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" });
+  return date.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit", hour12: true });
 }
 
 export default function RogelioWidget({ userId }: Props) {

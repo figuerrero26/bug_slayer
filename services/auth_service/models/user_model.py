@@ -12,5 +12,6 @@ class User(Base):
     otp_code                 = Column(String(6),   nullable=True,  default=None)
     otp_expiry               = Column(DateTime,    nullable=True,  default=None)
     otp_attempts             = Column(Integer,     nullable=False, default=0)
+    two_fa_enabled           = Column(Boolean,     nullable=True,  default=True)
     acepta_tratamiento_datos = Column(Boolean,     nullable=False, default=False)
     fecha_aceptacion_legal   = Column(DateTime,    nullable=True,  default=None)

@@ -9,7 +9,7 @@ from database import get_db
 from models.user_model import User
 from schemas.user_schema import (
     UserRegister, UserLogin, TokenResponse, PasswordChange,
-    TwoFactorRequired, TwoFactorVerify,
+    TwoFactorRequired, TwoFactorVerify, TwoFAUpdate,
 )
 from utils.security import hash_password, verify_password, create_token
 
@@ -116,13 +116,13 @@ def change_password(payload: PasswordChange, db: Session = Depends(get_db)):
     return {"message": "Contraseña actualizada exitosamente"}
 
 
-@router.post("/login", response_model=TwoFactorRequired)
+@router.post("/login")
 async def login(payload: UserLogin, db: Session = Depends(get_db)):
     """
-    Paso 1 del login con 2FA.
-    Valida credenciales, genera un OTP de 6 dígitos, lo guarda en BD
-    con expiración de 5 min y lo envía por correo.
-    NO emite token todavía — devuelve {"status": "2fa_required", "user_id": X}.
+    Login con soporte de 2FA configurable por usuario.
+    - Si two_fa_enabled (o no definido): genera OTP, envía correo y devuelve
+      {"status": "2fa_required", "user_id": X}.
+    - Si two_fa_enabled = False: salta el OTP y devuelve el JWT directamente.
     """
     user = db.query(User).filter(User.email == payload.email).first()
 
@@ -132,13 +132,24 @@ async def login(payload: UserLogin, db: Session = Depends(get_db)):
     if not user.is_active:
         raise HTTPException(status_code=403, detail="La cuenta está desactivada")
 
-    # Reutiliza exactamente la misma lógica de password-reset
+    # two_fa_enabled: None o True → activo; False → desactivado
+    fa_active = user.two_fa_enabled is None or user.two_fa_enabled
+
+    if not fa_active:
+        token = create_token(user.id, user.email)
+        return TokenResponse(
+            access_token=token,
+            token_type="bearer",
+            user_id=user.id,
+            email=user.email,
+        )
+
     otp    = str(secrets.randbelow(900_000) + 100_000)  # 100000–999999
     expiry = datetime.utcnow() + timedelta(minutes=OTP_EXPIRE_MINUTES)
 
     user.otp_code     = otp
     user.otp_expiry   = expiry
-    user.otp_attempts = 0    # reinicia intentos en cada nuevo login
+    user.otp_attempts = 0
     db.commit()
 
     try:
@@ -157,6 +168,17 @@ async def login(payload: UserLogin, db: Session = Depends(get_db)):
         print(f"[2fa] Error al enviar OTP — user {user.id}: {type(exc).__name__}: {exc}")
 
     return TwoFactorRequired(status="2fa_required", user_id=user.id)
+
+
+@router.patch("/2fa")
+def toggle_2fa(payload: TwoFAUpdate, db: Session = Depends(get_db)):
+    """Activa o desactiva el factor de doble autenticación para un usuario."""
+    user = db.query(User).filter(User.id == payload.user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    user.two_fa_enabled = payload.enabled
+    db.commit()
+    return {"two_fa_enabled": user.two_fa_enabled}
 
 
 @router.post("/verify-2fa", response_model=TokenResponse)

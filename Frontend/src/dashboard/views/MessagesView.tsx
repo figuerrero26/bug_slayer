@@ -46,35 +46,40 @@ function extractConference(message: string, conferences: Conference[]): Conferen
   return conferences.find((c) => c.title && upper.includes(c.title.toUpperCase())) ?? null;
 }
 
+// Fuerza interpretación UTC en strings sin indicador de zona (backend envía naive datetimes)
+function parseUTC(iso: string): Date {
+  return new Date(/Z|[+-]\d{2}:?\d{2}$/.test(iso) ? iso : `${iso}Z`);
+}
+
 function formatSchedule(raw: string): string {
-  const d = new Date(raw);
+  const d = parseUTC(raw);
   if (isNaN(d.getTime())) return raw;
   const weekday = d.toLocaleDateString("es-CO", { weekday: "long" });
   const date    = d.toLocaleDateString("es-CO", { day: "numeric", month: "long", year: "numeric" });
-  const time    = d.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" });
+  const time    = d.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit", hour12: true });
   return `${weekday.charAt(0).toUpperCase() + weekday.slice(1)}, ${date} | ${time}`;
 }
 
 function shortDate(iso: string | null): string {
   if (!iso) return "—";
-  const date = new Date(iso);
+  const date = parseUTC(iso);
   const now  = new Date();
   if (date.toDateString() === now.toDateString())
-    return date.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" });
+    return date.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit", hour12: true });
   return date.toLocaleDateString("es-CO", { day: "numeric", month: "short" });
 }
 
 function fullDateTime(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleString("es-CO", {
+  return parseUTC(iso).toLocaleString("es-CO", {
     day: "2-digit", month: "short", year: "numeric",
-    hour: "2-digit", minute: "2-digit",
+    hour: "2-digit", minute: "2-digit", hour12: true,
   });
 }
 
 function toDay(iso: string | null): number {
   if (!iso) return NaN;
-  const d = new Date(iso);
+  const d = parseUTC(iso);
   d.setHours(0, 0, 0, 0);
   return d.getTime();
 }

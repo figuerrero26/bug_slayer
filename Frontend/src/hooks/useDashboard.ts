@@ -33,7 +33,7 @@ export function useDashboard(userId: number | null, email: string) {
           registeredAt: data.registered_at
             ? new Date(data.registered_at).toLocaleString("es-CO", {
                 day: "2-digit", month: "short", year: "numeric",
-                hour: "2-digit", minute: "2-digit",
+                hour: "2-digit", minute: "2-digit", hour12: true,
               })
             : "—",
         });

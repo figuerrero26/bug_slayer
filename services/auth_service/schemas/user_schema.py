@@ -66,3 +66,8 @@ class TwoFactorRequired(BaseModel):
 class TwoFactorVerify(BaseModel):
     user_id: int
     code: str
+
+
+class TwoFAUpdate(BaseModel):
+    user_id: int
+    enabled: bool

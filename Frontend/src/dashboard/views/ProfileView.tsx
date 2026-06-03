@@ -28,7 +28,7 @@ function fmtDateShort(iso: string | null): string {
 function fmtTime(iso: string | null): string {
   if (!iso) return "";
   return new Date(iso).toLocaleTimeString("es-CO", {
-    hour: "2-digit", minute: "2-digit", hour12: false,
+    hour: "2-digit", minute: "2-digit", hour12: true,
   });
 }
 

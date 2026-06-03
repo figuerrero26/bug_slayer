@@ -46,7 +46,7 @@ function fmtDate(iso: string | null): string {
 function fmtTime(iso: string | null): string {
   if (!iso) return "";
   return new Date(iso).toLocaleTimeString("es-CO", {
-    hour: "2-digit", minute: "2-digit", hour12: false,
+    hour: "2-digit", minute: "2-digit", hour12: true,
   });
 }
 
@@ -145,8 +145,12 @@ export default function InscritasView({
   const [openMenuId, setOpenMenuId]     = useState<number | null>(null);
   const [cancellingId, setCancellingId] = useState<number | null>(null);
   const [toast, setToast]               = useState<{ msg: string; ok: boolean } | null>(null);
+  const [currentPage, setCurrentPage]   = useState(1);
+
+  const PAGE_SIZE = 5;
 
   useEffect(() => { setLocalSearch(searchQuery); }, [searchQuery]);
+  useEffect(() => { setCurrentPage(1); }, [localSearch, selectedCategory, selectedStatus]);
 
   useEffect(() => {
     fetch(`${SEARCH_URL}/users/${userId}/conferences`)
@@ -238,6 +242,9 @@ export default function InscritasView({
       (a, b) => STATUS_PRIORITY[getStatus(a.schedule)] - STATUS_PRIORITY[getStatus(b.schedule)]
     );
   }, [conferences, localSearch, selectedCategory, selectedStatus]);
+
+  const totalPages     = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
+  const paginatedVisible = visible.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   // ── Loading / Error ────────────────────────────────────────────────────────
   if (loading) return (
@@ -454,13 +461,13 @@ export default function InscritasView({
                       </tr>
                     </thead>
                     <tbody>
-                      {visible.map((conf, rowIdx) => {
+                      {paginatedVisible.map((conf, rowIdx) => {
                         const status = getStatus(conf.schedule);
                         return (
                           <tr key={conf.id}>
                             <td className="iv-td-id">#{conf.registration_id}</td>
                             <td className="iv-td-title">{conf.title}</td>
-                            <td>
+                            <td className="iv-td-category">
                               {conf.category
                                 ? <span className="iv-cat">{translateCat(conf.category)}</span>
                                 : <span className="iv-muted">—</span>}
@@ -496,7 +503,7 @@ export default function InscritasView({
                                 onClose={() => setOpenMenuId(null)}
                                 onCancel={() => handleCancelInscription(conf)}
                                 cancelling={cancellingId === conf.id}
-                                dropUp={rowIdx >= visible.length - 2}
+                                dropUp={rowIdx >= paginatedVisible.length - 2}
                                 cancelLabel={t.iv_cancel_action}
                               />
                             </td>
@@ -511,6 +518,50 @@ export default function InscritasView({
                       {localSearch
                         ? <>{t.iv_no_results_q} "<strong>{localSearch}</strong>"</>
                         : t.iv_no_results_cat}
+                    </div>
+                  )}
+
+                  {/* ── Paginación ── */}
+                  {totalPages > 1 && (
+                    <div className="iv-pagination">
+                      <button
+                        className="iv-pg-btn iv-pg-btn--arrow"
+                        onClick={() => setCurrentPage((p) => p - 1)}
+                        disabled={currentPage === 1}
+                        aria-label="Página anterior"
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="15 18 9 12 15 6"/>
+                        </svg>
+                      </button>
+
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        <button
+                          key={page}
+                          className={`iv-pg-btn${currentPage === page ? " iv-pg-btn--active" : ""}`}
+                          onClick={() => setCurrentPage(page)}
+                          aria-current={currentPage === page ? "page" : undefined}
+                        >
+                          {page}
+                        </button>
+                      ))}
+
+                      <button
+                        className="iv-pg-btn iv-pg-btn--arrow"
+                        onClick={() => setCurrentPage((p) => p + 1)}
+                        disabled={currentPage === totalPages}
+                        aria-label="Página siguiente"
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </button>
+
+                      <span className="iv-pg-info">
+                        {(currentPage - 1) * PAGE_SIZE + 1}–{Math.min(currentPage * PAGE_SIZE, visible.length)} de {visible.length}
+                      </span>
                     </div>
                   )}
                 </div>
