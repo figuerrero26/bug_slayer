@@ -1,0 +1,320 @@
+.checkout-page {
+  min-height: 100vh;
+  padding: 50px;
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  align-items: center;
+
+  background:
+    radial-gradient(circle at top right,
+      rgba(17, 77, 167, 0.35),
+      transparent 30%),
+    #08111f;
+}
+
+/* ========================
+   PANEL IZQUIERDO
+======================== */
+
+.checkout-summary {
+  width: 420px;
+  padding: 40px;
+
+  background: rgba(255,255,255,0.06);
+
+  backdrop-filter: blur(15px);
+
+  border: 1px solid rgba(255,255,255,.08);
+
+  border-radius: 24px;
+}
+
+.event-badge {
+  display: inline-block;
+
+  padding: 8px 16px;
+
+  background: #d4af37;
+
+  color: #000;
+
+  border-radius: 50px;
+
+  font-weight: 700;
+
+  margin-bottom: 20px;
+}
+
+.checkout-summary h1 {
+  color: white;
+  font-size: 32px;
+  margin-bottom: 15px;
+}
+
+.summary-description {
+  color: #c5d0e0;
+  line-height: 1.7;
+}
+
+.price-card {
+  margin-top: 25px;
+
+  padding: 20px;
+
+  border-radius: 18px;
+
+  background: rgba(255,255,255,.05);
+}
+
+.price-card span {
+  color: #b7c5da;
+}
+
+.price-card h2 {
+  color: #fff;
+
+  font-size: 38px;
+
+  margin-top: 10px;
+}
+
+.benefits {
+  margin-top: 25px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  color: white;
+}
+
+/* ========================
+   PANEL DERECHO
+======================== */
+
+.checkout-payment {
+  width: 650px;
+
+  background: white;
+
+  border-radius: 24px;
+
+  padding: 35px;
+
+  box-shadow:
+    0 20px 50px rgba(0,0,0,.35);
+}
+
+.payment-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 30px;
+}
+
+.payment-header h2 {
+  color: #0b1f46;
+}
+
+.cards {
+  display: flex;
+  gap: 10px;
+}
+
+.card-brand {
+  padding: 8px 12px;
+
+  border-radius: 10px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  color: white;
+}
+
+.visa {
+  background: #1a1f71;
+}
+
+.master {
+  background: #eb001b;
+}
+
+.amex {
+  background: #2e77bb;
+}
+
+.maestro {
+  background: #0099df;
+}
+
+/* ========================
+   TARJETA VISUAL
+======================== */
+
+.card-preview {
+  height: 220px;
+
+  border-radius: 22px;
+
+  padding: 25px;
+
+  margin-bottom: 30px;
+
+  color: white;
+
+  background:
+  linear-gradient(
+    135deg,
+    #0a2d75,
+    #0d4ab8,
+    #1f77ff
+  );
+}
+
+.card-chip {
+  width: 55px;
+  height: 40px;
+
+  border-radius: 8px;
+
+  background: gold;
+}
+
+.card-number-preview {
+  margin-top: 40px;
+
+  font-size: 26px;
+
+  letter-spacing: 3px;
+}
+
+.card-bottom {
+  margin-top: 35px;
+
+  display: flex;
+
+  justify-content: space-between;
+}
+
+.card-bottom small {
+  display: block;
+
+  opacity: .7;
+}
+
+/* ========================
+   FORMULARIO
+======================== */
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+
+  margin-bottom: 18px;
+}
+
+.input-group label {
+  margin-bottom: 8px;
+
+  color: #24324d;
+
+  font-weight: 600;
+}
+
+.input-group input {
+  height: 55px;
+
+  border: 1px solid #dbe4f1;
+
+  border-radius: 12px;
+
+  padding: 0 15px;
+
+  font-size: 15px;
+
+  transition: .3s;
+}
+
+.input-group input:focus {
+  border-color: #0057d8;
+
+  box-shadow:
+  0 0 0 4px rgba(0,87,216,.15);
+
+  outline: none;
+}
+
+.row {
+  display: flex;
+  gap: 15px;
+}
+
+.row .input-group {
+  flex: 1;
+}
+
+.pay-btn {
+  width: 100%;
+
+  margin-top: 15px;
+
+  height: 60px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  background:
+  linear-gradient(
+    90deg,
+    #003a99,
+    #005eff
+  );
+
+  color: white;
+
+  font-size: 18px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: .3s;
+}
+
+.pay-btn:hover {
+  transform: translateY(-2px);
+}
+
+.success-message {
+  margin-top: 15px;
+
+  text-align: center;
+
+  color: #17a44d;
+
+  font-weight: 700;
+}
+
+/* ========================
+   RESPONSIVE
+======================== */
+
+@media(max-width:1100px){
+
+  .checkout-page{
+    flex-direction:column;
+  }
+
+  .checkout-summary,
+  .checkout-payment{
+    width:100%;
+    max-width:700px;
+  }
+}

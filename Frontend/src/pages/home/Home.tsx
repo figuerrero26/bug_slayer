@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLang } from "../../context/LanguageContext";
 import VideoConiiti2 from "../../assets/videofondoconiiti.mp4";
 import ieeeGroup    from "../../assets/ieee_group.webp";
@@ -17,6 +17,7 @@ function CheckIcon() {
 
 function Home() {
   const { t } = useLang();
+  const navigate = useNavigate();
 
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [typedText, setTypedText]   = useState("");
@@ -297,7 +298,13 @@ function Home() {
         <div className="pricing-grid">
 
           {/* Plan 1 */}
-          <div className="pricing-card reveal delay-1">
+          <div
+            className="pricing-card reveal delay-1"
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate("/pagos-incripciones", { state: { planId: "member", title: "Miembros UCatólica e IEEE", amount: 940000 } })}
+            onKeyDown={(e) => { if (e.key === "Enter") navigate("/pagos-incripciones", { state: { planId: "member", title: "Miembros UCatólica e IEEE", amount: 940000 } }); }}
+          >
             <div className="pricing-shine" />
             <p className="pricing-category">Miembro</p>
             <h4 className="pricing-title">Miembros UCatólica e IEEE</h4>
@@ -312,10 +319,17 @@ function Home() {
               <li><CheckIcon />Constancia para todos los autores</li>
               <li><CheckIcon />Publicación de memorias</li>
             </ul>
+            
           </div>
 
           {/* Plan 2 */}
-          <div className="pricing-card pricing-card--featured reveal delay-2">
+          <div
+            className="pricing-card pricing-card--featured reveal delay-2"
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate("/pagos-incripciones", { state: { planId: "non_member", title: "No miembro - Inscripción", amount: 980000 } })}
+            onKeyDown={(e) => { if (e.key === "Enter") navigate("/pagos-incripciones", { state: { planId: "non_member", title: "No miembro - Inscripción", amount: 980000 } }); }}
+          >
             <div className="pricing-shine" />
             <p className="pricing-category">No miembro</p>
             <h4 className="pricing-title">Sí no eres miembro UCatólica ó IEEE</h4>
@@ -330,10 +344,17 @@ function Home() {
               <li><CheckIcon />Constancia para todos los autores</li>
               <li><CheckIcon />Publicación de memorias</li>
             </ul>
+            
           </div>
 
           {/* Plan 3 */}
-          <div className="pricing-card pricing-card--add-on reveal delay-3">
+          <div
+            className="pricing-card pricing-card--add-on reveal delay-3"
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate("/pagos-incripciones", { state: { planId: "attendee_conf", title: "Constancia - Conferencias", amount: 120000 } })}
+            onKeyDown={(e) => { if (e.key === "Enter") navigate("/pagos-incripciones", { state: { planId: "attendee_conf", title: "Constancia - Conferencias", amount: 120000 } }); }}
+          >
             <div className="pricing-shine" />
             <p className="pricing-category pricing-category--add-on">Asistente · Opcional</p>
             <h4 className="pricing-title">Constancia por participación en Conferencias</h4>
@@ -346,10 +367,17 @@ function Home() {
             <ul className="pricing-features">
               <li><CheckIcon />Certificado de Asistencia</li>
             </ul>
+            
           </div>
 
           {/* Plan 4 */}
-          <div className="pricing-card pricing-card--add-on reveal delay-4">
+          <div
+            className="pricing-card pricing-card--add-on reveal delay-4"
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate("/pagos-incripciones", { state: { planId: "attendee_ws", title: "Constancia - Workshops", amount: 90000 } })}
+            onKeyDown={(e) => { if (e.key === "Enter") navigate("/pagos-incripciones", { state: { planId: "attendee_ws", title: "Constancia - Workshops", amount: 90000 } }); }}
+          >
             <div className="pricing-shine" />
             <p className="pricing-category pricing-category--add-on">Asistente · Opcional</p>
             <h4 className="pricing-title">Constancia por participación en Workshops</h4>
@@ -362,6 +390,7 @@ function Home() {
             <ul className="pricing-features">
               <li><CheckIcon />Certificado de Asistencia</li>
             </ul>
+            
           </div>
 
         </div>

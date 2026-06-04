@@ -848,6 +848,7 @@ a {
 .pricing-card {
   position: relative;
   width: 262px;
+  cursor: pointer;
   background: rgba(255,255,255,0.10);
   border: 1px solid rgba(255,255,255,0.18);
   border-radius: 16px;
@@ -977,6 +978,28 @@ a {
 .pricing-card:hover .pricing-shine {
   left: 100%;
 }
+
+/* CTA dentro de la tarjeta */
+.pricing-cta {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+}
+.pricing-cta button {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(90deg, #0055cc, #2b7fff);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(43,127,255,0.18);
+}
+.pricing-cta button:hover { transform: translateY(-2px); }
+.pricing-cta button:focus { outline: 3px solid rgba(43,127,255,0.18); }
+
+/* Evitar que el <button> cierre el hover del padre en táctil */
+.pricing-card:active .pricing-cta button { transform: none; }
 
 /* CONTENEDOR GRID (legado — mantenido para otras páginas) */
 .grid {

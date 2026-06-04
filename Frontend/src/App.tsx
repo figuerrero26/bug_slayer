@@ -21,6 +21,7 @@ const Admin         = lazy(() => import("./admin/Admin.tsx"));
 const Login          = lazy(() => import("./auth/Login.tsx"));
 const Register       = lazy(() => import("./auth/Register.tsx"));
 const PasswordReset  = lazy(() => import("./auth/PasswordReset.tsx"));
+const Checkout      = lazy(() => import("./pages/checkout/Checkout.tsx"));
 
 function Layout() {
 
@@ -32,6 +33,7 @@ function Layout() {
     location.pathname === "/login" ||
     location.pathname === "/crear-cuenta" ||
     location.pathname === "/recuperar-contrasena" ||
+    location.pathname === "/pagos-incripciones" ||
     location.pathname === "/dashboard" ||
     location.pathname.startsWith("/admin");
 
@@ -46,6 +48,7 @@ function Layout() {
           <Route path="/nosotros" element={<Nosotros />} />
           <Route path="/ferias" element={<Ferias />} />
           <Route path="/inscripciones" element={<Inscripciones />} />
+          <Route path="/pagos-incripciones" element={<Checkout />} />
           <Route path="/noticias" element={<Noticias />} />
           <Route path="/ponentes" element={<Ponentes />} />
           <Route path="/coniiti2015" element={<Coniiti2015 />} />
