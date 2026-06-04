@@ -9,6 +9,7 @@ from models.conversation_model import Conversation
 from models.message_model import Message
 from schemas.chat_schema import AskRequest, AskResponse, ConversationOut, MessageOut
 from services.n8n_client import ask_rogelio
+from services.context_builder import build_user_context
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +28,7 @@ def _get_or_create_conversation(
         if conv:
             return conv
 
-    # Buscar por session_id para retomar la conversación tras refresh de página
+    # Retomar conversación tras refresh de página usando session_id
     if session_id:
         conv = db.query(Conversation).filter(Conversation.session_id == session_id).first()
         if conv:
@@ -46,9 +47,9 @@ def _get_or_create_conversation(
 
 @router.post("/ask", response_model=AskResponse, status_code=200)
 async def ask(payload: AskRequest, db: Session = Depends(get_db)):
-    # Garantizar session_id — el frontend lo puede omitir
     session_id = payload.session_id or str(uuid.uuid4())
 
+    # ── Conversación ──────────────────────────────────────────────────────────
     try:
         conv = _get_or_create_conversation(
             db,
@@ -59,8 +60,8 @@ async def ask(payload: AskRequest, db: Session = Depends(get_db)):
         )
     except Exception as e:
         logger.error("Error creando conversación: %s", e)
-        # Aún así intentamos responder sin persistencia
-        reply = await ask_rogelio(payload.user_id, 0, payload.message, [])
+        context = await build_user_context(payload.user_id)
+        reply = await ask_rogelio(payload.user_id, 0, payload.message, [], context)
         return AskResponse(
             conversation_id=0,
             session_id=session_id,
@@ -68,7 +69,7 @@ async def ask(payload: AskRequest, db: Session = Depends(get_db)):
             message_id=0,
         )
 
-    # Persistir mensaje del usuario
+    # ── Persistir mensaje del usuario ─────────────────────────────────────────
     try:
         user_msg = Message(conversation_id=conv.id, role="user", content=payload.message)
         db.add(user_msg)
@@ -77,7 +78,7 @@ async def ask(payload: AskRequest, db: Session = Depends(get_db)):
         logger.error("Error guardando mensaje: %s", e)
         user_msg = None
 
-    # Historial reciente
+    # ── Historial reciente ────────────────────────────────────────────────────
     try:
         recent = (
             db.query(Message)
@@ -93,10 +94,13 @@ async def ask(payload: AskRequest, db: Session = Depends(get_db)):
     except Exception:
         history = []
 
-    # Llamar a Rogelio (n8n o fallback)
-    reply = await ask_rogelio(conv.user_id, conv.id, payload.message, history)
+    # ── Contexto dinámico desde los microservicios ────────────────────────────
+    context = await build_user_context(conv.user_id)
 
-    # Persistir respuesta del asistente
+    # ── Llamar a Rogelio (n8n o fallback con datos reales) ────────────────────
+    reply = await ask_rogelio(conv.user_id, conv.id, payload.message, history, context)
+
+    # ── Persistir respuesta del asistente ─────────────────────────────────────
     assistant_msg_id = 0
     try:
         assistant_msg = Message(conversation_id=conv.id, role="assistant", content=reply)
