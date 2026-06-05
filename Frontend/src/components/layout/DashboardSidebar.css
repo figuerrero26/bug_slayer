@@ -268,13 +268,19 @@
 }
 
 .sb__item--logout {
-  color: rgba(255, 255, 255, 0.45);
+  color: #ef4444;
+  margin-top: 2px;
+  justify-content: center;
 }
 
 .sb__item--logout:hover:not(:disabled) {
-  background: rgba(239, 68, 68, 0.14) !important;
-  color: #fca5a5 !important;
+  background: rgba(239, 68, 68, 0.10) !important;
+  color: #f87171 !important;
   box-shadow: none !important;
+}
+
+.sb__item--logout:disabled {
+  opacity: 0.45;
 }
 
 /* ── Dark mode ──────────────────────────────────────────────────── */

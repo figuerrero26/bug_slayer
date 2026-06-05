@@ -129,7 +129,7 @@ export default function DashboardSidebar({
           aria-busy={isLoggingOut}
         >
           <span className="sb__icon" aria-hidden="true">
-            <LogOut size={18} strokeWidth={2} />
+            <LogOut size={18} strokeWidth={2.5} />
           </span>
           <span className="sb__label">{t.dash_logout}</span>
         </button>
