@@ -348,6 +348,28 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
+.rogelio-list--ordered {
+  list-style: none;
+  counter-reset: rogelio-counter;
+}
+
+.rogelio-list--ordered li {
+  counter-increment: rogelio-counter;
+}
+
+.rogelio-list--ordered li::before {
+  content: counter(rogelio-counter) ".";
+  font-size: 0.78rem;
+  font-weight: 700;
+  min-width: 14px;
+}
+
+.rogelio-muted {
+  opacity: 0.65;
+  font-style: italic;
+  font-size: 0.82em;
+}
+
 /* ── Chips de sugerencia ─────────────────────────────────── */
 
 .rogelio-suggestions {

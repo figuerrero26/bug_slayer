@@ -1,0 +1,56 @@
+{
+  "_nota": "Actualizar este archivo cuando cambien los precios en Home.tsx. El bot los lee en tiempo real.",
+  "_ultima_actualizacion": "2026",
+  "moneda": "COP",
+  "titulo": "Tarifas de Inscripción CONIITI 2026",
+  "planes": [
+    {
+      "id": "member",
+      "categoria": "Miembro",
+      "nombre": "Miembros UCatólica e IEEE",
+      "precio": 940000,
+      "precio_formateado": "940.000",
+      "tipo": "ponente",
+      "beneficios": [
+        "Inscripción como Ponente",
+        "Constancia para todos los autores",
+        "Publicación de memorias"
+      ]
+    },
+    {
+      "id": "non_member",
+      "categoria": "No miembro",
+      "nombre": "Si no eres miembro UCatólica o IEEE",
+      "precio": 980000,
+      "precio_formateado": "980.000",
+      "tipo": "ponente",
+      "beneficios": [
+        "Inscripción como Ponente",
+        "Constancia para todos los autores",
+        "Publicación de memorias"
+      ]
+    },
+    {
+      "id": "attendee_conf",
+      "categoria": "Asistente · Opcional",
+      "nombre": "Constancia por participación en Conferencias",
+      "precio": 120000,
+      "precio_formateado": "120.000",
+      "tipo": "asistente",
+      "beneficios": [
+        "Certificado de Asistencia a Conferencias"
+      ]
+    },
+    {
+      "id": "attendee_ws",
+      "categoria": "Asistente · Opcional",
+      "nombre": "Constancia por participación en Workshops",
+      "precio": 90000,
+      "precio_formateado": "90.000",
+      "tipo": "asistente",
+      "beneficios": [
+        "Certificado de Asistencia a Workshops"
+      ]
+    }
+  ]
+}

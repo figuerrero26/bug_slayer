@@ -292,9 +292,28 @@ function RenderContent({ content }: { content: string }) {
     <div className="rogelio-content">
       {blocks.filter(Boolean).map((block, bi) => {
         const lines = block.split("\n").filter(Boolean);
-        const listCount = lines.filter((l) => /^\s*[-*•]\s/.test(l)).length;
 
-        if (listCount > 0 && listCount >= Math.ceil(lines.length * 0.5)) {
+        const bulletCount  = lines.filter((l) => /^\s*[-*•]\s/.test(l)).length;
+        const numberedCount = lines.filter((l) => /^\s*\d+\.\s/.test(l)).length;
+
+        // Listas numeradas (pasos de proceso)
+        if (numberedCount > 0 && numberedCount >= Math.ceil(lines.length * 0.5)) {
+          return (
+            <ol key={bi} className="rogelio-list rogelio-list--ordered">
+              {lines.map((line, li) => {
+                const m = line.trimStart().match(/^\d+\.\s+(.*)/);
+                return m ? (
+                  <li key={li}><InlineMd text={m[1]} /></li>
+                ) : line.trim() ? (
+                  <li key={li}><InlineMd text={line} /></li>
+                ) : null;
+              })}
+            </ol>
+          );
+        }
+
+        // Listas con viñetas
+        if (bulletCount > 0 && bulletCount >= Math.ceil(lines.length * 0.5)) {
           return (
             <ul key={bi} className="rogelio-list">
               {lines.map((line, li) => {
@@ -325,12 +344,13 @@ function RenderContent({ content }: { content: string }) {
 }
 
 function InlineMd({ text }: { text: string }) {
-  const tokens = text.split(/(\*\*[^*\n]+\*\*|\*[^*\n]+\*)/g);
+  const tokens = text.split(/(\*\*[^*\n]+\*\*|\*[^*\n]+\*|_[^_\n]+_)/g);
   return (
     <>
       {tokens.map((t, i) => {
         if (/^\*\*.*\*\*$/.test(t)) return <strong key={i}>{t.slice(2, -2)}</strong>;
-        if (/^\*.*\*$/.test(t))    return <em key={i}>{t.slice(1, -1)}</em>;
+        if (/^\*.*\*$/.test(t))     return <em key={i}>{t.slice(1, -1)}</em>;
+        if (/^_.*_$/.test(t))       return <em key={i} className="rogelio-muted">{t.slice(1, -1)}</em>;
         return <React.Fragment key={i}>{t}</React.Fragment>;
       })}
     </>

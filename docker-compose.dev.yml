@@ -117,10 +117,14 @@ services:
     ports:
       - "8006:8006"
     environment:
-      DATABASE_URL: mysql+pymysql://coniiti:coniiti@181.79.5.78:3306/db_assistant?charset=utf8mb4
-      N8N_WEBHOOK_URL: ""
-      N8N_WEBHOOK_SECRET: ""
-      N8N_WEBHOOK_TOKEN: ""
+      DATABASE_URL:          mysql+pymysql://coniiti:coniiti@181.79.5.78:3306/db_assistant?charset=utf8mb4
+      SEARCH_SERVICE_URL:    http://search_service:8003
+      DASHBOARD_SERVICE_URL: http://dashboard_service:8002
+      OPENAI_API_KEY:        ${OPENAI_API_KEY:-}
+      OPENAI_MODEL:          ${OPENAI_MODEL:-gpt-4o-mini}
+      N8N_WEBHOOK_URL:       ""
+      N8N_WEBHOOK_SECRET:    ""
+      N8N_WEBHOOK_TOKEN:     ""
     volumes:
       - ./services/assistant_service:/app
     command: uvicorn main:app --host 0.0.0.0 --port 8006 --reload

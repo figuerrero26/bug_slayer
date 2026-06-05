@@ -155,6 +155,11 @@ services:
       - "8006"
     env_file:
       - ./services/assistant_service/.env.prod
+    environment:
+      SEARCH_SERVICE_URL:    http://search_service:8003
+      DASHBOARD_SERVICE_URL: http://dashboard_service:8002
+      OPENAI_API_KEY:        ${OPENAI_API_KEY:-}
+      OPENAI_MODEL:          ${OPENAI_MODEL:-gpt-4o-mini}
     networks:
       - red_interna
     security_opt:

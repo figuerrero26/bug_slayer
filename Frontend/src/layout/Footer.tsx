@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { FaFacebookF, FaInstagram, FaYoutube, FaLinkedinIn, FaSpotify } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { useLang } from "../context/LanguageContext";
@@ -6,6 +7,8 @@ import "../css/Home.css";
 import logoIcontec     from "../assets/sellos_footer.webp";
 import logoAltaCalidad from "../assets/logo-alta-calidad-ho.svg";
 import logoUcatolica   from "../assets/LogoUcatolica.webp";
+
+// ── Datos ─────────────────────────────────────────────────────────────────────
 
 const SEDES = [
   {
@@ -28,27 +31,134 @@ const SEDES = [
 const TEXTO_BRAND =
   "La Universidad Católica de Colombia es una Institución de Educación Superior sujeta a inspección y vigilancia por el Ministerio de Educación, reconocida mediante Resolución Número 2271 de julio 7 de 1970 del Ministerio de Justicia.";
 
+// Columna izquierda — 4 ítems
 const LEGAL_COL1 = [
-  { label: "Aviso de Privacidad",                    href: "#" },
-  { label: "Estatuto General",                       href: "#" },
-  { label: "Información Tributaria",                 href: "#" },
-  { label: "Política de Bienestar Universitario",    href: "#" },
-  { label: "Reglamento Estudiantil",                 href: "#" },
-  { label: "Valores Pecuniarios",                    href: "#" },
+  { label: "Política de Protección de Datos", href: "https://www.ucatolica.edu.co/portal/habeas-data/" },
+  { label: "Estatuto General",                href: "https://www.ucatolica.edu.co/portal/nuestra-universidad/estatutos-reglamentos-y-manuales/" },
+  { label: "Bienestar Universitario",         href: "https://www.ucatolica.edu.co/portal/vida-universitaria/" },
+  { label: "Reglamento Estudiantil",          href: "https://www.ucatolica.edu.co/portal/wp-content/uploads/adjuntos/acuerdos/consejo-superior-acuerdos-academicos-236-16.pdf" },
 ];
 
+// Columna derecha — 4 ítems (equilibrada)
 const LEGAL_COL2 = [
-  { label: "Autorización Tratamiento de Datos Personales Web", href: "/politica-tratamiento-datos.pdf" },
-  { label: "Política de Tratamiento de Datos Personales",      href: "/politica-tratamiento-datos.pdf" },
-  { label: "Términos y Condiciones de Uso del Sitio",          href: "#" },
-  { label: "Transparencia y Acceso a la Información Pública",  href: "#" },
+  { label: "Valores de Inscripción",                           href: "/#tarifas" },
+  { label: "Acreditación Institucional",                       href: "https://www.ucatolica.edu.co/portal/tag/acreditacion-institucional/" },
+  { label: "Términos y Condiciones de Uso del Sitio",          href: "https://www.ucatolica.edu.co/portal/terminos-y-condiciones/" },
+  { label: "Transparencia y Acceso a la Información Pública",  href: "https://www.ucatolica.edu.co/portal/transparencia-y-acceso-a-la-informacion/" },
 ];
+
+// ── Modal de confirmación de redirección ──────────────────────────────────────
+
+interface RedirectModalProps {
+  href: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+}
+
+function RedirectModal({ href, onConfirm, onCancel }: RedirectModalProps) {
+  let domain = href;
+  try { domain = new URL(href).hostname.replace("www.", ""); } catch { /* usa href raw */ }
+
+  return (
+    <div className="footer-redirect-overlay" role="dialog" aria-modal="true" aria-labelledby="redirect-title">
+      <div className="footer-redirect-card">
+        <div className="footer-redirect-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+            <polyline points="15 3 21 3 21 9" />
+            <line x1="10" y1="14" x2="21" y2="3" />
+          </svg>
+        </div>
+        <h3 id="redirect-title" className="footer-redirect-title">
+          Vas a salir de CONIITI 2026
+        </h3>
+        <p className="footer-redirect-body">
+          Serás redirigido al sitio oficial de la Universidad Católica de Colombia.
+          Una vez que aceptes, no volveremos a preguntarte en esta sesión.
+        </p>
+        <p className="footer-redirect-domain">{domain}</p>
+        <div className="footer-redirect-actions">
+          <button className="footer-redirect-btn footer-redirect-btn--cancel" onClick={onCancel}>
+            Cancelar
+          </button>
+          <button className="footer-redirect-btn footer-redirect-btn--confirm" onClick={onConfirm}>
+            Continuar →
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Helper — renderiza un enlace legal ───────────────────────────────────────
+
+function LegalLink({
+  item,
+  onExternal,
+}: {
+  item: { label: string; href: string };
+  onExternal: (href: string) => void;
+}) {
+  const isExternal = item.href.startsWith("http");
+  const isAnchor   = item.href.startsWith("/#");
+
+  if (isExternal) {
+    return (
+      <a
+        href={item.href}
+        onClick={(e) => { e.preventDefault(); onExternal(item.href); }}
+      >
+        {item.label}
+      </a>
+    );
+  }
+
+  if (isAnchor) {
+    return <a href={item.href}>{item.label}</a>;
+  }
+
+  return <a href={item.href}>{item.label}</a>;
+}
+
+// ── Componente principal ──────────────────────────────────────────────────────
+
+const REDIRECT_ACCEPTED_KEY = "footer_redirect_accepted";
 
 function Footer() {
   const { t } = useLang();
+  const [pendingHref, setPendingHref] = useState<string | null>(null);
+
+  function handleExternalClick(href: string) {
+    if (sessionStorage.getItem(REDIRECT_ACCEPTED_KEY)) {
+      window.open(href, "_blank", "noopener,noreferrer");
+    } else {
+      setPendingHref(href);
+    }
+  }
+
+  function handleConfirm() {
+    if (pendingHref) {
+      sessionStorage.setItem(REDIRECT_ACCEPTED_KEY, "1");
+      window.open(pendingHref, "_blank", "noopener,noreferrer");
+    }
+    setPendingHref(null);
+  }
+
+  function handleCancel() {
+    setPendingHref(null);
+  }
 
   return (
     <footer className="footer">
+
+      {/* ── Modal de confirmación ── */}
+      {pendingHref && (
+        <RedirectModal
+          href={pendingHref}
+          onConfirm={handleConfirm}
+          onCancel={handleCancel}
+        />
+      )}
 
       {/* ── Franja superior: 3 columnas ── */}
       <div className="footer-top">
@@ -73,26 +183,21 @@ function Footer() {
           ))}
         </div>
 
-        {/* Col 3 – Información legal */}
+        {/* Col 3 – Información legal (4 + 4 equilibrado) */}
         <div className="footer-col">
           <h4 className="footer-col-title">Información legal</h4>
           <div className="footer-legal-grid">
             <ul>
               {LEGAL_COL1.map((item) => (
                 <li key={item.label}>
-                  <a href={item.href}>{item.label}</a>
+                  <LegalLink item={item} onExternal={handleExternalClick} />
                 </li>
               ))}
             </ul>
             <ul>
               {LEGAL_COL2.map((item) => (
                 <li key={item.label}>
-                  <a
-                    href={item.href}
-                    {...(item.href !== "#" && { target: "_blank", rel: "noopener noreferrer" })}
-                  >
-                    {item.label}
-                  </a>
+                  <LegalLink item={item} onExternal={handleExternalClick} />
                 </li>
               ))}
             </ul>
